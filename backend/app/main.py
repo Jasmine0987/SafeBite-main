@@ -117,35 +117,94 @@ app.add_exception_handler(Exception, unhandled_exception_handler)
 # that actually needed persistence, and now live in app/core/database.py.
 # ---------------------------------------------------------------
 
+def _entry(name, aliases, tags, plain, why):
+    return {
+        "name": name,
+        "aliases": aliases,
+        "allergen_tags": tags,
+        "plainLanguage": plain,
+        "whyForYouTemplate": why,
+    }
+
+
 INGREDIENT_KB = {
-    "red40": {
-        "name": "Red 40",
-        "aliases": ["red 40", "fd&c red no. 40", "allura red ac", "e129"],
-        "allergen_tags": [],
-        "plainLanguage": "A synthetic dye made from petroleum, used to make foods look redder than the ingredients actually would on their own.",
-        "whyForYouTemplate": "Flagged because it's a synthetic dye — some people react to it even without a formal allergy.",
-    },
-    "peanut": {
-        "name": "Peanut",
-        "aliases": ["peanut", "peanuts", "groundnut", "arachis oil"],
-        "allergen_tags": ["peanut"],
-        "plainLanguage": "A legume, one of the most common food allergens.",
-        "whyForYouTemplate": "Flagged because peanut is on your allergen profile.",
-    },
-    "milk": {
-        "name": "Milk / Dairy",
-        "aliases": ["milk", "dairy", "whey", "casein", "lactose"],
-        "allergen_tags": ["dairy"],
-        "plainLanguage": "Derived from cow's milk — includes whey and casein even when 'milk' isn't listed directly.",
-        "whyForYouTemplate": "Flagged because dairy is on your allergen profile.",
-    },
-    "natural-flavor": {
-        "name": "Natural Flavor",
-        "aliases": ["natural flavor", "natural flavoring", "natural flavors"],
-        "allergen_tags": [],
-        "plainLanguage": "A catch-all term for flavor compounds from real plant/animal sources — the exact recipe isn't disclosed.",
-        "whyForYouTemplate": "Flagged as 'unclear' because the exact source can't be confirmed from the label alone.",
-    },
+    "red40": _entry(
+        "Red 40",
+        ["red 40", "fd&c red no. 40", "allura red ac", "e129"],
+        [],
+        "A synthetic dye made from petroleum, used to make foods look redder than the ingredients actually would on their own.",
+        "Flagged because it's a synthetic dye — some people react to it even without a formal allergy.",
+    ),
+    "natural-flavor": _entry(
+        "Natural Flavor",
+        ["natural flavor", "natural flavoring", "natural flavors"],
+        [],
+        "A catch-all term for flavor compounds from real plant/animal sources — the exact recipe isn't disclosed.",
+        "Flagged as 'unclear' because the exact source can't be confirmed from the label alone.",
+    ),
+    "milk": _entry(
+        "Milk / Dairy",
+        ["milk", "dairy", "whey", "casein", "caseinate", "lactose", "ghee", "butter", "cream", "cheese", "yogurt", "milk solids"],
+        ["dairy", "milk"],
+        "Derived from cow's milk. Includes whey, casein and ghee even when 'milk' isn't listed directly.",
+        "Flagged because dairy is on your allergen profile.",
+    ),
+    "egg": _entry(
+        "Egg",
+        ["egg", "eggs", "egg white", "egg yolk", "albumin", "albumen", "lysozyme"],
+        ["egg"],
+        "Whole egg or egg-derived proteins such as albumin.",
+        "Flagged because egg is on your allergen profile.",
+    ),
+    "fish": _entry(
+        "Fish",
+        ["fish", "salmon", "tuna", "cod", "anchovy", "anchovies", "tilapia", "sardine", "haddock"],
+        ["fish"],
+        "Finned fish and fish-derived ingredients.",
+        "Flagged because fish is on your allergen profile.",
+    ),
+    "shellfish": _entry(
+        "Shellfish",
+        ["shellfish", "shrimp", "prawn", "prawns", "crab", "lobster", "crayfish", "clam", "mussel", "oyster", "scallop"],
+        ["shellfish"],
+        "Crustaceans and molluscs.",
+        "Flagged because shellfish is on your allergen profile.",
+    ),
+    "tree-nut": _entry(
+        "Tree Nuts",
+        ["almond", "almonds", "cashew", "cashews", "walnut", "walnuts", "pecan", "pecans", "pistachio", "pistachios", "hazelnut", "hazelnuts", "macadamia", "brazil nut", "brazil nuts"],
+        ["tree-nut", "tree nut", "tree_nut"],
+        "Nuts that grow on trees, such as almonds, cashews and walnuts.",
+        "Flagged because tree nuts are on your allergen profile.",
+    ),
+    "peanut": _entry(
+        "Peanut",
+        ["peanut", "peanuts", "groundnut", "groundnuts", "arachis oil"],
+        ["peanut"],
+        "A legume, one of the most common food allergens.",
+        "Flagged because peanut is on your allergen profile.",
+    ),
+    "wheat": _entry(
+        "Wheat",
+        ["wheat", "semolina", "durum", "spelt", "farina", "wheat gluten"],
+        ["wheat"],
+        "A cereal grain containing gluten, found in many flours and baked goods.",
+        "Flagged because wheat is on your allergen profile.",
+    ),
+    "soy": _entry(
+        "Soy",
+        ["soy", "soya", "soybean", "soybeans", "soy lecithin", "tofu", "edamame", "miso", "tempeh"],
+        ["soy"],
+        "A legume used whole or as protein, oil and lecithin.",
+        "Flagged because soy is on your allergen profile.",
+    ),
+    "sesame": _entry(
+        "Sesame",
+        ["sesame", "tahini", "sesame oil", "sesame seeds"],
+        ["sesame"],
+        "Seeds and oil from the sesame plant.",
+        "Flagged because sesame is on your allergen profile.",
+    ),
 }
 
 
@@ -175,11 +234,6 @@ class ProfileIn(BaseModel):
     allergens: List[str]
 
 
-# ---------------------------------------------------------------
-# PANEL DETECTION — TODO: real YOLO/CNN detector goes here.
-# For now: no-op, assumes the whole uploaded image is the panel.
-# Architected but not yet trained — see the report's honesty note.
-# ---------------------------------------------------------------
 
 
 # ---------------------------------------------------------------
@@ -189,19 +243,24 @@ class ProfileIn(BaseModel):
 def run_ocr(image_bytes: bytes) -> str:
     try:
         import pytesseract
-        from PIL import Image
+        from PIL import Image, ImageOps
 
         from app.core.config import TESSERACT_CMD
         if TESSERACT_CMD:
             pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
 
-        img = Image.open(io.BytesIO(image_bytes))
-        text = pytesseract.image_to_string(img)
-        return text.lower()
+        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        if img.width < 1500:
+            scale = 1500 / img.width
+            img = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
+
+        candidates = [
+            ImageOps.autocontrast(img.convert("L")),
+            ImageOps.autocontrast(img.split()[1]),
+        ]
+        texts = [pytesseract.image_to_string(c, config="--psm 6") for c in candidates]
+        return max(texts, key=len).lower()
     except Exception as e:
-        # TODO: swap for your trained CNN/CRNN OCR model (Section 9 metrics).
-        # pytesseract is just a real, working placeholder so the pipeline
-        # is testable end-to-end before your custom model is ready.
         logger.warning(f"OCR failed/unavailable: {e}")
         return ""
 
@@ -227,6 +286,14 @@ def compute_verdict(ocr_text: str, profile_allergens: List[str]):
             [],
             "Couldn't read enough text from this label to check it safely. "
             "Try a clearer, well-lit photo of the ingredients panel.",
+        )
+
+    if "ingredient" not in ocr_text:
+        return (
+            "unclear",
+            [],
+            "No ingredients list found in this image. Nutrition Facts panels "
+            "don't list allergens, so please photograph the ingredients section.",
         )
 
     flagged = []
@@ -261,12 +328,16 @@ def compute_verdict(ocr_text: str, profile_allergens: List[str]):
 async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product"):
     image_bytes = await file.read()
 
-    from PIL import Image
-    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    cropped_img = detect_panel(img)
-    buf = io.BytesIO()
-    cropped_img.save(buf, format="PNG")
-    ocr_text = run_ocr(buf.getvalue())
+    cropped = detect_panel(image_bytes)           # YOLOv8 product detector (falls back to full image)
+    logger.info(
+        "YOLO detector: %s (input %d bytes, output %d bytes)",
+        "fell back to full image" if cropped == image_bytes else "cropped to detected product",
+        len(image_bytes), len(cropped),
+    )
+    ocr_text = run_ocr(cropped)
+    # If the crop lost the text or the ingredients heading, retry on the full image
+    if len(re.sub(r"[^a-z0-9]", "", ocr_text)) < MIN_OCR_ALNUM_CHARS or "ingredient" not in ocr_text:
+        ocr_text = run_ocr(image_bytes)
     verdict, flagged, note = compute_verdict(ocr_text, db.get_profile()["allergens"])
 
     scan_id = str(uuid.uuid4())[:8]
