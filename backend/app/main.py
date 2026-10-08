@@ -30,6 +30,8 @@ from typing import List, Optional
 import uuid, io, re
 
 from app.api.explain_routes import router as explain_router
+from app.api.nudge_routes import router as nudge_router
+from app.ai.detector import detect_panel
 from app.core.exceptions import (
     LLMUnavailableError,
     llm_unavailable_handler,
@@ -100,6 +102,7 @@ app.add_middleware(
 # Without this include_router call, explain_routes.py is fully coded but
 # unreachable at runtime.
 app.include_router(explain_router)
+app.include_router(nudge_router)
 
 # Register the custom exception handlers so LLM failures return the clean
 # {"error": ..., "message": ...} JSON shape instead of a raw framework 500.
@@ -171,15 +174,7 @@ class ProfileIn(BaseModel):
     allergens: List[str]
 
 
-# ---------------------------------------------------------------
-# PANEL DETECTION — TODO: real YOLO/CNN detector goes here.
-# For now: no-op, assumes the whole uploaded image is the panel.
-# Architected but not yet trained — see the report's honesty note.
-# ---------------------------------------------------------------
-def detect_panel(image_bytes: bytes) -> bytes:
-    # TODO: run your trained detector, crop to the ingredients panel,
-    # return the cropped image bytes. Returning input unchanged for now.
-    return image_bytes
+
 
 
 # ---------------------------------------------------------------
@@ -261,7 +256,7 @@ def compute_verdict(ocr_text: str, profile_allergens: List[str]):
 async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product"):
     image_bytes = await file.read()
 
-    cropped = detect_panel(image_bytes)          # TODO: real detector
+    cropped = detect_panel(image_bytes)          # YOLOv8 product detector (falls back to full image)
     ocr_text = run_ocr(cropped)                   # real OCR (pytesseract placeholder)
     verdict, flagged, note = compute_verdict(ocr_text, db.get_profile()["allergens"])
 
