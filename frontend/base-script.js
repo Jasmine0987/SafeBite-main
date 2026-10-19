@@ -32,3 +32,13 @@
     img.addEventListener("error", function onErr() {
       img.removeEventListener("error", onErr);
       img.classList.add("img-fallback");
+      var chip = document.createElement("span");
+      chip.className = "img-fallback-chip";
+      chip.setAttribute("aria-hidden", "true");
+      chip.textContent = fallbackEmoji(img);
+      if (img.parentNode) img.parentNode.replaceChild(chip, img);
+    });
+  }
+
+  document.querySelectorAll("img").forEach(wireImgFallback);
+})();

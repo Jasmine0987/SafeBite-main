@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="auth.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1486,53 +1487,47 @@ passwordToggle.addEventListener(
    FORM SUBMISSION
    ========================================================= */
 
-form.addEventListener(
-  'submit',
-  (event) => {
-
-    event.preventDefault();
-
-    const email =
-      document
-        .getElementById('email')
-        .value
-        .trim();
-
-    const passwordValue =
-      password.value.trim();
-
-
-    if(!email || !passwordValue){
-
-      return;
-
-    }
-
-
-    /*
-     * Demo routing.
-     *
-     * New users:
-     * → allergen setup
-     *
-     * Returning users:
-     * → dashboard
-     */
-
-    if(isSignup){
-
-      window.location.href =
-        'onboarding-allergens.html';
-
-    }else{
-
-      window.location.href =
-        'dashboard.html';
-
-    }
-
+function showAuthError(msg){
+  let el = document.getElementById('auth-error');
+  if(!el){
+    el = document.createElement('p');
+    el.id = 'auth-error';
+    el.style.cssText = 'margin:12px 0 0;font-weight:700;color:#BD3647;font-size:13px;';
+    form.appendChild(el);
   }
-);
+  el.textContent = msg;
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const passwordValue = password.value;
+  if(!email || !passwordValue) return;
+
+  submitButton.disabled = true;
+  const originalLabel = submitButton.textContent;
+  submitButton.textContent = 'ONE SEC…';
+
+  try {
+    const res = await fetch(`${SB_API}/api/auth/${isSignup ? 'signup' : 'login'}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: passwordValue })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(data.detail || 'Something went wrong.');
+
+    SBAuth.clear();
+    SBAuth.save(data);
+    window.location.href = isSignup ? 'onboarding-allergens.html' : 'dashboard.html';
+  } catch(err){
+    showAuthError(err.message === 'Failed to fetch'
+      ? "Can't reach the server. Is the backend running and port 8000 public?"
+      : err.message);
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
 
 
 /* =========================================================

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="auth.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -2535,7 +2536,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const STORAGE_KEY = "safebite-profile";
+  const STORAGE_KEY = "safebite-profile-" + (((window.SBAuth && SBAuth.user()) || {}).id || "guest");
 
   const defaultProfile = {
 
@@ -2594,6 +2595,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   };
 
+    // profile page toggles <-> backend allergen names
+  const A_MAP = { peanuts:'peanut', milk:'dairy', eggs:'egg', 'tree-nuts':'tree-nut', soy:'soy', wheat:'gluten' };
+  let serverOnlyAllergens = [];   // e.g. shellfish, which this page has no toggle for
+  const toServerAllergens = (a) => [
+    ...Object.keys(A_MAP).filter(k => a[k]).map(k => A_MAP[k]),
+    ...serverOnlyAllergens
+  ];
+  const fromServerAllergens = (list) => {
+    const out = {};
+    Object.keys(A_MAP).forEach(k => out[k] = list.includes(A_MAP[k]));
+    serverOnlyAllergens = list.filter(v => !Object.values(A_MAP).includes(v));
+    return out;
+  };
+  const syncProfileToServer = (p) => {
+    const { allergens, ...prefs } = p;
+    fetch(`${SB_API}/api/profile/prefs`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefs }) });
+    fetch(`${SB_API}/api/profile`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ allergens: toServerAllergens(allergens) }) });
+  };
 
   let profile = getProfile();
 
@@ -2963,7 +2982,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem(
           STORAGE_KEY,
           JSON.stringify(profile)
-        );
+        ); syncProfileToServer(profile);
 
         dirty = false;
 
@@ -2974,7 +2993,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "SAVED";
 
         toast(
-          "Profile saved locally."
+          "Profile saved."
         );
 
       } catch (error) {
@@ -3004,6 +3023,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       profile =
         cloneDefault();
+
+      syncProfileToServer(profile);
 
       localStorage.removeItem(
         STORAGE_KEY
@@ -3309,6 +3330,18 @@ document.addEventListener("DOMContentLoaded", () => {
      ======================================================= */
 
   loadUI();
+    (async () => {
+    try {
+      const [prefsRes, allergenRes] = await Promise.all([
+        fetch(`${SB_API}/api/profile/prefs`),
+        fetch(`${SB_API}/api/profile`)
+      ]);
+      const prefs = prefsRes.ok ? (await prefsRes.json()).prefs : {};
+      const server = allergenRes.ok ? (await allergenRes.json()).allergens : [];
+      profile = { ...cloneDefault(), ...prefs, allergens: fromServerAllergens(server) };
+    } catch (e) { /* offline: fall back to the cached copy */ }
+    loadUI();
+  })();
 
 });
 

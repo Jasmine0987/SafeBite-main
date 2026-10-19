@@ -8,7 +8,9 @@
 // =========================================================
 
 // Change this if your backend runs somewhere other than localhost:8000.
-const API_BASE = 'http://localhost:8000';
+const API_BASE = window.location.hostname.endsWith('.app.github.dev')
+  ? window.location.origin.replace(/-\d+\.app\.github\.dev$/, '-8000.app.github.dev')
+  : 'http://localhost:8000';
 
 // ---------------------------------------------------------
 // DASHBOARD — recent scans strip (from /api/scans) + nudge dismiss
@@ -202,9 +204,9 @@ const API_BASE = 'http://localhost:8000';
 
   function renderVerdict(scan){
     const spriteByVerdict = {
-      safe: 'assets/appy/sprite-eat.png',
-      flagged: 'assets/appy/sprite-dirty.png',
-      unclear: 'assets/appy/sprite-meditate.png'
+      safe: 'assets/appy/static/eat.png',
+      flagged: 'assets/appy/static/dirty.png',
+      unclear: 'assets/appy/static/meditate.png'
     };
     const labelByVerdict = { safe: 'SAFE', flagged: 'FLAGGED', unclear: 'UNCLEAR' };
     const copyByVerdict = {
@@ -298,9 +300,7 @@ const API_BASE = 'http://localhost:8000';
     });
 })();
 // ---------------------------------------------------------
-// SWAPS PAGE — render ranked swaps for ?scanId= from the
-// real backend (/api/scans/{id} for context, /api/swaps/{id}
-// for the ranked results).
+// SWAPS PAGE — ?scanId= (flagged scan) or ?q= (typed craving)
 // ---------------------------------------------------------
 (function(){
   const root = document.getElementById('swaps-root');
@@ -308,40 +308,50 @@ const API_BASE = 'http://localhost:8000';
 
   const params = new URLSearchParams(window.location.search);
   const scanId = params.get('scanId');
+  const q = (params.get('q') || '').trim();
   const backLink = document.getElementById('swaps-back-link');
   const contextEl = document.getElementById('swaps-context');
 
-  if (!scanId){
-    contextEl.textContent = 'No scan selected.';
-    root.innerHTML = '<p class="swap-empty">Go back and scan something flagged first. <a href="dashboard.html">Dashboard</a>.</p>';
+  if (!scanId && !q){
+    if (contextEl) contextEl.textContent = 'Nothing selected.';
+    root.innerHTML = '<p class="swap-empty">Scan something flagged, or <a href="craving-search.html">describe a craving</a>.</p>';
     return;
   }
 
-  if (backLink) backLink.href = `verdict.html?scanId=${encodeURIComponent(scanId)}`;
+  let request;
+  if (scanId){
+    if (backLink) backLink.href = `verdict.html?scanId=${encodeURIComponent(scanId)}`;
+    request = fetch(`${API_BASE}/api/scans/${encodeURIComponent(scanId)}`)
+      .then(r => { if (!r.ok) throw new Error(`Scan not found: ${r.status}`); return r.json(); })
+      .then(scan => {
+        if (contextEl) contextEl.textContent = `Because "${scan.productName}" was flagged`;
+        return fetch(`${API_BASE}/api/swaps/${encodeURIComponent(scanId)}`);
+      });
+  } else {
+    if (backLink) backLink.href = 'craving-search.html';
+    if (contextEl) contextEl.textContent = `Because you're craving "${q}"`;
+    request = fetch(`${API_BASE}/api/swaps?q=${encodeURIComponent(q)}`);
+  }
 
-  fetch(`${API_BASE}/api/scans/${scanId}`)
-    .then(r => { if (!r.ok) throw new Error(`Scan not found: ${r.status}`); return r.json(); })
-    .then(scan => {
-      contextEl.textContent = `Because "${scan.productName}" was flagged`;
-      return fetch(`${API_BASE}/api/swaps/${scanId}`);
-    })
+  request
     .then(r => { if (!r.ok) throw new Error(`Swaps request failed: ${r.status}`); return r.json(); })
     .then(data => {
-      if (!data.results.length){
+      const results = data.results || [];
+      if (!results.length){
         root.innerHTML = '<p class="swap-empty">No ranked swaps found for this one yet.</p>';
         return;
       }
-      root.innerHTML = `<div class="swap-grid">${data.results.map(s => `
+      root.innerHTML = `<div class="swap-grid">${results.map(s => `
         <div class="swap-result-card">
-          <span class="swap-macro-delta">${s.macroDelta}</span>
+          <span class="swap-macro-delta">${s.macroDelta || ''}</span>
           <h3>${s.name}</h3>
-          <div class="swap-tags">${s.tags.map(t => `<span class="swap-tag">${t}</span>`).join('')}</div>
-          <p class="swap-why">${s.why}</p>
+          <div class="swap-tags">${(s.tags || []).map(t => `<span class="swap-tag">${t}</span>`).join('')}</div>
+          <p class="swap-why">${s.why || ''}</p>
         </div>
       `).join('')}</div>`;
     })
     .catch(err => {
       console.error('Failed to load swaps:', err);
-      root.innerHTML = `<p class="swap-empty">Couldn't reach the backend — is it running on ${API_BASE}?</p>`;
+      root.innerHTML = `<p class="swap-empty">Couldn't load swaps (${err.message}). Is the backend running on ${API_BASE}?</p>`;
     });
 })();

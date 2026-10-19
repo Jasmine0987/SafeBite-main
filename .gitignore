@@ -24,3 +24,11 @@ node_modules/
 .DS_Store
 Thumbs.db
 backend/env
+data.pkl
+.data/
+best/
+*.pt
+*.pth
+*.db
+venv/
+__pycache__/

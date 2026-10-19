@@ -23,7 +23,7 @@ Run:
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
@@ -38,9 +38,11 @@ from app.core.exceptions import (
     unhandled_exception_handler,
 )
 from app.core import database as db
+from app.core.auth import router as auth_router, current_user
 from app.core.config import ALLOWED_ORIGINS, OLLAMA_BASE_URL, MIN_OCR_ALNUM_CHARS
 from app.core.logging_config import logger, setup_logging
 from app.ai.craving_vae import (
+    rank_craving,
     craving_text_to_vector,
     flagged_item_to_vector,
     rank_swaps_vae,
@@ -54,7 +56,6 @@ from app.ai.craving_vae import (
 async def lifespan(app: FastAPI):
     setup_logging()
     db.init_db()
-    db.seed_demo_scans_if_empty()
     _check_ollama_reachable()
     yield
 
@@ -102,6 +103,7 @@ app.add_middleware(
 # Wire in the AI explanation routes (/explain-ingredient, /explain-swap).
 # Without this include_router call, explain_routes.py is fully coded but
 # unreachable at runtime.
+app.include_router(auth_router)
 app.include_router(explain_router)
 app.include_router(nudge_router)
 
@@ -325,7 +327,7 @@ def compute_verdict(ocr_text: str, profile_allergens: List[str]):
 # ---------------------------------------------------------------
 
 @app.post("/api/scan", response_model=ScanResult)
-async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product"):
+async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product", user: dict = Depends(current_user)):
     image_bytes = await file.read()
 
     cropped = detect_panel(image_bytes)           # YOLOv8 product detector (falls back to full image)
@@ -338,7 +340,7 @@ async def scan_label(file: UploadFile = File(...), product_name: Optional[str] =
     # If the crop lost the text or the ingredients heading, retry on the full image
     if len(re.sub(r"[^a-z0-9]", "", ocr_text)) < MIN_OCR_ALNUM_CHARS or "ingredient" not in ocr_text:
         ocr_text = run_ocr(image_bytes)
-    verdict, flagged, note = compute_verdict(ocr_text, db.get_profile()["allergens"])
+    verdict, flagged, note = compute_verdict(ocr_text, db.get_profile(user["id"])["allergens"])
 
     scan_id = str(uuid.uuid4())[:8]
     scan = {
@@ -349,18 +351,18 @@ async def scan_label(file: UploadFile = File(...), product_name: Optional[str] =
         "flaggedIngredients": flagged,
         "note": note,
     }
-    db.save_scan(scan)
+    db.save_scan(scan, user["id"])
     return scan
 
 
 @app.get("/api/scans", response_model=List[ScanResult])
-def list_scans():
-    return db.list_scans()  # already most-recent-first
+def list_scans(user: dict = Depends(current_user)):
+    return db.list_scans(user["id"])  # already most-recent-first
 
 
 @app.get("/api/scans/{scan_id}", response_model=ScanResult)
-def get_scan(scan_id: str):
-    scan = db.get_scan(scan_id)
+def get_scan(scan_id: str, user: dict = Depends(current_user)):
+    scan = db.get_scan(scan_id, user["id"])
     if not scan:
         raise HTTPException(404, "Scan not found")
     return scan
@@ -380,8 +382,8 @@ def get_ingredient(ingredient_id: str):
 
 
 @app.get("/api/swaps/{scan_id}")
-def get_swaps_for_scan(scan_id: str):
-    scan = db.get_scan(scan_id)
+def get_swaps_for_scan(scan_id: str, user: dict = Depends(current_user)):
+    scan = db.get_scan(scan_id, user["id"])
     if not scan:
         raise HTTPException(404, "Scan not found")
     # Build a craving-signature query vector from the flagged ingredient(s)
@@ -393,20 +395,32 @@ def get_swaps_for_scan(scan_id: str):
 
 
 @app.get("/api/swaps")
-def search_swaps(q: str):
-    query_vec = craving_text_to_vector(q)
-    return {"query": q, "results": rank_swaps_vae(query_vec)}
+def search_swaps(q: str, user: dict = Depends(current_user)):
+    return rank_craving(q, db.get_profile(user["id"])["allergens"])
 
 
 @app.get("/api/profile")
-def get_profile():
-    return db.get_profile()
+def get_profile(user: dict = Depends(current_user)):
+    return db.get_profile(user["id"])
 
 
 @app.post("/api/profile")
-def set_profile(profile: ProfileIn):
-    return db.set_profile(profile.allergens)
+def set_profile(profile: ProfileIn, user: dict = Depends(current_user)):
+    return db.set_profile(user["id"], profile.allergens)
 
+class PrefsIn(BaseModel):
+    prefs: dict
+
+
+@app.get("/api/profile/prefs")
+def get_prefs(user: dict = Depends(current_user)):
+    return {"prefs": db.get_prefs(user["id"])}
+
+
+@app.post("/api/profile/prefs")
+def set_prefs(body: PrefsIn, user: dict = Depends(current_user)):
+    db.set_prefs(user["id"], body.prefs)
+    return {"prefs": body.prefs}
 
 @app.get("/")
 def root():

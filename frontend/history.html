@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="auth.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1379,7 +1380,7 @@
    SAFEBITE HISTORY LOGIC
    ========================================================= */
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = location.hostname.endsWith('.app.github.dev') ? location.origin.replace(/-[0-9]+[.]/, '-8000.') : 'http://localhost:8000';
 
 let allScans = [];
 

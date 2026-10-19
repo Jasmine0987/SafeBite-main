@@ -52,36 +52,34 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
 (function(){
   const cursor = document.getElementById('appy-cursor');
   const canvas = document.getElementById('trail-canvas');
-  const ctx = canvas.getContext('2d');
   const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   if (isTouch || !cursor || !canvas) return;
+  const ctx = canvas.getContext('2d');
 
   const BEE_IDLE = 'assets/cursor/bee-idle.png';
   const BEE_FLY  = 'assets/cursor/bee-fly.png';
-
   cursor.style.backgroundImage = `url('${BEE_FLY}')`;
 
   function setBeeFrame(hovering){
     cursor.style.backgroundImage = `url('${hovering ? BEE_IDLE : BEE_FLY}')`;
   }
-
-  // stays on the fly frame everywhere; only drops to idle while
-  // hovering an interactive element (buttons + links)
-  const hoverTargets = document.querySelectorAll('a, button, .brutal-btn, .gooey-btn, .knock-btn');
-  hoverTargets.forEach(el => {
+  document.querySelectorAll('a, button, .brutal-btn, .gooey-btn, .knock-btn').forEach(el => {
     el.addEventListener('mouseenter', () => setBeeFrame(true));
     el.addEventListener('mouseleave', () => setBeeFrame(false));
   });
 
+  // ---- dashed flight trail settings ----
+  const SPACING = 18;     // distance between dash centres (bigger = more gap)
+  const DASH_LEN = 9;     // length of each dash
+  const DASH_W = 2.5;     // thickness
+  const FADE = 0.02;     // life lost per frame (smaller = longer trail)
+  const COLOR = '#111';
+
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
-  let lastX = mouseX;
-  let lastY = mouseY;
-  let dripDist = 0;
-
-  // honey drips — small teardrops spawned as the bee moves, that
-  // fall and fade under gravity instead of a connected line
-  let drips = [];
+  let lastDashX = mouseX;
+  let lastDashY = mouseY;
+  let dashes = [];
 
   function resizeCanvas(){
     canvas.width = window.innerWidth;
@@ -93,78 +91,67 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-
-    const dx = mouseX - lastX;
-    const dy = mouseY - lastY;
-    const dist = Math.hypot(dx, dy);
-
-    if (dist > 3){
-      dripDist += dist;
-      lastX = mouseX;
-      lastY = mouseY;
-    }
-
     cursor.style.left = mouseX + 'px';
     cursor.style.top = mouseY + 'px';
 
-    if (dripDist > 22){
-      dripDist = 0;
-      drips.push({
-        x: mouseX + (Math.random() * 10 - 5),
-        y: mouseY + 20,
-        vy: 0.3 + Math.random() * 0.3,
-        size: 3.5 + Math.random() * 2.5,
-        life: 1
-      });
-      if (drips.length > 50) drips.shift();
+    // no trail in the footer (paw cursor owns it); reset anchor so
+    // there's no long dash line when the bee comes back
+    if (document.body.classList.contains('over-footer')){
+      lastDashX = mouseX;
+      lastDashY = mouseY;
+      return;
+    }
+
+    const dx = mouseX - lastDashX;
+    const dy = mouseY - lastDashY;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist >= SPACING){
+      const ux = dx / dist;
+      const uy = dy / dist;
+      const angle = Math.atan2(dy, dx);
+      const n = Math.floor(dist / SPACING);   // fast moves still get evenly spaced dashes
+      for (let i = 1; i <= n; i++){
+        dashes.push({
+          x: lastDashX + ux * SPACING * i,
+          y: lastDashY + uy * SPACING * i,
+          angle,
+          life: 1
+        });
+      }
+      lastDashX += ux * SPACING * n;
+      lastDashY += uy * SPACING * n;
+      if (dashes.length > 120) dashes.splice(0, dashes.length - 120);
     }
   });
 
-  function drawDrip(d){
-    const s = d.size;
+  function drawDash(d){
     ctx.save();
     ctx.globalAlpha = Math.max(d.life, 0);
-
-    // teardrop shape: pointed top, rounded bottom
+    ctx.translate(d.x, d.y);
+    ctx.rotate(d.angle);
+    ctx.strokeStyle = COLOR;
+    ctx.lineWidth = DASH_W;
+    ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(d.x, d.y - s * 1.5);
-    ctx.quadraticCurveTo(d.x + s, d.y - s * 0.2, d.x, d.y + s);
-    ctx.quadraticCurveTo(d.x - s, d.y - s * 0.2, d.x, d.y - s * 1.5);
-    ctx.closePath();
-
-    const grad = ctx.createLinearGradient(d.x, d.y - s, d.x, d.y + s);
-    grad.addColorStop(0, 'rgba(255,201,56,0.95)');
-    grad.addColorStop(1, 'rgba(196,122,9,0.95)');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // tiny highlight for shine
-    ctx.beginPath();
-    ctx.arc(d.x - s * 0.28, d.y - s * 0.15, s * 0.2, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fill();
-
+    ctx.moveTo(-DASH_LEN / 2, 0);
+    ctx.lineTo(DASH_LEN / 2, 0);
+    ctx.stroke();
     ctx.restore();
   }
 
   function drawTrail(){
     const overFooter = document.body.classList.contains('over-footer');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // hide the bee + its honey drips while the paw cursor owns the footer
     cursor.style.opacity = overFooter ? '0' : '1';
 
     if (!overFooter){
-      drips.forEach(d => {
-        d.vy += 0.05;
-        d.y += d.vy;
-        d.life -= 0.012;
-        drawDrip(d);
+      dashes.forEach(d => {
+        d.life -= FADE;
+        drawDash(d);
       });
     }
-
-    drips = drips.filter(d => d.life > 0);
-
+    dashes = dashes.filter(d => d.life > 0);
     requestAnimationFrame(drawTrail);
   }
   drawTrail();

@@ -321,3 +321,68 @@ def rank_swaps_vae(query_vec: np.ndarray, limit: int = 3) -> List[dict]:
 # should get "that one's architected, here's the plan and here's why it
 # wasn't feasible to train in this pass" — not silence or a bluff.
 # ---------------------------------------------------------------------------
+SWAP_ALLERGENS = {  # verify these against real products
+    "sw2": ["tree-nut"], "sw8": ["soy"], "sw9": ["dairy"],
+    "sw10": ["tree-nut", "soy"], "sw12": ["soy"],
+}
+
+LEXICON = {
+  "ice cream": {"sweet":.8,"creamy":.9,"cold":1}, "milkshake": {"sweet":.7,"creamy":1,"cold":.8},
+  "chocolate": {"sweet":.8,"creamy":.5}, "candy": {"sweet":1,"fruity":.3}, "dessert": {"sweet":1,"creamy":.4},
+  "cookie": {"sweet":.9,"crunchy":.5}, "cake": {"sweet":1,"creamy":.4}, "sugary": {"sweet":1}, "sweet": {"sweet":1},
+  "chips": {"salty":.9,"crunchy":1,"savory":.5}, "crisps": {"salty":.9,"crunchy":1}, "popcorn": {"salty":.6,"crunchy":.8},
+  "nachos": {"salty":.8,"crunchy":.9,"savory":.6}, "fries": {"salty":.9,"crunchy":.6,"savory":.6},
+  "cheesy": {"savory":.8,"creamy":.5,"salty":.6}, "cheese": {"savory":.8,"creamy":.5,"salty":.6},
+  "spicy": {"savory":.7,"salty":.3}, "tangy": {"fruity":.6,"savory":.3},
+  "salty": {"salty":1}, "salt": {"salty":1}, "savory": {"savory":1}, "savoury": {"savory":1}, "umami": {"savory":1},
+  "crunchy": {"crunchy":1}, "crunch": {"crunchy":1}, "crispy": {"crunchy":1}, "crisp": {"crunchy":1},
+  "fizzy": {"fizzy":1}, "soda": {"fizzy":1,"sweet":.7,"cold":.5}, "cola": {"fizzy":1,"sweet":.8,"cold":.5},
+  "carbonated": {"fizzy":1}, "sparkling": {"fizzy":1}, "bubbly": {"fizzy":1},
+  "creamy": {"creamy":1}, "smooth": {"creamy":.8}, "milky": {"creamy":.8},
+  "fruity": {"fruity":1}, "fruit": {"fruity":1}, "citrus": {"fruity":.9}, "berry": {"fruity":.9,"sweet":.5},
+  "cold": {"cold":1}, "icy": {"cold":1}, "frozen": {"cold":1}, "chilled": {"cold":.8}, "refreshing": {"cold":.7,"fruity":.4},
+}
+_PHRASES = sorted(LEXICON, key=len, reverse=True)
+_NEG = {"not", "no", "without", "less", "non", "isnt", "dont", "never"}
+
+
+def parse_craving(text: str):
+    t = " " + re.sub(r"[^a-z ]", " ", text.lower()) + " "
+    target = np.zeros(len(AXES), dtype=np.float32)
+    weight = np.full(len(AXES), 0.15, dtype=np.float32)  # unmentioned axes barely matter
+    hit = False
+    for p in _PHRASES:
+        for m in re.finditer(r"\b" + p + r"\b", t):
+            hit = True
+            negated = any(w in _NEG for w in t[:m.start()].split()[-3:])
+            for ax, s in LEXICON[p].items():
+                i = AXES.index(ax)
+                if negated:
+                    target[i], weight[i] = 0.0, 1.0   # "not too sweet" => want LOW sweet
+                else:
+                    target[i] = max(target[i], s); weight[i] = 1.0
+            t = t[:m.start()] + " " * (m.end() - m.start()) + t[m.end():]
+    return target, weight, hit
+
+
+def rank_craving(text: str, allergens: List[str], limit: int = 4) -> dict:
+    target, weight, hit = parse_craving(text)
+    if not hit:
+        return {"query": text, "results": [],
+                "message": "Try describing taste or texture, e.g. crunchy, salty, creamy, cold, fizzy."}
+    raw = (weight * (_catalog_matrix - target) ** 2).sum(axis=1)
+    lat = np.linalg.norm(_catalog_embeddings - _vae.embed(target.reshape(1, -1))[0], axis=1)
+    score = raw + 0.15 * lat            # sensory distance first, VAE latent as tie-breaker
+    out = []
+    for i in np.argsort(score):
+        item = SWAP_CATALOG[i]
+        if raw[i] > 0.8:
+            continue                    # too far from the craving, show fewer results instead of bad ones
+        if any(a in allergens for a in SWAP_ALLERGENS.get(item["id"], [])):
+            continue                    # safety first: drop anything that hits the user's allergens
+        top_axes = np.argsort(-np.array(item["vec"]))[:2]
+        out.append({"id": item["id"], "name": item["name"], "macroDelta": item["macroDelta"],
+                    "why": item["why"], "tags": [AXES[j] for j in top_axes]})
+        if len(out) == limit:
+            break
+    return {"query": text, "results": out}
