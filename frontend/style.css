@@ -10,7 +10,7 @@
   --footer-ink:#141414; --footer-cream:#FCF6E8; --ease-bounce:cubic-bezier(.34,1.56,.64,1);
   
 }
-
+html, body, *, *::before, *::after { cursor: none !important; }
 #trail-canvas{
   position:fixed; inset:0; width:100vw; height:100vh;
   pointer-events:none; z-index:9998;
@@ -30,7 +30,7 @@
   background-position:center;
 
   pointer-events:none;
-  z-index:9999;
+  z-index:99999;
 
   transform:translate(-50%,-50%);
 
@@ -52,7 +52,7 @@
 .navbar{
   position:fixed;
 
-  top:18px;
+  top:0px;
   left:50%;
 
   transform:translateX(-50%);
@@ -663,20 +663,23 @@
   pointer-events:auto;
 }
 
-.verdict-panel-sprite{
-  width:150px;
-  height:150px;
+.verdict-panel-sprite {
+  /* Keep a reasonable uniform size */
+  width: 180px;
+  height: 180px;
 
-  background-size:500% 500%;
+  /* Force the background grid to respect a 5x5 layout cleanly */
+  background-size: 500% 500%;
+  background-repeat: no-repeat;
+  background-position: center; /* Centers the current frame */
 
-  margin-bottom:.4rem;
-
-  border-radius:0;
-
-  background-color:transparent;
-
-  border:none;
+  margin-bottom: .4rem;
+  border-radius: 0;
+  background-color: transparent;
+  border: none;
 }
+
+
 
 .verdict-panel img{
   width:150px;
@@ -1366,7 +1369,9 @@ img.img-fallback{
     display:none !important;
   }
 }
-
+@media (hover:hover) and (pointer:fine){
+  html, body, *, *::before, *::after { cursor: none !important; }
+}
 
 /* =========================================================
    RESPONSIVE — NAVBAR

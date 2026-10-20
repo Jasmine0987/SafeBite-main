@@ -799,3 +799,28 @@ h6 {
   text-transform: uppercase;
 }
 
+/* =========================================================
+   COLOR WASH — opt-in via <body class="... color-wash">
+   Sections go transparent so the body's animated background
+   (driven by each section's data-color in script.js) shows through.
+   ========================================================= */
+body.color-wash{
+  background-color:#FCF6E8;
+  transition:background-color .8s ease;
+}
+body.color-wash section[data-color],
+body.color-wash header[data-color]{
+  background-color:transparent !important;
+}
+/* HOW IT WORKS — match index.html typography */
+body.hiw-page{
+  font-family:var(--body);
+}
+body.hiw-page h1,
+body.hiw-page h2,
+body.hiw-page h3,
+body.hiw-page h4,
+body.hiw-page .brutal-btn{
+  font-family:var(--display);
+  font-weight:400;
+}

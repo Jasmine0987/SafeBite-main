@@ -14,6 +14,11 @@
 
 <style>
 
+
+body.index-page .verdict-panel-sprite,
+body.index-page .swap-success-sprite{
+  background-color:transparent;
+}
 /* =========================================================
    SAFEBITE INDEX — INTERACTIVE EXPERIENCE
    ========================================================= */
@@ -35,7 +40,7 @@
 /* =========================================================
    BASE
    ========================================================= */
-
+html, body, *, *::before, *::after { cursor: none !important; }
 html{
   scroll-behavior:smooth;
 }
@@ -94,9 +99,6 @@ body.index-page .navbar{
   z-index:9000;
 }
 
-body.index-page .navbar.sb-nav-hidden{
-  transform:translateY(-110%);
-}
 
 body.index-page .navbar.sb-nav-scrolled{
   box-shadow:6px 6px 0 var(--sb-black);
@@ -501,8 +503,8 @@ body.index-page .nav-item a:hover .nav-frame{
 .sb-kinetic-centre{
   position:absolute;
   left:50%;
-  top:50%;
-  width:clamp(100px,14vw,190px);
+  top:70%;
+  width:clamp(600px,100vw,720px);
   transform:translate(-50%,-50%);
   filter:drop-shadow(7px 7px 0 var(--sb-black));
   pointer-events:none;
@@ -616,7 +618,7 @@ body.index-page .nav-item a:hover .nav-frame{
   width:48%;
   max-width:340px;
   right:5%;
-  top:20%;
+  top:5%;
   mix-blend-mode:multiply;
   transform:rotate(5deg);
   transition:transform .5s cubic-bezier(.2,.8,.2,1);
@@ -765,7 +767,7 @@ body.index-page .nav-item a:hover .nav-frame{
 
 .sb-pipeline{
   position:relative;
-  min-height:170vh;
+  min-height:130vh;
   background:var(--sb-cream);
   overflow:hidden;
 }
@@ -1593,13 +1595,14 @@ body.index-page .verdict-panel h3{
     </div>
 
 
-    <img
+    
+
+  </div>
+  <img
       class="sb-kinetic-centre"
       src="assets/appy/static/read.png"
       alt="Appy reading"
     >
-
-  </div>
 
 </section>
 
@@ -2038,7 +2041,6 @@ body.index-page .verdict-panel h3{
         <div
           class="verdict-panel"
           data-panel="maybe"
-          hidden
         >
 
           <div
@@ -2066,7 +2068,6 @@ body.index-page .verdict-panel h3{
         <div
           class="verdict-panel"
           data-panel="no"
-          hidden
         >
 
           <div
@@ -2188,7 +2189,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/dinner-table.png"
+          src="assets/illustrations/To-Do List Longer Than My Coffee Break-Photoroom.png"
           alt="Hand-drawn dinner illustration"
         >
 
@@ -3348,107 +3349,8 @@ window.addEventListener(
 updatePipeline();
 
 
-/* =========================================================
-   VERDICT INTERACTION
-   ========================================================= */
-
-const verdictButtons =
-  document.querySelectorAll(
-    ".verdict-menu [data-state]"
-  );
-
-const verdictPanels =
-  document.querySelectorAll(
-    ".verdict-panel[data-panel]"
-  );
-
-
-function activateVerdict(state){
-
-  verdictButtons.forEach(
-    function(button){
-
-      const active =
-        button.dataset.state === state;
-
-      button.classList.toggle(
-        "is-active",
-        active
-      );
-
-      button.setAttribute(
-        "aria-selected",
-        active ? "true" : "false"
-      );
-
-    }
-  );
-
-
-  verdictPanels.forEach(
-    function(panel){
-
-      const active =
-        panel.dataset.panel === state;
-
-      if(active){
-
-        panel.hidden = false;
-
-        if(
-          !reducedMotion &&
-          window.gsap
-        ){
-
-          gsap.fromTo(
-            panel,
-            {
-              opacity:0,
-              y:25,
-              rotate:1
-            },
-            {
-              opacity:1,
-              y:0,
-              rotate:0,
-              duration:.45,
-              ease:"power3.out"
-            }
-          );
-
-        }
-
-      }else{
-
-        panel.hidden = true;
-
-      }
-
-    }
-  );
-
-}
-
-
-verdictButtons.forEach(
-  function(button){
-
-    button.addEventListener(
-      "click",
-      function(){
-
-        activateVerdict(
-          button.dataset.state
-        );
-
-      }
-    );
-
-  }
-);
-
-
-activateVerdict("yes");
+const firstVerdict = document.querySelector('.gooey-btn[data-state="yes"]');
+if(firstVerdict) firstVerdict.click();
 
 
 /* =========================================================

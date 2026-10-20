@@ -3,893 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SafeBite — How It Works</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="pages.css">
-
 <style>
-
-/* =========================================================
-   HOW IT WORKS — INTERACTIVE LAYER
-   ========================================================= */
-
-:root{
-  --hiw-purple:#6B66A6;
-  --hiw-red:#BD3647;
-  --hiw-blue:#8FA3C4;
-  --hiw-green:#A2BF8A;
-  --hiw-yellow:#F2DB66;
-  --hiw-cream:#FCF6E8;
-  --hiw-black:#141414;
-}
-
-/* ---------------------------------------------------------
-   PAGE
-   --------------------------------------------------------- */
-
-.hiw-page{
-  overflow:hidden;
-}
-
-/* ---------------------------------------------------------
-   SCROLL PROGRESS
-   --------------------------------------------------------- */
-
-.hiw-progress{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:5px;
-  background:transparent;
-  z-index:9999;
-  pointer-events:none;
-}
-
-.hiw-progress-bar{
-  width:0%;
-  height:100%;
-  background:var(--hiw-yellow);
-  transform-origin:left;
-}
-
-/* ---------------------------------------------------------
-   HERO
-   --------------------------------------------------------- */
-
-.hiw-hero{
-  min-height:72vh;
-  display:flex;
-  align-items:center;
-  position:relative;
-  overflow:hidden;
-  padding:170px 7vw 100px;
-}
-
-.hiw-hero-inner{
-  width:min(1250px,100%);
-  margin:auto;
-  position:relative;
-  z-index:2;
-}
-
-.hiw-kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  font-family:var(--body);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  margin-bottom:24px;
-}
-
-.hiw-kicker::before{
-  content:"";
-  width:34px;
-  height:3px;
-  background:var(--hiw-yellow);
-}
-
-.hiw-hero-title{
-  max-width:1050px;
-  margin:0;
-  font-family:var(--display);
-  font-size:clamp(58px,9vw,145px);
-  line-height:.82;
-  letter-spacing:-.055em;
-  text-transform:uppercase;
-}
-
-.hiw-hero-title span{
-  display:block;
-  color:var(--hiw-yellow);
-}
-
-.hiw-hero-description{
-  max-width:580px;
-  margin:40px 0 0;
-  font-family:var(--body);
-  font-size:clamp(16px,1.4vw,21px);
-  line-height:1.55;
-}
-
-.hiw-hero-appy{
-  position:absolute;
-  right:7vw;
-  bottom:7%;
-  width:150px;
-  z-index:3;
-  transform:rotate(5deg);
-  filter:drop-shadow(9px 10px 0 rgba(20,20,20,.2));
-  animation:hiwAppyFloat 3.8s ease-in-out infinite;
-}
-
-.hiw-hero-appy img{
-  width:100%;
-  display:block;
-}
-
-@keyframes hiwAppyFloat{
-  0%,100%{
-    transform:translateY(0) rotate(5deg);
-  }
-  50%{
-    transform:translateY(-18px) rotate(-3deg);
-  }
-}
-
-/* floating decoration */
-
-.hiw-floating-note{
-  position:absolute;
-  right:13%;
-  top:22%;
-  padding:12px 17px;
-  border:3px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  box-shadow:6px 6px 0 var(--hiw-black);
-  font-family:var(--body);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.08em;
-  transform:rotate(4deg);
-  animation:hiwNote 4s ease-in-out infinite;
-}
-
-@keyframes hiwNote{
-  0%,100%{transform:rotate(4deg) translateY(0);}
-  50%{transform:rotate(-2deg) translateY(-8px);}
-}
-
-/* ---------------------------------------------------------
-   JOURNEY SWITCHER
-   --------------------------------------------------------- */
-
-.hiw-switcher-section{
-  padding:85px 7vw 55px;
-  background:var(--hiw-cream);
-  position:relative;
-}
-
-.hiw-switcher-inner{
-  width:min(1150px,100%);
-  margin:auto;
-}
-
-.hiw-switcher-header{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:30px;
-  margin-bottom:32px;
-}
-
-.hiw-switcher-title{
-  margin:0;
-  font-family:var(--display);
-  font-size:clamp(38px,5vw,72px);
-  line-height:.9;
-  text-transform:uppercase;
-}
-
-.hiw-switcher-title span{
-  color:var(--hiw-red);
-}
-
-.hiw-switcher-copy{
-  max-width:400px;
-  margin:0;
-  font-family:var(--body);
-  line-height:1.5;
-}
-
-.hiw-tabs{
-  display:flex;
-  gap:0;
-  border:3px solid var(--hiw-black);
-  box-shadow:8px 8px 0 var(--hiw-black);
-  width:max-content;
-  max-width:100%;
-}
-
-.hiw-tab{
-  border:0;
-  border-right:3px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  padding:18px 28px;
-  font-family:var(--display);
-  font-size:15px;
-  cursor:pointer;
-  transition:
-    background .25s ease,
-    color .25s ease,
-    transform .25s ease;
-}
-
-.hiw-tab:last-child{
-  border-right:0;
-}
-
-.hiw-tab:hover{
-  background:var(--hiw-yellow);
-  transform:translateY(-3px);
-}
-
-.hiw-tab.active{
-  background:var(--hiw-black);
-  color:var(--hiw-yellow);
-}
-
-/* ---------------------------------------------------------
-   PIPELINE
-   --------------------------------------------------------- */
-
-.hiw-pipeline{
-  padding:35px 7vw 70px;
-  background:var(--hiw-cream);
-}
-
-.hiw-pipeline-inner{
-  width:min(1150px,100%);
-  margin:auto;
-  display:flex;
-  align-items:center;
-  gap:0;
-  overflow:hidden;
-}
-
-.hiw-pipeline-item{
-  flex:1;
-  min-width:0;
-  position:relative;
-  padding:18px 16px;
-  border-top:3px solid var(--hiw-black);
-  border-bottom:3px solid var(--hiw-black);
-  border-left:3px solid var(--hiw-black);
-  background:white;
-  cursor:pointer;
-  transition:
-    background .25s ease,
-    transform .25s ease;
-}
-
-.hiw-pipeline-item:last-child{
-  border-right:3px solid var(--hiw-black);
-}
-
-.hiw-pipeline-item:hover{
-  background:var(--hiw-yellow);
-  transform:translateY(-5px);
-}
-
-.hiw-pipeline-number{
-  display:block;
-  font-family:var(--display);
-  font-size:11px;
-  margin-bottom:6px;
-  opacity:.55;
-}
-
-.hiw-pipeline-label{
-  font-family:var(--display);
-  font-size:18px;
-  text-transform:uppercase;
-}
-
-.hiw-pipeline-status{
-  position:absolute;
-  right:12px;
-  top:12px;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--hiw-green);
-  box-shadow:0 0 0 0 rgba(162,191,138,.6);
-  animation:hiwPulse 1.8s infinite;
-}
-
-@keyframes hiwPulse{
-  0%{box-shadow:0 0 0 0 rgba(162,191,138,.7);}
-  70%{box-shadow:0 0 0 9px rgba(162,191,138,0);}
-  100%{box-shadow:0 0 0 0 rgba(162,191,138,0);}
-}
-
-/* ---------------------------------------------------------
-   JOURNEY SECTIONS
-   --------------------------------------------------------- */
-
-.hiw-journey{
-  padding:110px 7vw;
-  position:relative;
-  overflow:hidden;
-}
-
-.hiw-journey-inner{
-  width:min(1100px,100%);
-  margin:auto;
-}
-
-.hiw-journey-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:40px;
-  margin-bottom:55px;
-}
-
-.hiw-journey-label{
-  margin:0 0 15px;
-  font-family:var(--body);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-}
-
-.hiw-journey-title{
-  margin:0;
-  font-family:var(--display);
-  font-size:clamp(48px,7vw,95px);
-  line-height:.85;
-  text-transform:uppercase;
-  letter-spacing:-.045em;
-}
-
-.hiw-journey-intro{
-  max-width:390px;
-  margin:0;
-  font-family:var(--body);
-  line-height:1.55;
-}
-
-/* ---------------------------------------------------------
-   STEPS
-   --------------------------------------------------------- */
-
-.hiw-steps{
-  position:relative;
-}
-
-.hiw-step{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:35px;
-  margin-bottom:22px;
-  padding:28px 32px;
-  border:3px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  box-shadow:8px 8px 0 var(--hiw-black);
-  cursor:pointer;
-  transform-style:preserve-3d;
-  transition:
-    transform .35s cubic-bezier(.2,.8,.2,1),
-    box-shadow .35s ease,
-    background .3s ease;
-}
-
-.hiw-step:hover{
-  transform:translate(-3px,-6px);
-  box-shadow:12px 14px 0 var(--hiw-black);
-}
-
-.hiw-step.active{
-  background:var(--hiw-yellow);
-  transform:translate(-4px,-5px);
-  box-shadow:12px 13px 0 var(--hiw-black);
-}
-
-.hiw-step-icon{
-  flex:0 0 105px;
-  width:105px;
-  height:105px;
-  object-fit:contain;
-  transition:
-    transform .4s cubic-bezier(.2,1.4,.4,1);
-}
-
-.hiw-step:hover .hiw-step-icon{
-  transform:scale(1.13) rotate(-5deg);
-}
-
-.hiw-step-content{
-  flex:1;
-}
-
-.hiw-step-topline{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  margin-bottom:7px;
-}
-
-.hiw-step-number{
-  font-family:var(--display);
-  font-size:12px;
-  opacity:.55;
-}
-
-.hiw-step-label{
-  font-family:var(--display);
-  font-size:clamp(22px,3vw,36px);
-  line-height:1;
-  text-transform:uppercase;
-}
-
-.hiw-step-description{
-  max-width:760px;
-  margin:9px 0 0;
-  font-family:var(--body);
-  font-size:15px;
-  line-height:1.55;
-}
-
-.hiw-step-expand{
-  flex:0 0 42px;
-  width:42px;
-  height:42px;
-  border:3px solid var(--hiw-black);
-  background:transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:var(--display);
-  font-size:22px;
-  transition:
-    transform .3s ease,
-    background .3s ease;
-}
-
-.hiw-step.active .hiw-step-expand{
-  transform:rotate(45deg);
-  background:var(--hiw-cream);
-}
-
-/* hidden extra information */
-
-.hiw-step-extra{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:
-    max-height .45s ease,
-    opacity .3s ease,
-    margin-top .3s ease;
-}
-
-.hiw-step.active .hiw-step-extra{
-  max-height:120px;
-  opacity:1;
-  margin-top:18px;
-}
-
-.hiw-step-extra span{
-  display:inline-block;
-  padding:8px 12px;
-  border:2px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  font-family:var(--body);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-}
-
-/* connector */
-
-.hiw-step-connector{
-  width:3px;
-  height:32px;
-  background:var(--hiw-black);
-  margin:0 0 0 82px;
-  position:relative;
-}
-
-.hiw-step-connector::after{
-  content:"↓";
-  position:absolute;
-  left:-7px;
-  bottom:-13px;
-  font-family:var(--display);
-  font-size:20px;
-}
-
-/* ---------------------------------------------------------
-   JOURNEY COLOUR VARIANTS
-   --------------------------------------------------------- */
-
-.hiw-scan{
-  background:var(--hiw-red);
-  color:var(--hiw-cream);
-}
-
-.hiw-scan .hiw-step{
-  background:var(--hiw-cream);
-  color:var(--hiw-black);
-}
-
-.hiw-scan .hiw-step.active{
-  background:var(--hiw-yellow);
-}
-
-.hiw-craving{
-  background:var(--hiw-blue);
-  color:var(--hiw-black);
-}
-
-.hiw-craving .hiw-step{
-  background:var(--hiw-cream);
-}
-
-.hiw-craving .hiw-step.active{
-  background:var(--hiw-yellow);
-}
-
-/* ---------------------------------------------------------
-   NUDGE
-   --------------------------------------------------------- */
-
-.hiw-nudge{
-  background:var(--hiw-green);
-  padding:110px 7vw;
-}
-
-.hiw-nudge-card{
-  width:min(1100px,100%);
-  margin:auto;
-  display:flex;
-  align-items:center;
-  gap:55px;
-  padding:45px;
-  border:3px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  box-shadow:14px 14px 0 var(--hiw-black);
-}
-
-.hiw-nudge-appy{
-  flex:0 0 180px;
-  width:180px;
-}
-
-.hiw-nudge-appy img{
-  width:100%;
-  display:block;
-  transition:transform .4s cubic-bezier(.2,1.4,.4,1);
-}
-
-.hiw-nudge-card:hover .hiw-nudge-appy img{
-  transform:rotate(7deg) scale(1.08);
-}
-
-.hiw-nudge-content{
-  flex:1;
-}
-
-.hiw-nudge-kicker{
-  font-family:var(--body);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.14em;
-  margin-bottom:13px;
-}
-
-.hiw-nudge-title{
-  margin:0;
-  font-family:var(--display);
-  font-size:clamp(38px,5vw,68px);
-  line-height:.88;
-  text-transform:uppercase;
-}
-
-.hiw-nudge-text{
-  max-width:650px;
-  margin:20px 0 0;
-  font-family:var(--body);
-  line-height:1.55;
-}
-
-/* ---------------------------------------------------------
-   LIVE STATUS
-   --------------------------------------------------------- */
-
-.hiw-live{
-  padding:75px 7vw;
-  background:var(--hiw-cream);
-}
-
-.hiw-live-inner{
-  width:min(1000px,100%);
-  margin:auto;
-  border:3px solid var(--hiw-black);
-  padding:25px;
-  background:white;
-  box-shadow:8px 8px 0 var(--hiw-black);
-}
-
-.hiw-live-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:20px;
-}
-
-.hiw-live-title{
-  margin:0;
-  font-family:var(--display);
-  font-size:26px;
-  text-transform:uppercase;
-}
-
-.hiw-live-indicator{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:var(--body);
-  font-size:11px;
-  font-weight:800;
-  text-transform:uppercase;
-}
-
-.hiw-live-dot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--hiw-green);
-  animation:hiwPulse 1.5s infinite;
-}
-
-.hiw-live-track{
-  height:13px;
-  border:2px solid var(--hiw-black);
-  background:var(--hiw-cream);
-  overflow:hidden;
-}
-
-.hiw-live-fill{
-  width:0%;
-  height:100%;
-  background:var(--hiw-red);
-  transition:width .6s cubic-bezier(.2,.8,.2,1);
-}
-
-.hiw-live-message{
-  margin:15px 0 0;
-  font-family:var(--body);
-  font-size:13px;
-}
-
-/* ---------------------------------------------------------
-   CTA
-   --------------------------------------------------------- */
-
-.hiw-cta{
-  padding:100px 7vw;
-  background:var(--hiw-yellow);
-  text-align:center;
-  border-top:3px solid var(--hiw-black);
-}
-
-.hiw-cta-kicker{
-  margin:0 0 15px;
-  font-family:var(--body);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.13em;
-}
-
-.hiw-cta-title{
-  margin:0 auto 30px;
-  max-width:850px;
-  font-family:var(--display);
-  font-size:clamp(48px,7vw,100px);
-  line-height:.85;
-  text-transform:uppercase;
-  letter-spacing:-.045em;
-}
-
-.hiw-cta .brutal-btn{
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease;
-}
-
-.hiw-cta .brutal-btn:hover{
-  transform:translate(-5px,-5px) rotate(-1deg);
-}
-
-/* ---------------------------------------------------------
-   REVEAL
-   --------------------------------------------------------- */
-
-.hiw-reveal{
-  opacity:0;
-  transform:translateY(50px);
-}
-
-.hiw-reveal.is-visible{
-  opacity:1;
-  transform:translateY(0);
-  transition:
-    opacity .7s ease,
-    transform .8s cubic-bezier(.2,.8,.2,1);
-}
-
-/* ---------------------------------------------------------
-   MOBILE
-   --------------------------------------------------------- */
-
-@media(max-width:800px){
-
-  .hiw-hero{
-    min-height:72vh;
-    padding:140px 6vw 80px;
-  }
-
-  .hiw-hero-appy{
-    width:95px;
-    right:7%;
-    bottom:8%;
-  }
-
-  .hiw-floating-note{
-    display:none;
-  }
-
-  .hiw-switcher-section,
-  .hiw-pipeline,
-  .hiw-journey,
-  .hiw-nudge,
-  .hiw-live,
-  .hiw-cta{
-    padding-left:6vw;
-    padding-right:6vw;
-  }
-
-  .hiw-switcher-header,
-  .hiw-journey-top,
-  .hiw-nudge-card{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .hiw-tabs{
-    width:100%;
-  }
-
-  .hiw-tab{
-    flex:1;
-    padding:15px 10px;
-    font-size:12px;
-  }
-
-  .hiw-pipeline-inner{
-    overflow-x:auto;
-    padding-bottom:8px;
-  }
-
-  .hiw-pipeline-item{
-    min-width:135px;
-  }
-
-  .hiw-step{
-    gap:18px;
-    padding:22px 18px;
-  }
-
-  .hiw-step-icon{
-    flex:0 0 72px;
-    width:72px;
-    height:72px;
-  }
-
-  .hiw-step-expand{
-    flex:0 0 34px;
-    width:34px;
-    height:34px;
-  }
-
-  .hiw-step-connector{
-    margin-left:54px;
-  }
-
-  .hiw-nudge-card{
-    padding:28px;
-    gap:25px;
-  }
-
-  .hiw-nudge-appy{
-    width:120px;
-    flex-basis:120px;
-  }
-
-}
-
-@media(max-width:520px){
-
-  .hiw-step{
-    align-items:flex-start;
-  }
-
-  .hiw-step-icon{
-    width:58px;
-    height:58px;
-    flex-basis:58px;
-  }
-
-  .hiw-step-description{
-    font-size:13px;
-  }
-
-  .hiw-step-topline{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:4px;
-  }
-
-  .hiw-step-expand{
-    display:none;
-  }
-
-}
+.step-list{ position:relative; padding-left:90px; }
+.step-list::before{               /* dashed trail */
+  content:""; position:absolute; left:34px; top:0; bottom:0;
+  border-left:4px dashed rgba(20,20,20,.35);
+}
+.trail-fill{                      /* path the bee has covered */
+  position:absolute; left:32px; top:0; width:8px; height:0;
+  background:var(--yellow); border:2px solid var(--ink);
+}
+.trail-bee{
+  position:absolute; left:2px; top:0; width:68px; height:68px; z-index:5;
+  transform:translateY(-50%); pointer-events:none;
+  background:url('assets/appy/sprite-walk.png') 0 0 / 500% 500% no-repeat;
+  filter:drop-shadow(3px 3px 0 var(--ink));
+}
+.step-item{ opacity:.15; transform:translateX(40px) scale(.96); transition:opacity .6s, transform .6s cubic-bezier(.34,1.56,.64,1); }
+.step-item.found{ opacity:1; transform:none; }
+.step-arrow{ display:none; }
+@media(max-width:640px){
+  .step-list{ padding-left:60px; }
+  .step-list::before{ left:22px; } .trail-fill{ left:20px; }
+  .trail-bee{ width:46px; height:46px; } }
 
 </style>
 </head>
-
 <body class="hiw-page">
-
-<!-- =========================================================
-     CURSOR
-     ========================================================= -->
 
 <canvas id="trail-canvas"></canvas>
 <div class="custom-appy-cursor" id="appy-cursor"></div>
 
-
-<!-- =========================================================
-     SCROLL PROGRESS
-     ========================================================= -->
-
-<div class="hiw-progress" aria-hidden="true">
-  <div class="hiw-progress-bar" id="hiw-progress-bar"></div>
-</div>
-
-
-<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<!-- ============ NAVBAR (shared) ============ -->
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
     <ul class="nav-links">
       <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
-      <li class="nav-item"><a href="how-it-works.html" class="is-active"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
       <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
       <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
       <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
@@ -897,1368 +54,214 @@
   </div>
 </nav>
 
-
-<!-- =========================================================
-     HERO
-     ========================================================= -->
-
-<header
-  class="hiw-hero"
-  id="hero"
-  data-color="#6B66A6"
->
-
-  <div class="hiw-hero-inner">
-
-    <p class="hiw-kicker">
-      THE TWO JOURNEYS
-    </p>
-
-    <h1 class="hiw-hero-title">
-      HOW SAFEBITE
-      <span>ACTUALLY WORKS.</span>
-    </h1>
-
-    <p class="hiw-hero-description">
-      Every scan, craving and pattern moves through a different
-      system. Follow the journey from your first input to the
-      final decision.
-    </p>
-
+<!-- ============ HERO STRIP ============ -->
+<header class="page-hero" id="hero" data-color="#6B66A6">
+  <div class="page-hero-inner">
+    <p class="section-kicker" style="color:var(--yellow)">THE TWO JOURNEYS</p>
+    <h1 class="page-hero-title split-title" style="color:var(--yellow)">HOW SAFEBITE<br>ACTUALLY WORKS</h1>
+    <p class="page-hero-sub" style="color:var(--cream)">Every scan and every craving runs through its own pipeline. Here's what actually happens behind each one.</p>
   </div>
-
-  <div class="hiw-floating-note">
-    FOLLOW THE FLOW ↓
-  </div>
-
-  <div class="hiw-hero-appy">
-    <img
-      src="assets/appy/static/read.png"
-      alt="Appy reading"
-    >
-  </div>
-
 </header>
 
+<!-- ============ SECTION A — SCAN FLOW ============ -->
+<section class="content-section" id="scan-flow" data-color="#BD3647">
+  <p class="section-kicker" style="color:var(--yellow)">JOURNEY ONE</p>
+  <h2 class="section-title split-title" style="color:var(--cream)">THE SCAN FLOW</h2>
 
-<!-- =========================================================
-     JOURNEY SELECTOR
-     ========================================================= -->
-
-<section class="hiw-switcher-section">
-
-  <div class="hiw-switcher-inner">
-
-    <div class="hiw-switcher-header">
-
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/eat.png" alt="">
       <div>
-        <p class="hiw-kicker">
-          THREE LAYERS
-        </p>
-
-        <h2 class="hiw-switcher-title">
-          ONE SYSTEM.<br>
-          <span>THREE JOURNEYS.</span>
-        </h2>
+        <span class="step-num">01</span>
+        <h3>CAMERA</h3>
+        <p>You point your phone at the ingredient panel — no barcode hunting, no manual search. The camera view locks on the moment it recognizes printed label text in frame.</p>
       </div>
-
-      <p class="hiw-switcher-copy">
-        Tap a journey to jump directly to the part you want
-        to understand.
-      </p>
-
     </div>
 
-    <div class="hiw-tabs">
+    <div class="step-arrow">↓</div>
 
-      <button
-        class="hiw-tab active"
-        data-target="scan-flow"
-        type="button"
-      >
-        01 / SCAN
-      </button>
-
-      <button
-        class="hiw-tab"
-        data-target="craving-flow"
-        type="button"
-      >
-        02 / CRAVING
-      </button>
-
-      <button
-        class="hiw-tab"
-        data-target="nudge-layer"
-        type="button"
-      >
-        03 / NUDGE
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     PIPELINE
-     ========================================================= -->
-
-<section class="hiw-pipeline">
-
-  <div class="hiw-pipeline-inner">
-
-    <div class="hiw-pipeline-item" data-scroll-target="scan-flow">
-      <span class="hiw-pipeline-number">01</span>
-      <span class="hiw-pipeline-label">Detect</span>
-      <span class="hiw-pipeline-status"></span>
-    </div>
-
-    <div class="hiw-pipeline-item" data-scroll-target="scan-flow">
-      <span class="hiw-pipeline-number">02</span>
-      <span class="hiw-pipeline-label">Read</span>
-      <span class="hiw-pipeline-status"></span>
-    </div>
-
-    <div class="hiw-pipeline-item" data-scroll-target="craving-flow">
-      <span class="hiw-pipeline-number">03</span>
-      <span class="hiw-pipeline-label">Match</span>
-      <span class="hiw-pipeline-status"></span>
-    </div>
-
-    <div class="hiw-pipeline-item" data-scroll-target="nudge-layer">
-      <span class="hiw-pipeline-number">04</span>
-      <span class="hiw-pipeline-label">Decide</span>
-      <span class="hiw-pipeline-status"></span>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     SCAN FLOW
-     ========================================================= -->
-
-<section
-  class="hiw-journey hiw-scan"
-  id="scan-flow"
-  data-color="#BD3647"
->
-
-  <div class="hiw-journey-inner">
-
-    <div class="hiw-journey-top hiw-reveal">
-
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/read.png" alt="">
       <div>
-
-        <p class="hiw-journey-label">
-          JOURNEY ONE
-        </p>
-
-        <h2 class="hiw-journey-title">
-          THE<br>SCAN FLOW
-        </h2>
-
+        <span class="step-num">02</span>
+        <h3>PANEL DETECTION</h3>
+        <p>Before anything gets read, SafeBite finds the panel itself: cropping out the ingredient block from packaging, glare, and clutter so only the text that matters gets passed downstream.</p>
       </div>
-
-      <p class="hiw-journey-intro">
-        From a camera frame to a clear YES, MAYBE or NO,
-        every scan passes through four distinct stages.
-      </p>
-
     </div>
 
+    <div class="step-arrow">↓</div>
 
-    <div class="hiw-steps">
-
-      <!-- STEP 01 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/eat.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">01</span>
-            <h3 class="hiw-step-label">CAMERA</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            You point your phone at the ingredient panel.
-            No barcode hunting or manual search. SafeBite
-            starts with what your camera sees.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>INPUT → CAMERA FRAME</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand camera step"
-        >
-          +
-        </button>
-
-      </article>
-
-
-      <div class="hiw-step-connector"></div>
-
-
-      <!-- STEP 02 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/read.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">02</span>
-            <h3 class="hiw-step-label">PANEL DETECTION</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            SafeBite identifies the ingredient panel and
-            isolates the useful text from packaging, glare
-            and surrounding visual noise.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>VISION → INGREDIENT REGION</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand panel detection step"
-        >
-          +
-        </button>
-
-      </article>
-
-
-      <div class="hiw-step-connector"></div>
-
-
-      <!-- STEP 03 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/think.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">03</span>
-            <h3 class="hiw-step-label">OCR</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            The panel becomes plain text. Ingredients,
-            additives and sweeteners are extracted in the
-            order they appear on the label.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>IMAGE → TEXT</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand OCR step"
-        >
-          +
-        </button>
-
-      </article>
-
-
-      <div class="hiw-step-connector"></div>
-
-
-      <!-- STEP 04 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/sit.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">04</span>
-            <h3 class="hiw-step-label">VERDICT</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            Your allergen profile is matched against the
-            extracted ingredients and SafeBite produces
-            a plain-language verdict.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>INGREDIENTS → YES / MAYBE / NO</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand verdict step"
-        >
-          +
-        </button>
-
-      </article>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     CRAVING FLOW
-     ========================================================= -->
-
-<section
-  class="hiw-journey hiw-craving"
-  id="craving-flow"
-  data-color="#8FA3C4"
->
-
-  <div class="hiw-journey-inner">
-
-    <div class="hiw-journey-top hiw-reveal">
-
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/think.png" alt="">
       <div>
-
-        <p class="hiw-journey-label">
-          JOURNEY TWO
-        </p>
-
-        <h2 class="hiw-journey-title">
-          THE<br>CRAVING FLOW
-        </h2>
-
+        <span class="step-num">03</span>
+        <h3>OCR</h3>
+        <p>The cropped panel gets converted from pixels to plain text — every ingredient, additive and sweetener extracted in the order it's printed, ready to be checked against what you care about.</p>
       </div>
-
-      <p class="hiw-journey-intro">
-        Instead of searching by product name, tell SafeBite
-        what you actually want to eat.
-      </p>
-
     </div>
 
+    <div class="step-arrow">↓</div>
 
-    <div class="hiw-steps">
-
-      <!-- STEP 01 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/drinkwalk.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">01</span>
-            <h3 class="hiw-step-label">TYPE OR SPEAK</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            Tell SafeBite what you're craving in your own
-            words. Something like "sweet and fizzy" is enough
-            to start the search.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>TEXT / VOICE → CRAVING</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand craving input step"
-        >
-          +
-        </button>
-
-      </article>
-
-
-      <div class="hiw-step-connector"></div>
-
-
-      <!-- STEP 02 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/meditate.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">02</span>
-            <h3 class="hiw-step-label">VAE EMBEDDING</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            The craving is converted into a shared latent
-            representation so similar products can be found
-            beyond simple keyword matching.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>CRAVING → LATENT SPACE</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand embedding step"
-        >
-          +
-        </button>
-
-      </article>
-
-
-      <div class="hiw-step-connector"></div>
-
-
-      <!-- STEP 03 -->
-
-      <article class="hiw-step hiw-reveal">
-
-        <img
-          class="hiw-step-icon"
-          src="assets/appy/static/eat.png"
-          alt=""
-        >
-
-        <div class="hiw-step-content">
-
-          <div class="hiw-step-topline">
-            <span class="hiw-step-number">03</span>
-            <h3 class="hiw-step-label">RANKED SWAPS</h3>
-          </div>
-
-          <p class="hiw-step-description">
-            Products are ranked according to craving
-            similarity and label safety, giving you alternatives
-            instead of simply telling you what to avoid.
-          </p>
-
-          <div class="hiw-step-extra">
-            <span>SIMILARITY + SAFETY → SWAPS</span>
-          </div>
-
-        </div>
-
-        <button
-          class="hiw-step-expand"
-          type="button"
-          aria-label="Expand ranked swaps step"
-        >
-          +
-        </button>
-
-      </article>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     PROACTIVE NUDGE
-     ========================================================= -->
-
-<section
-  class="hiw-nudge"
-  id="nudge-layer"
-  data-color="#A2BF8A"
->
-
-  <div class="hiw-nudge-card hiw-reveal">
-
-    <div class="hiw-nudge-appy">
-
-      <img
-        src="assets/appy/static/think.png"
-        alt="Appy thinking"
-      >
-
-    </div>
-
-    <div class="hiw-nudge-content">
-
-      <p class="hiw-nudge-kicker">
-        THE QUIET THIRD JOURNEY
-      </p>
-
-      <h2 class="hiw-nudge-title">
-        IT NOTICES<br>THE PATTERN.
-      </h2>
-
-      <p class="hiw-nudge-text">
-        SafeBite can look across previous scan results rather
-        than treating every product as an isolated event.
-        Patterns such as repeated flagged items can become
-        a proactive signal before the next scan.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     LIVE INTERACTIVE SYSTEM
-     ========================================================= -->
-
-<section class="hiw-live">
-
-  <div class="hiw-live-inner">
-
-    <div class="hiw-live-head">
-
-      <h2 class="hiw-live-title">
-        SYSTEM STATUS
-      </h2>
-
-      <div class="hiw-live-indicator">
-        <span class="hiw-live-dot"></span>
-        Processing
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/sit.png" alt="">
+      <div>
+        <span class="step-num">04</span>
+        <h3>VERDICT</h3>
+        <p>Your allergen list and flagged additives get matched against the extracted ingredients, and SafeBite lands on a verdict — YES, MAYBE, or NO — with the reasoning spelled out in plain language.</p>
       </div>
-
     </div>
-
-    <div class="hiw-live-track">
-      <div
-        class="hiw-live-fill"
-        id="hiw-live-fill"
-      ></div>
-    </div>
-
-    <p
-      class="hiw-live-message"
-      id="hiw-live-message"
-    >
-      Waiting for your input...
-    </p>
-
   </div>
-
 </section>
 
+<!-- ============ SECTION B — CRAVING FLOW ============ -->
+<section class="content-section" id="craving-flow" data-color="#8FA3C4">
+  <p class="section-kicker" style="color:var(--ink)">JOURNEY TWO</p>
+  <h2 class="section-title split-title" style="color:var(--cream)">THE CRAVING FLOW</h2>
 
-<!-- =========================================================
-     CTA
-     ========================================================= -->
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/drinkwalk.png" alt="">
+      <div>
+        <span class="step-num">01</span>
+        <h3>TYPE OR SPEAK</h3>
+        <p>Tell SafeBite what you're craving, typed or spoken, in your own words — "something sweet and fizzy" works just as well as a product name.</p>
+      </div>
+    </div>
 
-<section
-  class="hiw-cta"
-  data-color="#F2DB66"
->
+    <div class="step-arrow">↓</div>
 
-  <p class="hiw-cta-kicker">
-    NOW YOU KNOW WHAT HAPPENS BEHIND THE BITE.
-  </p>
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/meditate.png" alt="">
+      <div>
+        <span class="step-num">02</span>
+        <h3>VAE EMBEDDING</h3>
+        <p>That craving gets embedded into a shared latent space by a variational autoencoder, so "fizzy and sweet" lands near the products that actually satisfy it, not just the ones that share a keyword.</p>
+      </div>
+    </div>
 
-  <h2 class="hiw-cta-title">
-    READY TO TRY<br>THE REAL THING?
-  </h2>
+    <div class="step-arrow">↓</div>
 
-  <a
-    href="login.html"
-    class="brutal-btn brutal-btn--yellow"
-  >
-    TRY SAFEBITE →
-  </a>
-
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/eat.png" alt="">
+      <div>
+        <span class="step-num">03</span>
+        <h3>RANKED SWAPS</h3>
+        <p>SafeBite ranks nearby products by how well they match the craving and how clean their label is, then surfaces the top swaps — same craving, better ingredients.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- ============ SECTION C — PROACTIVE NUDGE LAYER ============ -->
+<section class="content-section" id="nudge-layer" data-color="#A2BF8A">
+  <p class="section-kicker" style="color:var(--red)">THE QUIET THIRD JOURNEY</p>
+  <h2 class="section-title split-title">THE PROACTIVE NUDGE LAYER</h2>
+  <p class="section-body-text reveal">This one runs in the background. Instead of waiting for you to scan, SafeBite reads the pattern in what you've already scanned and speaks up before your next bite — no camera required.</p>
 
-<!-- =========================================================
-     FOOTER — KEEP SHARED STRUCTURE
-     ========================================================= -->
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/walk.png" alt="">
+      <div>
+        <span class="step-num">01</span>
+        <h3>SCAN HISTORY</h3>
+        <p>Every verdict you've received — clean, flagged, or swapped — gets logged as a sequence, building a picture of your recent eating pattern over time.</p>
+      </div>
+    </div>
 
-<footer
-  class="footer"
-  id="footer"
-  data-color="#FFF8E0"
->
+    <div class="step-arrow">↓</div>
 
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/think.png" alt="">
+      <div>
+        <span class="step-num">02</span>
+        <h3>BILSTM PATTERN READ</h3>
+        <p>A bidirectional LSTM reads that sequence forward and backward, picking up on trends a single scan would never reveal — like three flagged snacks in a row.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/dirty.png" alt="">
+      <div>
+        <span class="step-num">03</span>
+        <h3>PROACTIVE NUDGE</h3>
+        <p>Before you even reach for the next item, SafeBite surfaces a heads-up — "before you even scan" — so the pattern gets interrupted, not just recorded.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FOOTER ============ -->
+<section class="cta-strip" data-color="#FCF6E8">
+  <p style="color:var(--ink)">Reading about it only gets you so far.</p>
+  <a href="login.html" class="brutal-btn brutal-btn--yellow">TRY IT YOURSELF →</a>
+</section>
+
+<!-- ============ FOOTER — "mainstays" style flat-lay (shared, verbatim) ============ -->
+<footer class="footer" id="footer" data-color="#FFF8E0">
   <div class="footer-topbar">
-
-    <a
-      href="#"
-      class="footer-social-icon"
-      aria-label="Instagram"
-    >
-
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-
-        <rect
-          x="3"
-          y="3"
-          width="18"
-          height="18"
-          rx="5"
-        ></rect>
-
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-        ></circle>
-
-        <circle
-          cx="17.5"
-          cy="6.5"
-          r="1"
-        ></circle>
-
+    <a href="#" class="footer-social-icon" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1"></circle>
       </svg>
-
     </a>
-
-    <a
-      href="how-it-works.html"
-      class="footer-topbar-link"
-    >
-      HOW IT WORKS
-    </a>
-
-    <a
-      href="architecture.html"
-      class="footer-topbar-link"
-    >
-      HOW IT THINKS
-    </a>
-
-    <a
-      href="results.html"
-      class="footer-topbar-link"
-    >
-      RESULTS
-    </a>
-
-    <a
-      href="about.html"
-      class="footer-topbar-link"
-    >
-      ABOUT
-    </a>
-
-    <span
-      class="footer-topbar-link footer-topbar-credit"
-    >
-      SITE BY SAFEBITE
-    </span>
-
+    <a href="how-it-works.html" class="footer-topbar-link">HOW IT WORKS</a>
+    <a href="architecture.html" class="footer-topbar-link">HOW IT THINKS</a>
+    <a href="results.html" class="footer-topbar-link">RESULTS</a>
+    <a href="about.html" class="footer-topbar-link">ABOUT</a>
+    <span class="footer-topbar-link footer-topbar-credit">SITE BY SAFEBITE</span>
   </div>
 
-
-  <div
-    class="footer-flatlay"
-    id="footer-flatlay"
-  >
-
-    <img src="assets/footer/vase-flowers.png"
-         class="fl-item"
-         id="fl-vase"
-         alt=""
-         data-depth="0.10">
-
-    <img src="assets/footer/wine-glass-1.png"
-         class="fl-item"
-         id="fl-wineglass1"
-         alt=""
-         data-depth="0.06">
-
-    <img src="assets/footer/fork.png"
-         class="fl-item"
-         id="fl-fork"
-         alt=""
-         data-depth="0.08"
-         data-rotate="-8">
-
-    <img src="assets/footer/sausage-plate.png"
-         class="fl-item"
-         id="fl-sausage"
-         alt=""
-         data-depth="0.05">
-
-    <img src="assets/footer/wine-bottle.png"
-         class="fl-item"
-         id="fl-bottle"
-         alt=""
-         data-depth="0.09">
-
-    <img src="assets/footer/candle-2.png"
-         class="fl-item"
-         id="fl-candle2"
-         alt=""
-         data-depth="0.07">
-
-    <img src="assets/footer/salt-pepper.png"
-         class="fl-item"
-         id="fl-saltpepper"
-         alt=""
-         data-depth="0.11">
-
-    <img src="assets/footer/cheese-block.png"
-         class="fl-item"
-         id="fl-cheese"
-         alt=""
-         data-depth="0.06">
-
-    <img src="assets/footer/candle-1.png"
-         class="fl-item"
-         id="fl-candle1"
-         alt=""
-         data-depth="0.08">
-
-    <img src="assets/footer/olives-bowl.png"
-         class="fl-item"
-         id="fl-olivesbowl"
-         alt=""
-         data-depth="0.05">
-
-    <img src="assets/footer/olives-loose.png"
-         class="fl-item"
-         id="fl-olivesloose"
-         alt=""
-         data-depth="0.09">
-
-    <img src="assets/footer/jar.png"
-         class="fl-item"
-         id="fl-jar"
-         alt=""
-         data-depth="0.07">
-
-    <img src="assets/footer/bread-board.png"
-         class="fl-item"
-         id="fl-bread"
-         alt=""
-         data-depth="0.04">
-
-    <img src="assets/footer/spoon.png"
-         class="fl-item"
-         id="fl-spoon"
-         alt=""
-         data-depth="0.10"
-         data-rotate="6">
-
-    <img src="assets/footer/wine-glass-2.png"
-         class="fl-item"
-         id="fl-wineglass2"
-         alt=""
-         data-depth="0.06">
-
-    <img src="assets/footer/charcuterie-board.png"
-         class="fl-item"
-         id="fl-charcuterie"
-         alt=""
-         data-depth="0.03">
-
-    <img src="assets/footer/knife.png"
-         class="fl-item"
-         id="fl-knife"
-         alt=""
-         data-depth="0.08"
-         data-rotate="-4">
-
-    <img src="assets/footer/hat-plate.png"
-         class="fl-item"
-         id="fl-hat"
-         alt=""
-         data-depth="0.05">
-
+  <div class="footer-flatlay" id="footer-flatlay">
+    <img src="assets/footer/vase-flowers.png"      class="fl-item" id="fl-vase"       alt="" data-depth="0.10">
+    <img src="assets/footer/wine-glass-1.png"      class="fl-item" id="fl-wineglass1" alt="" data-depth="0.06">
+    <img src="assets/footer/fork.png"               class="fl-item" id="fl-fork"       alt="" data-depth="0.08" data-rotate="-8">
+    <img src="assets/footer/sausage-plate.png"      class="fl-item" id="fl-sausage"    alt="" data-depth="0.05">
+    <img src="assets/footer/wine-bottle.png"        class="fl-item" id="fl-bottle"     alt="" data-depth="0.09">
+    <img src="assets/footer/candle-2.png"           class="fl-item" id="fl-candle2"    alt="" data-depth="0.07">
+    <img src="assets/footer/salt-pepper.png"        class="fl-item" id="fl-saltpepper" alt="" data-depth="0.11">
+    <img src="assets/footer/cheese-block.png"       class="fl-item" id="fl-cheese"     alt="" data-depth="0.06">
+    <img src="assets/footer/candle-1.png"           class="fl-item" id="fl-candle1"    alt="" data-depth="0.08">
+    <img src="assets/footer/olives-bowl.png"        class="fl-item" id="fl-olivesbowl" alt="" data-depth="0.05">
+    <img src="assets/footer/olives-loose.png"       class="fl-item" id="fl-olivesloose" alt="" data-depth="0.09">
+    <img src="assets/footer/jar.png"                class="fl-item" id="fl-jar"        alt="" data-depth="0.07">
+    <img src="assets/footer/bread-board.png"        class="fl-item" id="fl-bread"      alt="" data-depth="0.04">
+    <img src="assets/footer/spoon.png"              class="fl-item" id="fl-spoon"      alt="" data-depth="0.10" data-rotate="6">
+    <img src="assets/footer/wine-glass-2.png"       class="fl-item" id="fl-wineglass2" alt="" data-depth="0.06">
+    <img src="assets/footer/charcuterie-board.png"  class="fl-item" id="fl-charcuterie" alt="" data-depth="0.03">
+    <img src="assets/footer/knife.png"              class="fl-item" id="fl-knife"      alt="" data-depth="0.08" data-rotate="-4">
+    <img src="assets/footer/hat-plate.png"          class="fl-item" id="fl-hat"        alt="" data-depth="0.05">
   </div>
-
 </footer>
 
-
-<!-- =========================================================
-     LIBRARIES
-     ========================================================= -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
 <script src="script.js"></script>
-<script src="appy-sprites.js"></script>
-
 <script src="base-script.js"></script>
-
-
-<!-- =========================================================
-     PAGE INTERACTIONS
-     ========================================================= -->
-
 <script>
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* -------------------------------------------------------
-     SCROLL PROGRESS
-     ------------------------------------------------------- */
-
-  const progressBar =
-    document.getElementById("hiw-progress-bar");
-
-  const updateProgress = () => {
-
-    const scrollTop = window.scrollY;
-
-    const documentHeight =
-      document.documentElement.scrollHeight -
-      window.innerHeight;
-
-    const progress =
-      documentHeight > 0
-        ? (scrollTop / documentHeight) * 100
-        : 0;
-
-    progressBar.style.width =
-      Math.min(100, Math.max(0, progress)) + "%";
-
-  };
-
-  window.addEventListener(
-    "scroll",
-    updateProgress,
-    { passive:true }
-  );
-
-  updateProgress();
-
-
-  /* -------------------------------------------------------
-     JOURNEY TABS
-     ------------------------------------------------------- */
-
-  const tabs =
-    document.querySelectorAll(".hiw-tab");
-
-  tabs.forEach(tab => {
-
-    tab.addEventListener("click", () => {
-
-      const targetId =
-        tab.dataset.target;
-
-      const target =
-        document.getElementById(targetId);
-
-      if(!target) return;
-
-      tabs.forEach(item =>
-        item.classList.remove("active")
-      );
-
-      tab.classList.add("active");
-
-      const offset =
-        window.innerWidth <= 700
-          ? 100
-          : 120;
-
-      const top =
-        target.getBoundingClientRect().top +
-        window.scrollY -
-        offset;
-
-      window.scrollTo({
-        top,
-        behavior:"smooth"
-      });
-
-    });
-
-  });
-
-
-  /* -------------------------------------------------------
-     PIPELINE CLICK
-     ------------------------------------------------------- */
-
-  document
-    .querySelectorAll(".hiw-pipeline-item")
-    .forEach(item => {
-
-      item.addEventListener("click", () => {
-
-        const target =
-          document.getElementById(
-            item.dataset.scrollTarget
-          );
-
-        if(!target) return;
-
-        target.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-
-      });
-
-    });
-
-
-  /* -------------------------------------------------------
-     STEP EXPANSION
-     ------------------------------------------------------- */
-
-  document
-    .querySelectorAll(".hiw-step")
-    .forEach(step => {
-
-      const button =
-        step.querySelector(".hiw-step-expand");
-
-      const toggle = () => {
-
-        const wasActive =
-          step.classList.contains("active");
-
-        step
-          .closest(".hiw-steps")
-          .querySelectorAll(".hiw-step")
-          .forEach(other => {
-
-            if(other !== step){
-              other.classList.remove("active");
-            }
-
-          });
-
-        step.classList.toggle(
-          "active",
-          !wasActive
-        );
-
-      };
-
-      step.addEventListener("click", event => {
-
-        if(event.target.closest("button")){
-          toggle();
-          return;
-        }
-
-        toggle();
-
-      });
-
-    });
-
-
-  /* -------------------------------------------------------
-     MOUSE TILT ON STEP CARDS
-     ------------------------------------------------------- */
-
-  const supportsHover =
-    window.matchMedia("(hover:hover)").matches;
-
-  if(supportsHover){
-
-    document
-      .querySelectorAll(".hiw-step")
-      .forEach(step => {
-
-        step.addEventListener("mousemove", event => {
-
-          if(step.classList.contains("active"))
-            return;
-
-          const rect =
-            step.getBoundingClientRect();
-
-          const x =
-            (event.clientX - rect.left) /
-            rect.width - .5;
-
-          const y =
-            (event.clientY - rect.top) /
-            rect.height - .5;
-
-          const rotateY = x * 3;
-          const rotateX = -y * 3;
-
-          step.style.transform =
-            `perspective(900px)
-             rotateX(${rotateX}deg)
-             rotateY(${rotateY}deg)
-             translateY(-4px)`;
-
-        });
-
-        step.addEventListener("mouseleave", () => {
-
-          if(step.classList.contains("active"))
-            return;
-
-          step.style.transform = "";
-
-        });
-
-      });
-
+document.querySelectorAll('.step-list').forEach(list=>{
+  const items=[...list.querySelectorAll('.step-item')];
+  items.forEach(i=>i.classList.remove('reveal'));   // stop the old reveal clashing
+  const fill=document.createElement('div'); fill.className='trail-fill';
+  const bee=document.createElement('div'); bee.className='trail-bee';
+  list.append(fill,bee);
+  const walk=createSprite(bee,{fps:10,autoplay:false});
+  let t;
+  function update(){
+    const r=list.getBoundingClientRect();
+    const p=Math.min(1,Math.max(0,(innerHeight*0.6-r.top)/r.height));
+    const y=p*r.height;
+    bee.style.top=y+'px'; fill.style.height=y+'px';
+    walk.play(); clearTimeout(t); t=setTimeout(walk.stop,150);
+    items.forEach(i=>i.classList.toggle('found', i.offsetTop < y+40));
   }
-
-
-  /* -------------------------------------------------------
-     REVEAL OBSERVER
-     ------------------------------------------------------- */
-
-  const revealItems =
-    document.querySelectorAll(".hiw-reveal");
-
-  const revealObserver =
-    new IntersectionObserver(
-      entries => {
-
-        entries.forEach(entry => {
-
-          if(!entry.isIntersecting)
-            return;
-
-          entry.target.classList.add(
-            "is-visible"
-          );
-
-          revealObserver.unobserve(
-            entry.target
-          );
-
-        });
-
-      },
-      {
-        threshold:.12,
-        rootMargin:"0px 0px -50px 0px"
-      }
-    );
-
-  revealItems.forEach(item =>
-    revealObserver.observe(item)
-  );
-
-
-  /* -------------------------------------------------------
-     LIVE SYSTEM ANIMATION
-     ------------------------------------------------------- */
-
-  const liveFill =
-    document.getElementById("hiw-live-fill");
-
-  const liveMessage =
-    document.getElementById("hiw-live-message");
-
-  const messages = [
-    "Camera frame received...",
-    "Finding the useful region...",
-    "Reading ingredient text...",
-    "Matching against your profile...",
-    "Generating a clear result..."
-  ];
-
-  let liveIndex = 0;
-
-  const runLiveAnimation = () => {
-
-    liveIndex =
-      (liveIndex + 1) %
-      messages.length;
-
-    const percentage =
-      ((liveIndex + 1) / messages.length) * 100;
-
-    liveFill.style.width =
-      percentage + "%";
-
-    liveMessage.textContent =
-      messages[liveIndex];
-
-    if(liveIndex === messages.length - 1){
-
-      setTimeout(() => {
-
-        liveFill.style.width = "0%";
-
-        liveMessage.textContent =
-          "Ready for your next bite.";
-
-      }, 900);
-
-    }
-
-  };
-
-  setInterval(
-    runLiveAnimation,
-    1800
-  );
-
-
-  /* -------------------------------------------------------
-     APPY INTERACTION
-     ------------------------------------------------------- */
-
-  const appy =
-    document.querySelector(".hiw-hero-appy");
-
-  if(appy && supportsHover){
-
-    appy.addEventListener(
-      "mouseenter",
-      () => {
-
-        appy.style.animationPlayState =
-          "paused";
-
-        appy.style.transform =
-          "scale(1.12) rotate(-8deg)";
-
-      }
-    );
-
-    appy.addEventListener(
-      "mouseleave",
-      () => {
-
-        appy.style.animationPlayState =
-          "running";
-
-        appy.style.transform = "";
-
-      }
-    );
-
-  }
-
-
-  /* -------------------------------------------------------
-     ACTIVE JOURNEY WHILE SCROLLING
-     ------------------------------------------------------- */
-
-  const journeys = [
-    {
-      id:"scan-flow",
-      tab:document.querySelector(
-        '[data-target="scan-flow"]'
-      )
-    },
-    {
-      id:"craving-flow",
-      tab:document.querySelector(
-        '[data-target="craving-flow"]'
-      )
-    },
-    {
-      id:"nudge-layer",
-      tab:document.querySelector(
-        '[data-target="nudge-layer"]'
-      )
-    }
-  ];
-
-  const journeyObserver =
-    new IntersectionObserver(
-      entries => {
-
-        entries.forEach(entry => {
-
-          if(!entry.isIntersecting)
-            return;
-
-          const current =
-            journeys.find(
-              journey =>
-                journey.id === entry.target.id
-            );
-
-          if(!current || !current.tab)
-            return;
-
-          tabs.forEach(tab =>
-            tab.classList.remove("active")
-          );
-
-          current.tab.classList.add("active");
-
-        });
-
-      },
-      {
-        threshold:.25
-      }
-    );
-
-  journeys.forEach(journey => {
-
-    const element =
-      document.getElementById(journey.id);
-
-    if(element)
-      journeyObserver.observe(element);
-
-  });
-
-
-  /* -------------------------------------------------------
-     KEYBOARD ACCESSIBILITY
-     ------------------------------------------------------- */
-
-  document
-    .querySelectorAll(".hiw-step")
-    .forEach(step => {
-
-      step.setAttribute(
-        "tabindex",
-        "0"
-      );
-
-      step.addEventListener(
-        "keydown",
-        event => {
-
-          if(
-            event.key === "Enter" ||
-            event.key === " "
-          ){
-
-            event.preventDefault();
-
-            step.click();
-
-          }
-
-        }
-      );
-
-    });
-
-
-  /* -------------------------------------------------------
-     GSAP HERO
-     ------------------------------------------------------- */
-
-  if(
-    typeof gsap !== "undefined"
-  ){
-
-    gsap.from(
-      ".hiw-kicker",
-      {
-        opacity:0,
-        y:25,
-        duration:.7,
-        ease:"power3.out"
-      }
-    );
-
-    gsap.from(
-      ".hiw-hero-title",
-      {
-        opacity:0,
-        y:70,
-        duration:1,
-        delay:.1,
-        ease:"power4.out"
-      }
-    );
-
-    gsap.from(
-      ".hiw-hero-description",
-      {
-        opacity:0,
-        y:30,
-        duration:.8,
-        delay:.35,
-        ease:"power3.out"
-      }
-    );
-
-    gsap.from(
-      ".hiw-hero-appy",
-      {
-        opacity:0,
-        scale:.5,
-        rotation:-15,
-        duration:1,
-        delay:.4,
-        ease:"back.out(1.7)"
-      }
-    );
-
-  }
-
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',update);
+  update();
 });
-
 </script>
-
 </body>
 </html>
