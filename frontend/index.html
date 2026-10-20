@@ -6,7 +6,9 @@
 <meta name="theme-color" content="#6B66A6">
 
 <title>SafeBite — Know What You Eat</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="style.css">
 
@@ -26,8 +28,8 @@
   --sb-plum:#816AA8;
   --sb-black:#141414;
 
-  --sb-display:'Cabinet Grotesk',sans-serif;
-  --sb-body:'General Sans',sans-serif;
+  --sb-display:'Bungee','Impact',sans-serif;
+  --sb-body:'Space Mono',ui-monospace,monospace;
 }
 
 /* =========================================================
@@ -57,7 +59,7 @@ body.index-page h2,
 body.index-page h3,
 body.index-page h4{
   font-family:var(--sb-display);
-  font-weight:800;
+  font-weight:400;
 }
 
 body.index-page a{
@@ -156,7 +158,7 @@ body.index-page .nav-item a:hover .nav-frame{
   left:-1rem;
   bottom:5rem;
   color:var(--sb-cream);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.12em;
   transform:rotate(-90deg);
@@ -190,7 +192,7 @@ body.index-page .nav-item a:hover .nav-frame{
   background:var(--sb-cream);
   border:3px solid var(--sb-black);
   box-shadow:6px 6px 0 var(--sb-black);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.08em;
 }
@@ -286,7 +288,7 @@ body.index-page .nav-item a:hover .nav-frame{
 
 .sb-small-link{
   color:var(--sb-cream);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   text-transform:uppercase;
   text-underline-offset:5px;
@@ -325,7 +327,7 @@ body.index-page .nav-item a:hover .nav-frame{
   justify-content:space-between;
   border-bottom:3px solid var(--sb-black);
   padding-bottom:12px;
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:9px;
 }
 
@@ -398,7 +400,7 @@ body.index-page .nav-item a:hover .nav-frame{
   background:var(--sb-cream);
   border:3px solid var(--sb-black);
   box-shadow:6px 6px 0 var(--sb-black);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   line-height:1.15;
   transform:rotate(-5deg);
@@ -467,7 +469,7 @@ body.index-page .nav-item a:hover .nav-frame{
   top:8vh;
   left:3vw;
   color:var(--sb-cream);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.1em;
 }
@@ -531,7 +533,7 @@ body.index-page .nav-item a:hover .nav-frame{
 
 .sb-micro{
   margin:0 0 14px;
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.1em;
   text-transform:uppercase;
@@ -584,7 +586,7 @@ body.index-page .nav-item a:hover .nav-frame{
 }
 
 .sb-entry-num{
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.08em;
   position:relative;
@@ -720,7 +722,7 @@ body.index-page .nav-item a:hover .nav-frame{
 }
 
 .sb-stack-index{
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
 }
 
@@ -812,7 +814,7 @@ body.index-page .nav-item a:hover .nav-frame{
   max-width:450px;
   margin:3rem auto 0;
   text-align:center;
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:11px;
   line-height:1.2;
 }
@@ -917,7 +919,7 @@ body.index-page .verdict-panel h3{
   margin-top:20px;
   padding:7px 10px;
   border:2px solid var(--sb-black);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:9px;
   background:var(--sb-yellow);
 }
@@ -971,7 +973,7 @@ body.index-page .verdict-panel h3{
 .sb-swipe-card:nth-child(5){background:#F8C1BA}
 
 .sb-swipe-number{
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
 }
 
@@ -1005,7 +1007,7 @@ body.index-page .verdict-panel h3{
 .sb-swipe-hint{
   text-align:center;
   margin:2rem 0 0;
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.1em;
 }
@@ -1089,7 +1091,7 @@ body.index-page .verdict-panel h3{
   background:var(--sb-cream);
   border:2px solid var(--sb-black);
   padding:6px 8px;
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:9px;
 }
 
@@ -1140,7 +1142,7 @@ body.index-page .verdict-panel h3{
 
 .sb-final p{
   color:var(--sb-cream);
-  font-family:monospace;
+  font-family:var(--sb-body);
   font-size:10px;
   letter-spacing:.1em;
 }
@@ -1407,69 +1409,18 @@ body.index-page .verdict-panel h3{
 <canvas id="trail-canvas" aria-hidden="true"></canvas>
 <div class="custom-appy-cursor" id="appy-cursor" aria-hidden="true"></div>
 
-<!-- =======================================================
-     NAVBAR
-     ======================================================= -->
-
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
 <nav class="navbar" id="navbar">
-
   <div class="nav-inner">
-
-    <a href="index.html" class="nav-logo">
-      SAFEBITE<span class="nav-logo-dot">.</span>
-    </a>
-
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
     <ul class="nav-links">
-
-      <li class="nav-item">
-        <a href="index.html">
-          <span class="nav-frame">
-            <img src="assets/appy/static/eat.png" alt="">
-          </span>
-          Home
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="how-it-works.html">
-          <span class="nav-frame">
-            <img src="assets/appy/static/read.png" alt="">
-          </span>
-          How It Works
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="architecture.html">
-          <span class="nav-frame">
-            <img src="assets/appy/static/think.png" alt="">
-          </span>
-          How It Thinks
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="results.html">
-          <span class="nav-frame">
-            <img src="assets/appy/static/sit.png" alt="">
-          </span>
-          Results
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="about.html">
-          <span class="nav-frame">
-            <img src="assets/appy/static/meditate.png" alt="">
-          </span>
-          About
-        </a>
-      </li>
-
+      <li class="nav-item"><a href="index.html" class="is-active"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
     </ul>
-
   </div>
-
 </nav>
 
 
@@ -1691,7 +1642,7 @@ body.index-page .verdict-panel h3{
 
       <img
         class="sb-entry-image"
-        src="assets/illustrations/coffee.jpeg"
+        src="assets/illustrations/coffee.png"
         alt="Hand-drawn coffee and croissant illustration"
       >
 
@@ -1724,7 +1675,7 @@ body.index-page .verdict-panel h3{
 
       <img
         class="sb-entry-image"
-        src="assets/illustrations/picnic.jpeg"
+        src="assets/illustrations/picnic.png"
         alt="Hand-drawn food illustration"
       >
 
@@ -1812,7 +1763,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-stack-image"
-          src="assets/illustrations/dinner.jpeg"
+          src="assets/illustrations/dinner.png"
           alt="Hand-drawn dinner table illustration"
         >
 
@@ -1844,7 +1795,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-stack-image"
-          src="assets/illustrations/chez-marianne.jpeg"
+          src="assets/illustrations/chez-marianne.png"
           alt="Hand-drawn storefront illustration"
         >
 
@@ -1876,7 +1827,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-stack-image"
-          src="assets/illustrations/pizza.jpeg"
+          src="assets/illustrations/pizza.png"
           alt="Hand-drawn pizza illustration"
         >
 
@@ -1908,7 +1859,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-stack-image"
-          src="assets/illustrations/charcuterie.jpeg"
+          src="assets/illustrations/charcuterie.png"
           alt="Hand-drawn food board illustration"
         >
 
@@ -2189,7 +2140,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/pizza.jpeg"
+          src="assets/illustrations/pizza.png"
           alt="Hand-drawn pizza illustration"
         >
 
@@ -2213,7 +2164,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/coffee.jpeg"
+          src="assets/illustrations/coffee.png"
           alt="Hand-drawn coffee and croissant illustration"
         >
 
@@ -2237,7 +2188,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/dinner-table.jpeg"
+          src="assets/illustrations/dinner-table.png"
           alt="Hand-drawn dinner illustration"
         >
 
@@ -2261,7 +2212,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/charcuterie.jpeg"
+          src="assets/illustrations/charcuterie.png"
           alt="Hand-drawn food board illustration"
         >
 
@@ -2285,7 +2236,7 @@ body.index-page .verdict-panel h3{
 
         <img
           class="sb-swipe-image"
-          src="assets/illustrations/cat-coffee.jpeg"
+          src="assets/illustrations/cat-coffee.png"
           alt="Hand-drawn cat with coffee illustration"
         >
 
@@ -2344,7 +2295,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/coffee.jpeg"
+        src="assets/illustrations/coffee.png"
         alt="Coffee and croissant line drawing"
       >
 
@@ -2358,7 +2309,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/cat-coffee.jpeg"
+        src="assets/illustrations/cat-coffee.png"
         alt="Cat with coffee line drawing"
       >
 
@@ -2372,7 +2323,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/charcuterie.jpeg"
+        src="assets/illustrations/charcuterie.png"
         alt="Food board line drawing"
       >
 
@@ -2386,7 +2337,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/dinner-table.jpeg"
+        src="assets/illustrations/dinner-table.png"
         alt="Dinner table illustration"
       >
 
@@ -2400,7 +2351,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/pizza.jpeg"
+        src="assets/illustrations/pizza.png"
         alt="Pizza line drawing"
       >
 
@@ -2414,7 +2365,7 @@ body.index-page .verdict-panel h3{
     <figure class="sb-art sb-reveal">
 
       <img
-        src="assets/illustrations/disco-ball.jpeg"
+        src="assets/illustrations/disco-ball.png"
         alt="Disco ball line drawing"
       >
 
@@ -2723,6 +2674,7 @@ body.index-page .verdict-panel h3{
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script src="script.js"></script>
+<script src="appy-sprites.js"></script>
 
 
 <!-- =======================================================

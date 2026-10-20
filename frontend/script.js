@@ -4,6 +4,7 @@
 // sized independently of the native 256px frame.
 // =========================================================
 function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}){
+  if (el.__sprite) return el.__sprite;
   const frameCount = cols * rows;
   let frame = 0;
   let raf = null;
@@ -36,7 +37,9 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
   paint();
   if (autoplay) play();
 
-  return { play, stop, setFrame, step, el };
+  const api = { play, stop, setFrame, step, el };
+  el.__sprite = api;
+  return api;
 }
 
 // =========================================================

@@ -215,8 +215,9 @@ const API_BASE = window.location.hostname.endsWith('.app.github.dev')
       unclear: "Couldn't fully confirm this one — some ingredients need a closer look."
     };
 
-    document.getElementById('verdict-result-sprite').style.backgroundImage =
-      `url('${spriteByVerdict[scan.verdict]}')`;
+    const verdictSprite = document.getElementById('verdict-result-sprite');
+    verdictSprite.style.backgroundImage = `url('${spriteByVerdict[scan.verdict]}')`;
+    if (window.AppySprites) AppySprites.scan(verdictSprite);   // start the sprite animation
     document.getElementById('verdict-badge').textContent = labelByVerdict[scan.verdict];
     document.getElementById('verdict-badge').className = `verdict-badge-lg verdict-badge-lg--${scan.verdict}`;
     document.getElementById('verdict-product-name').textContent = scan.productName;

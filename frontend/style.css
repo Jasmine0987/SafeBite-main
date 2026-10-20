@@ -1,6 +1,15 @@
 /* =========================================================
    CUSTOM BEE CURSOR + DRIPPING HONEY TRAIL
    ========================================================= */
+:where(:root){
+  --ink:#141414; --cream:#FCF6E8; --yellow:#F2DB66; --red:#BD3647; --green:#A2BF8A;
+  --purple:#6B66A6; --plum:#816AA8; --slate:#3F3D5C;
+  --border:2px solid var(--ink); --border-thick:3px solid var(--ink);
+  --shadow-sm:4px 4px 0 var(--ink); --shadow-md:6px 6px 0 var(--ink); --shadow-lg:10px 10px 0 var(--ink);
+  --display:'Bungee','Impact',sans-serif; --display-heading:'Bungee','Impact',sans-serif; --body:'Space Mono',ui-monospace,monospace;
+  --footer-ink:#141414; --footer-cream:#FCF6E8; --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  
+}
 
 #trail-canvas{
   position:fixed; inset:0; width:100vw; height:100vh;
