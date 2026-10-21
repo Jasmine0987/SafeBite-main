@@ -1592,30 +1592,6 @@ img.img-fallback{
    make General Sans appear on headings.
    ========================================================= */
 
-body{
-  font-family:'General Sans', sans-serif;
-  font-weight:400;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.hero-title,
-.hero-bg-outline,
-.section-title,
-.kinetic-row,
-.nav-logo,
-.brutal-btn,
-.gooey-btn,
-.hiw-slide-num{
-  font-family:'Cabinet Grotesk', sans-serif;
-  font-weight:800;
-  text-transform:uppercase;
-}
-
 
 /* =========================================================
    SAFETY / PAGE VISIBILITY FIX

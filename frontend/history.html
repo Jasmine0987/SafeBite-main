@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
 <script src="auth.js"></script>
+<script>
+  const KEY = 'safebite_token';
+  if (localStorage.getItem(KEY)) document.querySelectorAll('.nav-logo').forEach(a => a.href = 'dashboard.html');
+  document.getElementById('signout-link')?.addEventListener('click', e => {
+    e.preventDefault(); localStorage.removeItem(KEY); location.href = 'login.html';
+  });
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SafeBite — History</title>
+<script>if(!localStorage.getItem('safebite_token')) location.replace('login.html');</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -940,11 +949,12 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
     <ul class="nav-links">
-      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
-      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
-      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
-      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
-      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+      <li class="nav-item"><a href="settings.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>Settings</a></li>
+      <li class="nav-item"><a href="#" id="signout-link"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Sign out</a></li>
     </ul>
   </div>
 </nav>
