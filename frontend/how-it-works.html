@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeBite — How It Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+<style>
+.step-list{ position:relative; padding-left:90px; }
+.step-list::before{               /* dashed trail */
+  content:""; position:absolute; left:34px; top:0; bottom:0;
+  border-left:4px dashed rgba(20,20,20,.35);
+}
+.trail-fill{                      /* path the bee has covered */
+  position:absolute; left:32px; top:0; width:8px; height:0;
+  background:var(--yellow); border:2px solid var(--ink);
+}
+.trail-bee{
+  position:absolute; left:2px; top:0; width:68px; height:68px; z-index:5;
+  transform:translateY(-50%); pointer-events:none;
+  background:url('assets/appy/sprite-walk.png') 0 0 / 500% 500% no-repeat;
+  filter:drop-shadow(3px 3px 0 var(--ink));
+}
+.step-item{ opacity:.15; transform:translateX(40px) scale(.96); transition:opacity .6s, transform .6s cubic-bezier(.34,1.56,.64,1); }
+.step-item.found{ opacity:1; transform:none; }
+.step-arrow{ display:none; }
+@media(max-width:640px){
+  .step-list{ padding-left:60px; }
+  .step-list::before{ left:22px; } .trail-fill{ left:20px; }
+  .trail-bee{ width:46px; height:46px; } }
+
+</style>
+</head>
+<body class="hiw-page color-wash">
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+<!-- ============ NAVBAR (shared) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO STRIP ============ -->
+<header class="page-hero" id="hero" data-color="#6B66A6">
+  <div class="page-hero-inner">
+    <p class="section-kicker" style="color:var(--yellow)">THE TWO JOURNEYS</p>
+    <h1 class="page-hero-title split-title" style="color:var(--yellow)">HOW SAFEBITE<br>ACTUALLY WORKS</h1>
+    <p class="page-hero-sub" style="color:var(--cream)">Every scan and every craving runs through its own pipeline. Here's what actually happens behind each one.</p>
+  </div>
+</header>
+
+<!-- ============ SECTION A — SCAN FLOW ============ -->
+<section class="content-section" id="scan-flow" data-color="#BD3647">
+  <p class="section-kicker" style="color:var(--yellow)">JOURNEY ONE</p>
+  <h2 class="section-title split-title" style="color:var(--cream)">THE SCAN FLOW</h2>
+
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/eat.png" alt="">
+      <div>
+        <span class="step-num">01</span>
+        <h3>CAMERA</h3>
+        <p>You point your phone at the ingredient panel — no barcode hunting, no manual search. The camera view locks on the moment it recognizes printed label text in frame.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/read.png" alt="">
+      <div>
+        <span class="step-num">02</span>
+        <h3>PANEL DETECTION</h3>
+        <p>Before anything gets read, SafeBite finds the panel itself: cropping out the ingredient block from packaging, glare, and clutter so only the text that matters gets passed downstream.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/think.png" alt="">
+      <div>
+        <span class="step-num">03</span>
+        <h3>OCR</h3>
+        <p>The cropped panel gets converted from pixels to plain text — every ingredient, additive and sweetener extracted in the order it's printed, ready to be checked against what you care about.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/sit.png" alt="">
+      <div>
+        <span class="step-num">04</span>
+        <h3>VERDICT</h3>
+        <p>Your allergen list and flagged additives get matched against the extracted ingredients, and SafeBite lands on a verdict — YES, MAYBE, or NO — with the reasoning spelled out in plain language.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION B — CRAVING FLOW ============ -->
+<section class="content-section" id="craving-flow" data-color="#8FA3C4">
+  <p class="section-kicker" style="color:var(--ink)">JOURNEY TWO</p>
+  <h2 class="section-title split-title" style="color:var(--cream)">THE CRAVING FLOW</h2>
+
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/drinkwalk.png" alt="">
+      <div>
+        <span class="step-num">01</span>
+        <h3>TYPE OR SPEAK</h3>
+        <p>Tell SafeBite what you're craving, typed or spoken, in your own words — "something sweet and fizzy" works just as well as a product name.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/meditate.png" alt="">
+      <div>
+        <span class="step-num">02</span>
+        <h3>VAE EMBEDDING</h3>
+        <p>That craving gets embedded into a shared latent space by a variational autoencoder, so "fizzy and sweet" lands near the products that actually satisfy it, not just the ones that share a keyword.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/eat.png" alt="">
+      <div>
+        <span class="step-num">03</span>
+        <h3>RANKED SWAPS</h3>
+        <p>SafeBite ranks nearby products by how well they match the craving and how clean their label is, then surfaces the top swaps — same craving, better ingredients.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION C — PROACTIVE NUDGE LAYER ============ -->
+<section class="content-section" id="nudge-layer" data-color="#A2BF8A">
+  <p class="section-kicker" style="color:var(--red)">THE QUIET THIRD JOURNEY</p>
+  <h2 class="section-title split-title">THE PROACTIVE NUDGE LAYER</h2>
+  <p class="section-body-text reveal">This one runs in the background. Instead of waiting for you to scan, SafeBite reads the pattern in what you've already scanned and speaks up before your next bite — no camera required.</p>
+
+  <div class="step-list">
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/walk.png" alt="">
+      <div>
+        <span class="step-num">01</span>
+        <h3>SCAN HISTORY</h3>
+        <p>Every verdict you've received — clean, flagged, or swapped — gets logged as a sequence, building a picture of your recent eating pattern over time.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/think.png" alt="">
+      <div>
+        <span class="step-num">02</span>
+        <h3>BILSTM PATTERN READ</h3>
+        <p>A bidirectional LSTM reads that sequence forward and backward, picking up on trends a single scan would never reveal — like three flagged snacks in a row.</p>
+      </div>
+    </div>
+
+    <div class="step-arrow">↓</div>
+
+    <div class="step-item reveal">
+      <img class="step-icon" src="assets/appy/static/dirty.png" alt="">
+      <div>
+        <span class="step-num">03</span>
+        <h3>PROACTIVE NUDGE</h3>
+        <p>Before you even reach for the next item, SafeBite surfaces a heads-up — "before you even scan" — so the pattern gets interrupted, not just recorded.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FOOTER ============ -->
+<section class="cta-strip" data-color="#FCF6E8">
+  <p style="color:var(--ink)">Reading about it only gets you so far.</p>
+  <a href="login.html" class="brutal-btn brutal-btn--yellow">TRY IT YOURSELF →</a>
+</section>
+
+<!-- ============ FOOTER — "mainstays" style flat-lay (shared, verbatim) ============ -->
+<footer class="footer" id="footer" data-color="#FFF8E0">
+  <div class="footer-topbar">
+    <a href="#" class="footer-social-icon" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1"></circle>
+      </svg>
+    </a>
+    <a href="how-it-works.html" class="footer-topbar-link">HOW IT WORKS</a>
+    <a href="architecture.html" class="footer-topbar-link">HOW IT THINKS</a>
+    <a href="results.html" class="footer-topbar-link">RESULTS</a>
+    <a href="about.html" class="footer-topbar-link">ABOUT</a>
+    <span class="footer-topbar-link footer-topbar-credit">SITE BY SAFEBITE</span>
+  </div>
+
+  <div class="footer-flatlay" id="footer-flatlay">
+    <img src="assets/footer/vase-flowers.png"      class="fl-item" id="fl-vase"       alt="" data-depth="0.10">
+    <img src="assets/footer/wine-glass-1.png"      class="fl-item" id="fl-wineglass1" alt="" data-depth="0.06">
+    <img src="assets/footer/fork.png"               class="fl-item" id="fl-fork"       alt="" data-depth="0.08" data-rotate="-8">
+    <img src="assets/footer/sausage-plate.png"      class="fl-item" id="fl-sausage"    alt="" data-depth="0.05">
+    <img src="assets/footer/wine-bottle.png"        class="fl-item" id="fl-bottle"     alt="" data-depth="0.09">
+    <img src="assets/footer/candle-2.png"           class="fl-item" id="fl-candle2"    alt="" data-depth="0.07">
+    <img src="assets/footer/salt-pepper.png"        class="fl-item" id="fl-saltpepper" alt="" data-depth="0.11">
+    <img src="assets/footer/cheese-block.png"       class="fl-item" id="fl-cheese"     alt="" data-depth="0.06">
+    <img src="assets/footer/candle-1.png"           class="fl-item" id="fl-candle1"    alt="" data-depth="0.08">
+    <img src="assets/footer/olives-bowl.png"        class="fl-item" id="fl-olivesbowl" alt="" data-depth="0.05">
+    <img src="assets/footer/olives-loose.png"       class="fl-item" id="fl-olivesloose" alt="" data-depth="0.09">
+    <img src="assets/footer/jar.png"                class="fl-item" id="fl-jar"        alt="" data-depth="0.07">
+    <img src="assets/footer/bread-board.png"        class="fl-item" id="fl-bread"      alt="" data-depth="0.04">
+    <img src="assets/footer/spoon.png"              class="fl-item" id="fl-spoon"      alt="" data-depth="0.10" data-rotate="6">
+    <img src="assets/footer/wine-glass-2.png"       class="fl-item" id="fl-wineglass2" alt="" data-depth="0.06">
+    <img src="assets/footer/charcuterie-board.png"  class="fl-item" id="fl-charcuterie" alt="" data-depth="0.03">
+    <img src="assets/footer/knife.png"              class="fl-item" id="fl-knife"      alt="" data-depth="0.08" data-rotate="-4">
+    <img src="assets/footer/hat-plate.png"          class="fl-item" id="fl-hat"        alt="" data-depth="0.05">
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+<script src="base-script.js"></script>
+<script>
+document.querySelectorAll('.step-list').forEach(list=>{
+  const items=[...list.querySelectorAll('.step-item')];
+  items.forEach(i=>i.classList.remove('reveal'));   // stop the old reveal clashing
+  const fill=document.createElement('div'); fill.className='trail-fill';
+  const bee=document.createElement('div'); bee.className='trail-bee';
+  list.append(fill,bee);
+  const walk=createSprite(bee,{fps:10,autoplay:false});
+  let t;
+  function update(){
+    const r=list.getBoundingClientRect();
+    const p=Math.min(1,Math.max(0,(innerHeight*0.6-r.top)/r.height));
+    const y=p*r.height;
+    bee.style.top=y+'px'; fill.style.height=y+'px';
+    walk.play(); clearTimeout(t); t=setTimeout(walk.stop,150);
+    items.forEach(i=>i.classList.toggle('found', i.offsetTop < y+40));
+  }
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',update);
+  update();
+});
+</script>
+</body>
+</html>

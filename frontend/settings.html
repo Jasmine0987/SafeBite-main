@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<script>
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('#signout-link');
+    if (!link) return;
+    e.preventDefault();
+    try { localStorage.clear(); sessionStorage.clear(); } catch (err) {}
+    window.location.href = 'login.html';
+  });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Settings</title>
+<script>if(!localStorage.getItem('safebite_token')) location.replace('login.html');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE SETTINGS — ART DIRECTED APP PAGE
+   ========================================================= */
+
+.settings-page {
+  background: var(--cream);
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   ORIGINAL SAFEBITE CURSOR LAYER
+   DO NOT CHANGE ITS SIZE — script.js controls it
+   ========================================================= */
+
+#trail-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+.custom-appy-cursor {
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* =========================================================
+   DECORATIVE BACKGROUND
+   ========================================================= */
+
+.settings-page::before {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  right: -180px;
+  top: 210px;
+  background: var(--yellow);
+  border: 4px solid var(--black);
+  transform: rotate(18deg);
+  z-index: -2;
+  opacity: .75;
+}
+
+.settings-page::after {
+  content: "";
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  left: -170px;
+  bottom: 100px;
+  background: var(--purple);
+  border: 4px solid var(--black);
+  transform: rotate(-14deg);
+  z-index: -2;
+  opacity: .55;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.settings-main {
+  width: min(1380px, 92%);
+  margin: 0 auto;
+  padding: 125px 0 80px;
+}
+
+/* =========================================================
+   TOP INTRO
+   ========================================================= */
+
+.settings-intro {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 35px;
+}
+
+.settings-kicker {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 18px;
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.settings-kicker::before {
+  content: "";
+  width: 55px;
+  height: 4px;
+  background: var(--red);
+  display: block;
+}
+
+.settings-title {
+  margin: 0;
+  max-width: 800px;
+  font-family: var(--display-heading);
+  font-size: clamp(4.5rem, 9vw, 9rem);
+  line-height: .76;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+}
+
+.settings-title span {
+  color: var(--yellow);
+  -webkit-text-stroke: 3px var(--black);
+}
+
+.settings-intro-copy {
+  align-self: end;
+  max-width: 430px;
+  padding: 25px;
+  background: var(--slate);
+  border: 4px solid var(--black);
+  box-shadow: 10px 10px 0 var(--black);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   APPY HERO CARD
+   ========================================================= */
+
+.appy-settings-card {
+  position: relative;
+  min-height: 230px;
+  margin-bottom: 35px;
+  padding: 35px 40px;
+  background: var(--purple);
+  border: 4px solid var(--black);
+  box-shadow: 14px 14px 0 var(--black);
+  overflow: hidden;
+}
+
+.appy-settings-card::before {
+  content: "SAFETY FIRST";
+  position: absolute;
+  right: -15px;
+  bottom: -50px;
+  font-family: var(--display-heading);
+  font-size: clamp(7rem, 13vw, 13rem);
+  line-height: .7;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(20,20,20,.18);
+  pointer-events: none;
+}
+
+.appy-settings-card::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  right: 80px;
+  top: -150px;
+  border: 3px solid var(--black);
+  border-radius: 50%;
+  opacity: .4;
+}
+
+.appy-settings-content {
+  position: relative;
+  z-index: 2;
+  width: 60%;
+}
+
+.appy-settings-label {
+  display: inline-block;
+  padding: 7px 10px;
+  margin-bottom: 18px;
+  background: var(--yellow);
+  border: 3px solid var(--black);
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.appy-settings-title {
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: .8;
+  text-transform: uppercase;
+}
+
+.appy-settings-copy {
+  max-width: 580px;
+  margin: 18px 0 0;
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.appy-settings-character {
+  position: absolute;
+  right: 65px;
+  bottom: -8px;
+  width: 190px;
+  z-index: 4;
+  filter: drop-shadow(8px 8px 0 var(--black));
+  animation: appyFloat 3.8s ease-in-out infinite;
+}
+
+@keyframes appyFloat {
+  0%,100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+/* =========================================================
+   MAIN SETTINGS GRID
+   ========================================================= */
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1.55fr .75fr;
+  gap: 35px;
+  align-items: start;
+}
+
+/* =========================================================
+   PROFILE PANEL
+   ========================================================= */
+
+.profile-panel {
+  background: var(--cream);
+  border: 4px solid var(--black);
+  box-shadow: 14px 14px 0 var(--black);
+}
+
+.profile-panel-header {
+  min-height: 100px;
+  padding: 25px 30px;
+  background: var(--black);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.profile-panel-heading {
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: .8;
+  text-transform: uppercase;
+}
+
+.profile-panel-tag {
+  flex-shrink: 0;
+  padding: 9px 12px;
+  border: 2px solid var(--cream);
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.profile-panel-body {
+  padding: 35px;
+}
+
+/* =========================================================
+   LIVE PROFILE HEADER
+   ========================================================= */
+
+.live-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+  border-bottom: 3px solid var(--black);
+}
+
+.live-profile-copy {
+  max-width: 550px;
+}
+
+.live-profile-label {
+  margin-bottom: 8px;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.live-profile-text {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.profile-count {
+  min-width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--yellow);
+  border: 4px solid var(--black);
+  box-shadow: 7px 7px 0 var(--black);
+  transform: rotate(3deg);
+}
+
+.profile-count-number {
+  font-family: var(--display-heading);
+  font-size: 42px;
+  line-height: .8;
+}
+
+.profile-count-label {
+  margin-top: 7px;
+  font-family: var(--body);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   ALLERGEN GRID
+   ========================================================= */
+
+.allergen-heading {
+  margin-bottom: 17px;
+  font-family: var(--display-heading);
+  font-size: 25px;
+  line-height: .9;
+  text-transform: uppercase;
+}
+
+.allergen-subtitle {
+  margin: 0 0 20px;
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: .72;
+}
+
+.choice-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 0 !important;
+}
+
+.choice-chip {
+  position: relative;
+  min-height: 68px;
+  padding: 16px 18px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  box-shadow: 5px 5px 0 var(--black);
+  font-family: var(--display-heading);
+  font-size: 18px;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
+}
+
+.choice-chip::after {
+  content: "＋";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--body);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.choice-chip:hover {
+  transform: translate(-3px, -3px);
+  background: var(--slate);
+  box-shadow: 8px 8px 0 var(--black);
+}
+
+.choice-chip.active {
+  background: var(--red);
+  color: var(--cream);
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.choice-chip.active::after {
+  content: "✓";
+  font-weight: 800;
+}
+
+/* =========================================================
+   SAVE AREA
+   ========================================================= */
+
+.save-area {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 3px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.save-description {
+  max-width: 400px;
+  margin: 0;
+  font-family: var(--body);
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: .7;
+}
+
+.save-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#save-btn {
+  min-width: 170px;
+  cursor: pointer;
+}
+
+#save-btn.is-saving {
+  pointer-events: none;
+  opacity: .7;
+}
+
+#save-status {
+  display: block;
+  min-width: 150px;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+#save-status.success {
+  color: var(--green);
+}
+
+#save-status.error {
+  color: var(--red);
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+   ========================================================= */
+
+.settings-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* =========================================================
+   SAFETY METER
+   ========================================================= */
+
+.safety-meter-card {
+  padding: 28px;
+  background: var(--green);
+  border: 4px solid var(--black);
+  box-shadow: 10px 10px 0 var(--black);
+}
+
+.sidebar-label {
+  margin-bottom: 14px;
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.meter-title {
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: 35px;
+  line-height: .82;
+  text-transform: uppercase;
+}
+
+.meter-track {
+  height: 24px;
+  margin: 28px 0 12px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.meter-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--black);
+  transition: width .6s cubic-bezier(.5,1.8,.5,1);
+}
+
+.meter-footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   APPY TIPS
+   ========================================================= */
+
+.appy-tip-card {
+  position: relative;
+  min-height: 290px;
+  padding: 28px;
+  background: var(--slate);
+  border: 4px solid var(--black);
+  box-shadow: 10px 10px 0 var(--black);
+  overflow: hidden;
+}
+
+.appy-tip-card .sidebar-label {
+  position: relative;
+  z-index: 3;
+}
+
+.appy-tip-title {
+  position: relative;
+  z-index: 3;
+  max-width: 250px;
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: 40px;
+  line-height: .8;
+  text-transform: uppercase;
+}
+
+.appy-tip-text {
+  position: relative;
+  z-index: 3;
+  max-width: 260px;
+  margin-top: 18px;
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.appy-tip-character {
+  position: absolute;
+  width: 125px;
+  right: 15px;
+  bottom: 5px;
+  transform: rotate(7deg);
+  filter: drop-shadow(6px 6px 0 var(--black));
+  transition: transform .35s cubic-bezier(.5,1.8,.5,1);
+}
+
+.appy-tip-card:hover .appy-tip-character {
+  transform: rotate(-7deg) translateY(-15px) scale(1.06);
+}
+
+/* =========================================================
+   QUICK LINKS
+   ========================================================= */
+
+.quick-links {
+  border: 4px solid var(--black);
+  background: var(--black);
+  display: grid;
+  gap: 3px;
+}
+
+.quick-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+  padding: 15px 18px;
+  background: var(--cream);
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--display-heading);
+  font-size: 15px;
+  text-transform: uppercase;
+  transition: padding .2s ease, background .2s ease;
+}
+
+.quick-link:hover {
+  padding-left: 26px;
+  background: var(--yellow);
+}
+
+.quick-link span:last-child {
+  font-family: var(--body);
+  font-size: 20px;
+}
+
+/* =========================================================
+   PROFILE FLOW
+   ========================================================= */
+
+.profile-flow {
+  margin-top: 35px;
+  border: 4px solid var(--black);
+  background: var(--black);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.profile-flow-card {
+  min-height: 175px;
+  padding: 25px;
+  background: var(--cream);
+}
+
+.profile-flow-card:nth-child(2) {
+  background: var(--yellow);
+}
+
+.profile-flow-card:nth-child(3) {
+  background: var(--red);
+  color: var(--cream);
+}
+
+.flow-number {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.flow-title {
+  margin: 45px 0 10px;
+  font-family: var(--display-heading);
+  font-size: 28px;
+  line-height: .85;
+  text-transform: uppercase;
+}
+
+.flow-text {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FLOATING DECOR
+   ========================================================= */
+
+.settings-sticker {
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  border: 3px solid var(--black);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.sticker-one {
+  width: 75px;
+  height: 75px;
+  right: 7%;
+  top: 45%;
+  background: var(--yellow);
+  transform: rotate(12deg);
+}
+
+.sticker-two {
+  width: 55px;
+  height: 55px;
+  left: 5%;
+  top: 62%;
+  background: var(--red);
+  transform: rotate(-18deg);
+}
+
+/* =========================================================
+   REVEAL
+   ========================================================= */
+
+.settings-reveal {
+  opacity: 0;
+  transform: translateY(35px);
+}
+
+.settings-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   FOOTER SPACING
+   ========================================================= */
+
+.settings-page .footer {
+  margin-top: 60px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+  .settings-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-intro-copy {
+    max-width: 600px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .appy-settings-content {
+    width: 70%;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .settings-main {
+    width: 90%;
+    padding-top: 105px;
+  }
+
+  .settings-title {
+    font-size: clamp(4rem, 17vw, 7rem);
+  }
+
+  .appy-settings-card {
+    padding: 28px 25px;
+  }
+
+  .appy-settings-content {
+    width: 100%;
+    padding-right: 120px;
+  }
+
+  .appy-settings-character {
+    width: 125px;
+    right: 15px;
+  }
+
+  .profile-panel-body {
+    padding: 25px 20px;
+  }
+
+  .profile-panel-header {
+    padding: 22px;
+  }
+
+  .live-profile {
+    align-items: flex-start;
+  }
+
+  .choice-chip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .save-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #save-btn {
+    width: 100%;
+  }
+
+  #save-status {
+    text-align: center;
+  }
+
+  .profile-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-flow-card {
+    min-height: 145px;
+  }
+
+  .settings-sticker {
+    display: none;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body class="settings-page">
+
+<!-- =======================================================
+     ORIGINAL SAFEBITE CURSOR
+     ======================================================= -->
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+      <li class="nav-item"><a href="settings.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>Settings</a></li>
+      <li class="nav-item"><a href="#" id="signout-link"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Sign out</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =======================================================
+     DECORATIVE STICKERS
+     ======================================================= -->
+
+<div class="settings-sticker sticker-one"></div>
+<div class="settings-sticker sticker-two"></div>
+
+
+<!-- =======================================================
+     MAIN
+     ======================================================= -->
+
+<main class="settings-main">
+
+
+  <!-- =====================================================
+       INTRO
+       ===================================================== -->
+
+  <section class="settings-intro settings-reveal">
+
+    <div>
+
+      <p class="settings-kicker">
+        YOUR SAFETY LAYER
+      </p>
+
+      <h1 class="settings-title">
+        TUNE<br>
+        YOUR <span>SAFE</span><br>
+        ZONE.
+      </h1>
+
+    </div>
+
+    <div class="settings-intro-copy">
+
+      Your allergen profile controls what SafeBite is allowed to
+      surface across scans, searches and swaps.
+
+      <br><br>
+
+      <strong>
+        Change it once. SafeBite carries the rule everywhere.
+      </strong>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       APPY HERO
+       ===================================================== -->
+
+  <section class="appy-settings-card settings-reveal">
+
+    <div class="appy-settings-content">
+
+      <div class="appy-settings-label">
+        APPY / SAFETY ASSISTANT
+      </div>
+
+      <h2 class="appy-settings-title">
+        I'LL WATCH<br>
+        THE INGREDIENTS.
+      </h2>
+
+      <p class="appy-settings-copy">
+        Pick the allergens that matter to you. Appy will keep this
+        profile in mind whenever SafeBite evaluates a food.
+      </p>
+
+    </div>
+
+    <img
+      src="assets/appy/static/think.png"
+      class="appy-settings-character"
+      alt="Appy"
+    >
+
+  </section>
+
+
+  <!-- =====================================================
+       SETTINGS GRID
+       ===================================================== -->
+
+  <div class="settings-grid">
+
+
+    <!-- ===================================================
+         PROFILE PANEL
+         =================================================== -->
+
+    <section class="profile-panel settings-reveal">
+
+      <div class="profile-panel-header">
+
+        <h2 class="profile-panel-heading">
+          ALLERGEN<br>
+          PROFILE
+        </h2>
+
+        <div class="profile-panel-tag">
+          DETERMINISTIC
+        </div>
+
+      </div>
+
+
+      <div class="profile-panel-body">
+
+
+        <!-- LIVE PROFILE -->
+
+        <div class="live-profile">
+
+          <div class="live-profile-copy">
+
+            <div class="live-profile-label">
+              ACTIVE SAFETY RULES
+            </div>
+
+            <p class="live-profile-text">
+              Select every allergen that SafeBite should treat as a
+              safety constraint.
+            </p>
+
+          </div>
+
+
+          <div class="profile-count">
+
+            <span
+              class="profile-count-number"
+              id="profile-count"
+            >
+              0
+            </span>
+
+            <span class="profile-count-label">
+              Selected
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ALLERGENS -->
+
+        <div class="allergen-heading">
+          WHAT SHOULD WE WATCH?
+        </div>
+
+        <p class="allergen-subtitle">
+          Tap a card to add or remove an allergen from your profile.
+        </p>
+
+
+        <div
+          class="choice-chip-grid"
+          id="allergen-grid"
+        >
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="peanut"
+          >
+            Peanut
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="tree-nut"
+          >
+            Tree Nut
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="dairy"
+          >
+            Dairy
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="gluten"
+          >
+            Gluten
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="egg"
+          >
+            Egg
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="shellfish"
+          >
+            Shellfish
+          </button>
+
+          <button
+            type="button"
+            class="choice-chip"
+            data-value="soy"
+          >
+            Soy
+          </button>
+
+        </div>
+
+
+        <!-- SAVE -->
+
+        <div class="save-area">
+
+          <p class="save-description">
+            Your selection is used by the safety layer before
+            recommendations are surfaced.
+          </p>
+
+          <div class="save-actions">
+
+            <span id="save-status"></span>
+
+            <button
+              id="save-btn"
+              class="brutal-btn brutal-btn--yellow"
+              type="button"
+            >
+              SAVE CHANGES →
+            </button>
+            <button type="button" onclick="SBAuth.logout()">LOG OUT</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         SIDEBAR
+         =================================================== -->
+
+    <aside class="settings-sidebar">
+
+
+      <!-- SAFETY METER -->
+
+      <section class="safety-meter-card settings-reveal">
+
+        <div class="sidebar-label">
+          PROFILE SIGNAL
+        </div>
+
+        <h2 class="meter-title">
+          SAFETY<br>
+          COVERAGE
+        </h2>
+
+        <div class="meter-track">
+
+          <div
+            class="meter-fill"
+            id="meter-fill"
+          ></div>
+
+        </div>
+
+        <div class="meter-footer">
+
+          <span id="meter-text">
+            0 RULES ACTIVE
+          </span>
+
+          <span>
+            LIVE
+          </span>
+
+        </div>
+
+      </section>
+
+
+      <!-- APPY TIP -->
+
+      <section class="appy-tip-card settings-reveal">
+
+        <div class="sidebar-label">
+          APPY SAYS
+        </div>
+
+        <h2
+          class="appy-tip-title"
+          id="appy-tip-title"
+        >
+          START<br>
+          WITH<br>
+          WHAT<br>
+          MATTERS.
+        </h2>
+
+        <p
+          class="appy-tip-text"
+          id="appy-tip-text"
+        >
+          Select an allergen and I'll keep an eye on it across
+          SafeBite.
+        </p>
+
+        <img
+          src="assets/appy/static/read.png"
+          class="appy-tip-character"
+          id="appy-tip-character"
+          alt="Appy"
+        >
+
+      </section>
+
+
+      <!-- QUICK LINKS -->
+
+      <div class="quick-links settings-reveal">
+
+        <a
+          href="dashboard.html"
+          class="quick-link"
+        >
+          DASHBOARD
+          <span>↗</span>
+        </a>
+
+        <a
+          href="scan.html"
+          class="quick-link"
+        >
+          SCAN A LABEL
+          <span>↗</span>
+        </a>
+
+        <a
+          href="craving-search.html"
+          class="quick-link"
+        >
+          FIND A SWAP
+          <span>↗</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+
+  <!-- =====================================================
+       HOW PROFILE FLOWS THROUGH SAFEBITE
+       ===================================================== -->
+
+  <section class="profile-flow settings-reveal">
+
+    <article class="profile-flow-card">
+
+      <div class="flow-number">
+        01 / PROFILE
+      </div>
+
+      <h3 class="flow-title">
+        YOU<br>
+        CHOOSE
+      </h3>
+
+      <p class="flow-text">
+        Your selected allergens become active safety constraints.
+      </p>
+
+    </article>
+
+
+    <article class="profile-flow-card">
+
+      <div class="flow-number">
+        02 / FILTER
+      </div>
+
+      <h3 class="flow-title">
+        SAFETY<br>
+        CHECK
+      </h3>
+
+      <p class="flow-text">
+        Candidate foods can be checked against the active profile.
+      </p>
+
+    </article>
+
+
+    <article class="profile-flow-card">
+
+      <div class="flow-number">
+        03 / RESULT
+      </div>
+
+      <h3 class="flow-title">
+        CLEAR<br>
+        VERDICT
+      </h3>
+
+      <p class="flow-text">
+        SafeBite keeps the safety decision separate from similarity.
+      </p>
+
+    </article>
+
+  </section>
+
+</main>
+
+
+<!-- =======================================================
+     FOOTER — SHARED SAFEBITE FOOTER
+     ======================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-color="#FFF8E0"
+>
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5"
+        ></rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1"
+        ></circle>
+      </svg>
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link"
+    >
+      HOW IT WORKS
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link"
+    >
+      HOW IT THINKS
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link"
+    >
+      RESULTS
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link"
+    >
+      ABOUT
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit"
+    >
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay"
+  >
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10"
+    >
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8"
+    >
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11"
+    >
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08"
+    >
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07"
+      onerror="this.style.display='none'"
+    >
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04"
+    >
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6"
+    >
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03"
+    >
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4"
+    >
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05"
+    >
+
+  </div>
+
+</footer>
+
+
+<!-- =======================================================
+     SCRIPTS
+     ======================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   SETTINGS LOGIC
+   ========================================================= */
+
+const API_BASE = location.hostname.endsWith('.app.github.dev') ? location.origin.replace(/-[0-9]+[.]/, '-8000.') : 'http://localhost:8000';
+
+const grid = document.getElementById('allergen-grid');
+const saveBtn = document.getElementById('save-btn');
+const saveStatus = document.getElementById('save-status');
+
+const profileCount = document.getElementById('profile-count');
+const meterFill = document.getElementById('meter-fill');
+const meterText = document.getElementById('meter-text');
+
+const appyTipTitle = document.getElementById('appy-tip-title');
+const appyTipText = document.getElementById('appy-tip-text');
+const appyTipCharacter = document.getElementById('appy-tip-character');
+
+const selected = new Set();
+
+const MAX_ALLERGENS = grid.querySelectorAll('.choice-chip').length;
+
+
+/* =========================================================
+   APPY MESSAGES
+   ========================================================= */
+
+const appyMessages = {
+
+  0: {
+    title: `START<br>WITH<br>WHAT<br>MATTERS.`,
+    text: `Select an allergen and I'll keep an eye on it across SafeBite.`,
+    image: 'assets/appy/static/read.png'
+  },
+
+  1: {
+    title: `GOOD<br>START.`,
+    text: `One safety rule is active. Add more if you need them.`,
+    image: 'assets/appy/static/think.png'
+  },
+
+  2: {
+    title: `I'M<br>WATCHING.`,
+    text: `Your profile is getting more specific. That helps the safety layer.`,
+    image: 'assets/appy/static/sit.png'
+  },
+
+  3: {
+    title: `NICE<br>AND<br>CLEAR.`,
+    text: `Three active constraints. I'll keep these in mind across your food journeys.`,
+    image: 'assets/appy/static/meditate.png'
+  },
+
+  4: {
+    title: `SAFETY<br>MODE<br>ON.`,
+    text: `Your profile now has several active constraints.`,
+    image: 'assets/appy/static/think.png'
+  },
+
+  5: {
+    title: `VERY<br>SPECIFIC.`,
+    text: `A detailed profile gives the safety layer more rules to check.`,
+    image: 'assets/appy/static/read.png'
+  },
+
+  6: {
+    title: `I'VE<br>GOT<br>THE<br>LIST.`,
+    text: `Six active allergens. Your safety profile is highly specific.`,
+    image: 'assets/appy/static/sit.png'
+  },
+
+  7: {
+    title: `FULL<br>WATCH<br>MODE.`,
+    text: `Every available allergen rule is active.`,
+    image: 'assets/appy/static/meditate.png'
+  }
+
+};
+
+
+/* =========================================================
+   UPDATE UI
+   ========================================================= */
+
+function updateProfileUI(animate = true) {
+
+  const count = selected.size;
+
+  profileCount.textContent = count;
+
+  const percentage = Math.round(
+    (count / MAX_ALLERGENS) * 100
+  );
+
+  meterFill.style.width = percentage + '%';
+
+  if (count === 0) {
+    meterText.textContent = '0 RULES ACTIVE';
+  } else if (count === 1) {
+    meterText.textContent = '1 RULE ACTIVE';
+  } else {
+    meterText.textContent = count + ' RULES ACTIVE';
+  }
+
+
+  const message =
+    appyMessages[count] || appyMessages[7];
+
+  appyTipTitle.innerHTML = message.title;
+  appyTipText.textContent = message.text;
+  appyTipCharacter.src = message.image;
+
+
+  if (animate && window.gsap) {
+
+    gsap.fromTo(
+      profileCount,
+      {
+        scale: .75,
+        rotation: -8
+      },
+      {
+        scale: 1,
+        rotation: 3,
+        duration: .45,
+        ease: 'back.out(2)'
+      }
+    );
+
+    gsap.fromTo(
+      appyTipCharacter,
+      {
+        y: 25,
+        rotation: 12
+      },
+      {
+        y: 0,
+        rotation: -7,
+        duration: .5,
+        ease: 'back.out(1.8)'
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD PROFILE
+   ========================================================= */
+
+async function loadProfile() {
+
+  let allergens = [];
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/api/profile`
+    );
+
+    if (!response.ok) {
+      throw new Error('Profile request failed');
+    }
+
+    const profile = await response.json();
+
+    allergens = Array.isArray(profile.allergens)
+      ? profile.allergens
+      : [];
+
+    localStorage.setItem(
+      'safebite_allergens',
+      JSON.stringify(allergens)
+    );
+
+  } catch (error) {
+
+    try {
+
+      allergens =
+        JSON.parse(
+          localStorage.getItem(
+            'safebite_allergens'
+          )
+        ) || [];
+
+    } catch {
+
+      allergens = [];
+
+    }
+
+  }
+
+
+  allergens.forEach(value => {
+
+    const chip = grid.querySelector(
+      `[data-value="${value}"]`
+    );
+
+    if (chip) {
+
+      selected.add(value);
+      chip.classList.add('active');
+
+    }
+
+  });
+
+
+  updateProfileUI(false);
+
+}
+
+
+/* =========================================================
+   CHIP INTERACTION
+   ========================================================= */
+
+grid.querySelectorAll('.choice-chip').forEach(chip => {
+
+  chip.addEventListener('click', () => {
+
+    const value = chip.dataset.value;
+
+    if (selected.has(value)) {
+
+      selected.delete(value);
+
+      chip.classList.remove('active');
+
+    } else {
+
+      selected.add(value);
+
+      chip.classList.add('active');
+
+    }
+
+    updateProfileUI(true);
+
+
+    /* Tiny Appy reaction */
+
+    if (window.gsap) {
+
+      gsap.fromTo(
+        chip,
+        {
+          scale: .92
+        },
+        {
+          scale: 1,
+          duration: .35,
+          ease: 'back.out(2)'
+        }
+      );
+
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+saveBtn.addEventListener('click', async () => {
+
+  const allergens = Array.from(selected);
+
+  saveBtn.classList.add('is-saving');
+  saveBtn.textContent = 'SAVING...';
+
+  saveStatus.textContent = '';
+  saveStatus.className = '';
+
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/api/profile`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          allergens
+        })
+      }
+    );
+
+
+    if (!response.ok) {
+      throw new Error('Save failed');
+    }
+
+
+    localStorage.setItem(
+      'safebite_allergens',
+      JSON.stringify(allergens)
+    );
+
+
+    saveStatus.textContent =
+      'PROFILE SAVED ✓';
+
+    saveStatus.className = 'success';
+
+
+  } catch (error) {
+
+    /*
+     * Keep the profile locally if backend
+     * is unavailable.
+     */
+
+    localStorage.setItem(
+      'safebite_allergens',
+      JSON.stringify(allergens)
+    );
+
+
+    saveStatus.textContent =
+      'SAVED LOCALLY — BACKEND OFFLINE';
+
+    saveStatus.className = 'error';
+
+  }
+
+
+  saveBtn.classList.remove('is-saving');
+  saveBtn.textContent = 'SAVE CHANGES →';
+
+
+  if (window.gsap) {
+
+    gsap.fromTo(
+      saveBtn,
+      {
+        scale: .9
+      },
+      {
+        scale: 1,
+        duration: .45,
+        ease: 'back.out(2)'
+      }
+    );
+
+  }
+
+});
+
+
+/* =========================================================
+   GSAP INTRO
+   ========================================================= */
+
+function initSettingsAnimations() {
+
+  if (!window.gsap) return;
+
+  if (window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+
+  const reveals =
+    document.querySelectorAll(
+      '.settings-reveal'
+    );
+
+
+  reveals.forEach((element, index) => {
+
+    gsap.to(
+      element,
+      {
+        opacity: 1,
+        y: 0,
+        duration: .8,
+        delay: index * .06,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 88%',
+          once: true
+        }
+      }
+    );
+
+  });
+
+
+  /* Intro entrance */
+
+  gsap.from(
+    '.settings-title',
+    {
+      y: 80,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power4.out',
+      delay: .15
+    }
+  );
+
+
+  gsap.from(
+    '.settings-kicker',
+    {
+      x: -50,
+      opacity: 0,
+      duration: .7,
+      ease: 'power3.out',
+      delay: .05
+    }
+  );
+
+
+  gsap.from(
+    '.settings-intro-copy',
+    {
+      x: 60,
+      opacity: 0,
+      duration: .9,
+      ease: 'power3.out',
+      delay: .3
+    }
+  );
+
+
+  /* Appy entrance */
+
+  gsap.from(
+    '.appy-settings-character',
+    {
+      x: 120,
+      y: 100,
+      rotation: 20,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'back.out(1.6)',
+      delay: .45
+    }
+  );
+
+
+  /* Floating stickers */
+
+  gsap.to(
+    '.sticker-one',
+    {
+      rotation: 25,
+      y: -20,
+      duration: 3,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    }
+  );
+
+
+  gsap.to(
+    '.sticker-two',
+    {
+      rotation: -28,
+      y: 18,
+      duration: 3.7,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    }
+  );
+
+
+  /* Appy hero subtle movement */
+
+  gsap.to(
+    '.appy-settings-character',
+    {
+      y: -10,
+      duration: 2.8,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    }
+  );
+
+
+  /* Sidebar hover tilt */
+
+  document
+    .querySelectorAll(
+      '.safety-meter-card, .appy-tip-card'
+    )
+    .forEach(card => {
+
+      card.addEventListener(
+        'mousemove',
+        event => {
+
+          const rect =
+            card.getBoundingClientRect();
+
+          const x =
+            event.clientX - rect.left;
+
+          const y =
+            event.clientY - rect.top;
+
+          const rotateY =
+            ((x / rect.width) - .5) * 5;
+
+          const rotateX =
+            ((y / rect.height) - .5) * -5;
+
+          gsap.to(
+            card,
+            {
+              rotationX: rotateX,
+              rotationY: rotateY,
+              transformPerspective: 700,
+              duration: .25
+            }
+          );
+
+        }
+      );
+
+
+      card.addEventListener(
+        'mouseleave',
+        () => {
+
+          gsap.to(
+            card,
+            {
+              rotationX: 0,
+              rotationY: 0,
+              duration: .45,
+              ease: 'power2.out'
+            }
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   INITIALISE
+   ========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+
+    loadProfile();
+
+    initSettingsAnimations();
+
+  }
+);
+
+</script>
+
+</body>
+</html>

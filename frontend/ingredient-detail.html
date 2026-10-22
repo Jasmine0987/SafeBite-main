@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Ingredient Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE — INGREDIENT DETAIL
+   Editorial paper-cutout app page
+   ========================================================= */
+
+.ingredient-page {
+  background: var(--cream, #FCF6E8);
+  color: var(--black, #141414);
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------
+   APP SHELL
+   --------------------------------------------------------- */
+
+.ingredient-main {
+  padding: 150px 5vw 0;
+}
+
+.ingredient-shell {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+}
+
+/* ---------------------------------------------------------
+   TOP BAR
+   --------------------------------------------------------- */
+
+.ingredient-topbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 72px;
+}
+
+.ingredient-back {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--yellow, #F2DB66);
+  border: 3px solid var(--black, #141414);
+  color: var(--black, #141414);
+
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-size: 30px;
+  font-weight: 800;
+  text-decoration: none;
+
+  box-shadow: 6px 6px 0 var(--black, #141414);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.ingredient-back:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0 var(--black, #141414);
+}
+
+.ingredient-kicker {
+  margin: 0 0 10px;
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.ingredient-heading {
+  margin: 0;
+
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-size: clamp(48px, 7vw, 108px);
+  line-height: .84;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.ingredient-subheading {
+  max-width: 620px;
+  margin: 20px 0 0;
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------
+   INTRODUCTION
+   --------------------------------------------------------- */
+
+.ingredient-intro {
+  position: relative;
+
+  min-height: 430px;
+  padding: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+
+  background: var(--purple, #6B66A6);
+  border: 3px solid var(--black, #141414);
+
+  box-shadow: 14px 14px 0 var(--black, #141414);
+
+  overflow: hidden;
+}
+
+.ingredient-intro-copy {
+  position: relative;
+  z-index: 2;
+
+  max-width: 760px;
+}
+
+.ingredient-intro-label {
+  display: inline-block;
+
+  padding: 8px 12px;
+
+  background: var(--cream, #FCF6E8);
+  border: 3px solid var(--black, #141414);
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+
+  box-shadow: 4px 4px 0 var(--black, #141414);
+
+  margin-bottom: 28px;
+}
+
+.ingredient-intro-title {
+  margin: 0;
+
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-size: clamp(52px, 8vw, 120px);
+  line-height: .82;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+
+  color: var(--cream, #FCF6E8);
+}
+
+.ingredient-intro-text {
+  max-width: 620px;
+  margin: 26px 0 0;
+
+  color: var(--cream, #FCF6E8);
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.ingredient-appy {
+  position: relative;
+  z-index: 2;
+
+  width: min(280px, 30vw);
+  min-width: 180px;
+
+  align-self: flex-end;
+
+  transform: rotate(3deg);
+  filter: drop-shadow(8px 8px 0 rgba(20,20,20,.95));
+}
+
+.ingredient-appy img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Decorative paper circles */
+
+.ingredient-intro::before,
+.ingredient-intro::after {
+  content: "";
+  position: absolute;
+
+  border: 3px solid var(--black, #141414);
+  border-radius: 50%;
+}
+
+.ingredient-intro::before {
+  width: 230px;
+  height: 230px;
+  right: 90px;
+  top: -110px;
+  background: var(--yellow, #F2DB66);
+}
+
+.ingredient-intro::after {
+  width: 110px;
+  height: 110px;
+  left: 48%;
+  bottom: -65px;
+  background: var(--red, #BD3647);
+}
+
+/* ---------------------------------------------------------
+   DYNAMIC ROOT
+   --------------------------------------------------------- */
+
+#ingredient-root {
+  margin-top: 100px;
+}
+
+/*
+   app.js dynamically renders the ingredient content here.
+   These styles intentionally target common existing
+   SafeBite app classes without changing the data layer.
+*/
+
+#ingredient-root > * {
+  margin-bottom: 34px;
+}
+
+/* ---------------------------------------------------------
+   SECTION LABEL
+   --------------------------------------------------------- */
+
+.ingredient-section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+
+  margin: 0 0 24px;
+}
+
+.ingredient-section-number {
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.ingredient-section-name {
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------
+   PAPER CARDS
+   --------------------------------------------------------- */
+
+#ingredient-root .app-card,
+#ingredient-root .ingredient-card,
+#ingredient-root .detail-card,
+#ingredient-root .info-card,
+#ingredient-root .app-panel {
+  position: relative;
+
+  padding: 34px;
+
+  background: #fff;
+  border: 3px solid var(--black, #141414);
+
+  box-shadow: 9px 9px 0 var(--black, #141414);
+
+  border-radius: 0;
+}
+
+#ingredient-root .app-card:nth-child(odd),
+#ingredient-root .ingredient-card:nth-child(odd),
+#ingredient-root .detail-card:nth-child(odd) {
+  transform: rotate(-.35deg);
+}
+
+#ingredient-root .app-card:nth-child(even),
+#ingredient-root .ingredient-card:nth-child(even),
+#ingredient-root .detail-card:nth-child(even) {
+  transform: rotate(.35deg);
+}
+
+/* ---------------------------------------------------------
+   DYNAMIC TYPOGRAPHY
+   --------------------------------------------------------- */
+
+#ingredient-root h2,
+#ingredient-root h3,
+#ingredient-root h4 {
+  margin-top: 0;
+
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-weight: 800;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+
+#ingredient-root h2 {
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: .9;
+}
+
+#ingredient-root h3 {
+  font-size: clamp(25px, 3vw, 42px);
+  line-height: .95;
+}
+
+#ingredient-root p,
+#ingredient-root li,
+#ingredient-root span {
+  font-family: var(--body, 'General Sans', sans-serif);
+}
+
+#ingredient-root p {
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------
+   TAGS / BADGES
+   --------------------------------------------------------- */
+
+#ingredient-root .tag,
+#ingredient-root .badge,
+#ingredient-root .status,
+#ingredient-root .ingredient-tag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 12px;
+
+  border: 2px solid var(--black, #141414);
+
+  background: var(--yellow, #F2DB66);
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------
+   WARNING / SAFETY BLOCKS
+   --------------------------------------------------------- */
+
+#ingredient-root .warning,
+#ingredient-root .danger,
+#ingredient-root .risk,
+#ingredient-root .unsafe,
+#ingredient-root .flagged {
+  background: var(--red, #BD3647);
+  color: var(--cream, #FCF6E8);
+
+  border: 3px solid var(--black, #141414);
+  box-shadow: 9px 9px 0 var(--black, #141414);
+}
+
+#ingredient-root .safe {
+  background: var(--green, #A2BF8A);
+
+  border: 3px solid var(--black, #141414);
+  box-shadow: 9px 9px 0 var(--black, #141414);
+}
+
+/* ---------------------------------------------------------
+   BUTTONS
+   --------------------------------------------------------- */
+
+#ingredient-root button,
+#ingredient-root .app-button,
+#ingredient-root a.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  padding: 12px 20px;
+
+  background: var(--black, #141414);
+  color: var(--cream, #FCF6E8);
+
+  border: 3px solid var(--black, #141414);
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+#ingredient-root button:hover,
+#ingredient-root .app-button:hover,
+#ingredient-root a.app-button:hover {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------
+   CTA
+   --------------------------------------------------------- */
+
+.ingredient-cta {
+  margin: 110px 0 120px;
+
+  padding: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+
+  background: var(--yellow, #F2DB66);
+
+  border: 3px solid var(--black, #141414);
+  box-shadow: 12px 12px 0 var(--black, #141414);
+}
+
+.ingredient-cta h2 {
+  max-width: 700px;
+  margin: 0;
+
+  font-family: var(--display, 'Cabinet Grotesk', sans-serif);
+  font-size: clamp(38px, 5vw, 70px);
+  line-height: .88;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+
+.ingredient-cta a {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px 24px;
+
+  background: var(--black, #141414);
+  color: var(--cream, #FCF6E8);
+
+  border: 3px solid var(--black, #141414);
+
+  font-family: var(--body, 'General Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition: transform 180ms ease;
+}
+
+.ingredient-cta a:hover {
+  transform: translate(5px, 5px);
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+   --------------------------------------------------------- */
+
+@media (max-width: 850px) {
+
+  .ingredient-main {
+    padding: 125px 20px 0;
+  }
+
+  .ingredient-topbar {
+    gap: 18px;
+    margin-bottom: 50px;
+  }
+
+  .ingredient-back {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    font-size: 24px;
+  }
+
+  .ingredient-intro {
+    min-height: auto;
+    padding: 35px 28px 45px;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ingredient-intro-title {
+    font-size: clamp(54px, 15vw, 92px);
+  }
+
+  .ingredient-appy {
+    width: 190px;
+    min-width: 0;
+    align-self: flex-end;
+    margin-top: 20px;
+  }
+
+  .ingredient-intro::before {
+    right: -70px;
+  }
+
+  #ingredient-root .app-card,
+  #ingredient-root .ingredient-card,
+  #ingredient-root .detail-card,
+  #ingredient-root .info-card,
+  #ingredient-root .app-panel {
+    padding: 25px;
+  }
+
+  .ingredient-cta {
+    margin: 75px 0 90px;
+    padding: 35px 25px;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+
+  .ingredient-main {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .ingredient-topbar {
+    align-items: flex-start;
+  }
+
+  .ingredient-subheading {
+    font-size: 15px;
+  }
+
+  .ingredient-intro {
+    padding: 28px 22px 35px;
+  }
+
+  .ingredient-intro-label {
+    margin-bottom: 22px;
+  }
+
+  .ingredient-intro-text {
+    font-size: 15px;
+  }
+
+  .ingredient-appy {
+    width: 150px;
+  }
+
+  #ingredient-root .app-card,
+  #ingredient-root .ingredient-card,
+  #ingredient-root .detail-card,
+  #ingredient-root .info-card,
+  #ingredient-root .app-panel {
+    padding: 20px;
+    box-shadow: 6px 6px 0 var(--black, #141414);
+  }
+
+  .ingredient-cta a {
+    width: 100%;
+  }
+}
+
+</style>
+</head>
+
+<body class="ingredient-page">
+
+<!-- =====================================================
+     CUSTOM CURSOR
+     ===================================================== -->
+
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+
+<div
+  class="custom-appy-cursor"
+  id="appy-cursor"
+  aria-hidden="true">
+</div>
+
+
+<!-- =====================================================
+     SHARED APP NAVIGATION
+     ===================================================== -->
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="ingredient-main">
+
+  <div class="ingredient-shell">
+
+
+    <!-- =================================================
+         PAGE HEADER
+         ================================================= -->
+
+    <header class="ingredient-topbar">
+
+      <a
+        href="verdict.html"
+        id="ingredient-back-link"
+        class="ingredient-back"
+        aria-label="Back to verdict">
+        ←
+      </a>
+
+      <div>
+
+        <p class="ingredient-kicker">
+          Ingredient intelligence / SafeBite
+        </p>
+
+        <h1 class="ingredient-heading">
+          INGREDIENT<br>
+          DETAIL.
+        </h1>
+
+        <p class="ingredient-subheading">
+          The plain-English why behind a flagged ingredient.
+          SafeBite breaks down what it is, why it matters,
+          and what it means for your food choice.
+        </p>
+
+      </div>
+
+    </header>
+
+
+    <!-- =================================================
+         INTRODUCTION
+         ================================================= -->
+
+    <section class="ingredient-intro">
+
+      <div class="ingredient-intro-copy">
+
+        <span class="ingredient-intro-label">
+          READ THE LABEL
+        </span>
+
+        <h2 class="ingredient-intro-title">
+          KNOW<br>
+          WHAT'S<br>
+          INSIDE.
+        </h2>
+
+        <p class="ingredient-intro-text">
+          Ingredients can sound complicated. SafeBite turns
+          the technical name into something you can actually
+          understand before you decide what to eat.
+        </p>
+
+      </div>
+
+
+      <div class="ingredient-appy" aria-hidden="true">
+
+        <img
+          src="assets/appy/static/read.png"
+          alt="">
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         DYNAMIC INGREDIENT CONTENT
+         ================================================= -->
+
+    <section id="ingredient-root" aria-live="polite">
+      <!--
+        app.js injects the selected ingredient information here.
+        Keep this ID unchanged.
+      -->
+    </section>
+
+
+    <!-- =================================================
+         CTA
+         ================================================= -->
+
+    <section class="ingredient-cta">
+
+      <h2>
+        UNDERSTANDING<br>
+        THE LABEL CHANGES<br>
+        THE CHOICE.
+      </h2>
+
+      <a href="craving-search.html">
+        Find a safer swap →
+      </a>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+<!-- =====================================================
+     SHARED FOOTER
+     IMPORTANT: KEEP THIS STRUCTURE FOR FOOTER JS/CSS
+     ===================================================== -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram">
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5">
+        </rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4">
+        </circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link">
+      HOW IT WORKS
+    </a>
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link">
+      HOW IT THINKS
+    </a>
+
+    <a
+      href="results.html"
+      class="footer-topbar-link">
+      RESULTS
+    </a>
+
+    <a
+      href="about.html"
+      class="footer-topbar-link">
+      ABOUT
+    </a>
+
+    <span class="footer-topbar-link footer-topbar-credit">
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay">
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10">
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8">
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05">
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09">
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07">
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11">
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08">
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05">
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09">
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07">
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04">
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6">
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03">
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4">
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
+
+<script src="app-data.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+<script src="app.js"></script>
+
+
+<!-- =====================================================
+     PAGE ANIMATION
+     ===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  if (typeof gsap === "undefined") return;
+
+  gsap.from(".ingredient-topbar", {
+    y: 45,
+    opacity: 0,
+    duration: 1,
+    ease: "power4.out"
+  });
+
+  gsap.from(".ingredient-intro", {
+    y: 65,
+    opacity: 0,
+    duration: 1.1,
+    delay: .15,
+    ease: "power4.out"
+  });
+
+  gsap.from(".ingredient-appy", {
+    y: 45,
+    rotation: 10,
+    opacity: 0,
+    duration: 1,
+    delay: .4,
+    ease: "back.out(1.5)"
+  });
+
+  gsap.from(".ingredient-cta", {
+    scrollTrigger: {
+      trigger: ".ingredient-cta",
+      start: "top 85%"
+    },
+    y: 60,
+    opacity: 0,
+    duration: .9,
+    ease: "power3.out"
+  });
+
+});
+
+</script>
+
+</body>
+</html>

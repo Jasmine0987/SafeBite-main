@@ -1,0 +1,3176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Insights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE — INSIGHTS
+   Editorial pattern-reading experience
+   ========================================================= */
+
+.insights-page{
+  min-height:100vh;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.insights-hero{
+  position:relative;
+  min-height:76vh;
+
+  background:var(--purple);
+  color:var(--cream);
+
+  border-bottom:var(--border-thick);
+
+  display:flex;
+  align-items:center;
+
+  padding:8rem 5vw 6rem;
+
+  overflow:hidden;
+}
+
+
+.insights-hero::before{
+  content:"INSIGHTS";
+
+  position:absolute;
+
+  left:-2vw;
+  bottom:-4vw;
+
+  font-family:var(--display);
+
+  font-size:clamp(8rem,22vw,22rem);
+
+  line-height:.7;
+
+  color:transparent;
+
+  -webkit-text-stroke:2px rgba(252,246,232,.12);
+
+  white-space:nowrap;
+
+  pointer-events:none;
+}
+
+
+.insights-hero::after{
+  content:"";
+
+  position:absolute;
+
+  width:520px;
+  height:520px;
+
+  border:3px solid rgba(252,246,232,.12);
+
+  border-radius:50%;
+
+  right:-260px;
+  top:-180px;
+
+  pointer-events:none;
+}
+
+
+.insights-hero-inner{
+  width:min(1250px,100%);
+  margin:auto;
+
+  position:relative;
+  z-index:2;
+}
+
+
+.insights-hero-copy{
+  max-width:900px;
+}
+
+
+.insights-kicker{
+  display:inline-block;
+
+  font-family:var(--body);
+
+  font-size:.68rem;
+  font-weight:700;
+
+  letter-spacing:.22em;
+
+  text-transform:uppercase;
+
+  color:var(--yellow);
+
+  margin-bottom:1.5rem;
+}
+
+
+.insights-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(5rem,12vw,12rem);
+
+  line-height:.74;
+
+  letter-spacing:-.06em;
+
+  text-transform:uppercase;
+}
+
+
+.insights-title span{
+  display:block;
+}
+
+
+.insights-title .outline{
+  color:transparent;
+
+  -webkit-text-stroke:3px var(--cream);
+
+  margin-left:9vw;
+}
+
+
+.insights-subtitle{
+  max-width:590px;
+
+  margin:2.8rem 0 0 9vw;
+
+  font-family:var(--body);
+
+  font-size:.92rem;
+
+  line-height:1.7;
+
+  color:var(--cream);
+
+  opacity:.9;
+}
+
+
+.insights-hero-bottom{
+  display:flex;
+
+  align-items:center;
+
+  gap:1rem;
+
+  margin:2rem 0 0 9vw;
+}
+
+
+.insights-period{
+  border:3px solid var(--ink);
+
+  background:var(--yellow);
+
+  color:var(--ink);
+
+  padding:.7rem 1rem;
+
+  box-shadow:var(--shadow-sm);
+
+  font-family:var(--display);
+
+  font-size:.68rem;
+
+  text-transform:uppercase;
+}
+
+
+.insights-live{
+  display:flex;
+
+  align-items:center;
+
+  gap:.5rem;
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+}
+
+
+.insights-live-dot{
+  width:10px;
+  height:10px;
+
+  background:var(--green);
+
+  border:2px solid var(--cream);
+
+  border-radius:50%;
+}
+
+
+/* =========================================================
+   HERO APPY
+   ========================================================= */
+
+.insights-appy{
+  position:absolute;
+
+  width:210px;
+
+  right:8vw;
+  bottom:4rem;
+
+  z-index:3;
+
+  filter:drop-shadow(10px 10px 0 rgba(20,20,20,.25));
+
+  transform:rotate(6deg);
+}
+
+
+.insights-appy-tag{
+  position:absolute;
+
+  right:3vw;
+  bottom:2rem;
+
+  background:var(--cream);
+
+  color:var(--ink);
+
+  border:3px solid var(--ink);
+
+  padding:.7rem .9rem;
+
+  box-shadow:var(--shadow-sm);
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  transform:rotate(-4deg);
+
+  z-index:4;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.insights-main{
+  width:min(1200px,90vw);
+
+  margin:auto;
+
+  padding:7rem 0 8rem;
+}
+
+
+.insights-section{
+  margin-bottom:9rem;
+}
+
+
+.insights-section:last-child{
+  margin-bottom:0;
+}
+
+
+.insights-section-header{
+  margin-bottom:3rem;
+}
+
+
+.insights-section-kicker{
+  font-family:var(--body);
+
+  font-size:.65rem;
+
+  font-weight:700;
+
+  letter-spacing:.22em;
+
+  text-transform:uppercase;
+
+  margin:0 0 .8rem;
+}
+
+
+.insights-section-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(3.5rem,8vw,8rem);
+
+  line-height:.78;
+
+  letter-spacing:-.05em;
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================================
+   SNAPSHOT
+   ========================================================= */
+
+.snapshot-wrap{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:1.2rem;
+
+  align-items:stretch;
+}
+
+
+.snapshot-card{
+  flex:1 1 220px;
+
+  min-height:230px;
+
+  border:var(--border-thick);
+
+  padding:1.5rem;
+
+  box-shadow:var(--shadow-md);
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:space-between;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+
+.snapshot-card:nth-child(1){
+  background:var(--yellow);
+}
+
+
+.snapshot-card:nth-child(2){
+  background:var(--green);
+}
+
+
+.snapshot-card:nth-child(3){
+  background:var(--red);
+
+  color:var(--cream);
+}
+
+
+.snapshot-card:nth-child(4){
+  background:var(--slate);
+}
+
+
+.snapshot-card::after{
+  content:"";
+
+  position:absolute;
+
+  width:100px;
+  height:100px;
+
+  border:2px solid currentColor;
+
+  border-radius:50%;
+
+  right:-45px;
+  bottom:-45px;
+
+  opacity:.12;
+}
+
+
+.snapshot-label{
+  font-family:var(--body);
+
+  font-size:.63rem;
+
+  font-weight:700;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+.snapshot-number{
+  font-family:var(--display);
+
+  font-size:clamp(4rem,7vw,7rem);
+
+  line-height:.75;
+
+  letter-spacing:-.06em;
+
+  margin-top:auto;
+
+  margin-bottom:1.5rem;
+}
+
+
+.snapshot-description{
+  max-width:190px;
+
+  font-family:var(--body);
+
+  font-size:.7rem;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   BIG PATTERN PANEL
+   ========================================================= */
+
+.pattern-layout{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:1.5rem;
+
+  align-items:stretch;
+}
+
+
+.pattern-main{
+  flex:1 1 650px;
+
+  background:var(--purple);
+
+  color:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-lg);
+
+  padding:2.5rem;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+
+.pattern-main::before{
+  content:"";
+
+  position:absolute;
+
+  width:420px;
+  height:420px;
+
+  right:-210px;
+  bottom:-210px;
+
+  border:2px solid rgba(252,246,232,.16);
+
+  border-radius:50%;
+}
+
+
+.pattern-main-label{
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  color:var(--yellow);
+
+  margin-bottom:1rem;
+}
+
+
+.pattern-main-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(3rem,6vw,6rem);
+
+  line-height:.8;
+
+  text-transform:uppercase;
+
+  letter-spacing:-.045em;
+}
+
+
+.pattern-main-copy{
+  max-width:560px;
+
+  font-family:var(--body);
+
+  font-size:.78rem;
+
+  line-height:1.65;
+
+  opacity:.82;
+
+  margin:1.5rem 0 3rem;
+}
+
+
+/* =========================================================
+   BARS
+   ========================================================= */
+
+.pattern-chart{
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:1.15rem;
+}
+
+
+.pattern-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:1rem;
+}
+
+
+.pattern-row-label{
+  width:100px;
+
+  flex-shrink:0;
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.05em;
+}
+
+
+.pattern-bar{
+  flex:1;
+
+  height:20px;
+
+  border:2px solid var(--cream);
+
+  background:rgba(252,246,232,.12);
+
+  overflow:hidden;
+}
+
+
+.pattern-bar-fill{
+  width:0;
+
+  height:100%;
+
+  background:var(--yellow);
+
+  transition:width 1.2s cubic-bezier(.6,0,.3,1);
+}
+
+
+.pattern-row-value{
+  width:40px;
+
+  font-family:var(--display);
+
+  font-size:1rem;
+
+  text-align:right;
+}
+
+
+/* =========================================================
+   FLAGS
+   ========================================================= */
+
+.flags-card{
+  flex:0 1 390px;
+
+  background:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-md);
+
+  padding:2rem;
+}
+
+
+.flags-label{
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+.flags-title{
+  margin:.6rem 0 .7rem;
+
+  font-family:var(--display);
+
+  font-size:clamp(2.5rem,5vw,4.5rem);
+
+  line-height:.8;
+
+  letter-spacing:-.04em;
+
+  text-transform:uppercase;
+}
+
+
+.flags-description{
+  font-family:var(--body);
+
+  font-size:.72rem;
+
+  line-height:1.5;
+
+  margin-bottom:1.5rem;
+}
+
+
+.flag-list{
+  display:flex;
+
+  flex-direction:column;
+}
+
+
+.flag-item{
+  display:flex;
+
+  align-items:center;
+
+  gap:.8rem;
+
+  padding:.8rem 0;
+
+  border-top:2px solid var(--ink);
+}
+
+
+.flag-item:last-child{
+  border-bottom:2px solid var(--ink);
+}
+
+
+.flag-rank{
+  width:35px;
+  height:35px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  background:var(--red);
+
+  color:var(--cream);
+
+  border:2px solid var(--ink);
+
+  font-family:var(--display);
+
+  font-size:.7rem;
+}
+
+
+.flag-name{
+  flex:1;
+
+  font-family:var(--body);
+
+  font-size:.68rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+}
+
+
+.flag-count{
+  font-family:var(--display);
+
+  font-size:1.3rem;
+}
+
+
+/* =========================================================
+   WEEKLY SECTION
+   ========================================================= */
+
+.week-panel{
+  background:var(--slate);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-lg);
+
+  padding:2.5rem;
+
+  position:relative;
+}
+
+
+.week-top{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  gap:2rem;
+
+  margin-bottom:3rem;
+}
+
+
+.week-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(3rem,7vw,7rem);
+
+  line-height:.76;
+
+  letter-spacing:-.05em;
+
+  text-transform:uppercase;
+}
+
+
+.week-stat{
+  background:var(--cream);
+
+  border:3px solid var(--ink);
+
+  box-shadow:var(--shadow-sm);
+
+  padding:.7rem 1rem;
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  white-space:nowrap;
+}
+
+
+.week-chart{
+  height:270px;
+
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:space-between;
+
+  gap:.8rem;
+
+  border-bottom:3px solid var(--ink);
+
+  padding:0 .5rem .8rem;
+}
+
+
+.week-day{
+  height:100%;
+
+  flex:1;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-end;
+
+  gap:.6rem;
+}
+
+
+.week-column-wrap{
+  width:100%;
+
+  max-width:60px;
+
+  height:220px;
+
+  display:flex;
+
+  align-items:flex-end;
+}
+
+
+.week-column{
+  width:100%;
+
+  height:0;
+
+  background:var(--yellow);
+
+  border:3px solid var(--ink);
+
+  transition:height 1s cubic-bezier(.6,0,.3,1);
+}
+
+
+.week-day:nth-child(2) .week-column{
+  background:var(--cream);
+}
+
+
+.week-day:nth-child(4) .week-column{
+  background:var(--green);
+}
+
+
+.week-day:nth-child(6) .week-column{
+  background:var(--red);
+}
+
+
+.week-day-label{
+  font-family:var(--body);
+
+  font-size:.6rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================================
+   CRAVINGS
+   ========================================================= */
+
+.craving-layout{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:1.5rem;
+}
+
+
+.craving-story{
+  flex:1 1 430px;
+
+  background:var(--red);
+
+  color:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-lg);
+
+  padding:2.5rem;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+
+.craving-story::after{
+  content:"CRAVE";
+
+  position:absolute;
+
+  right:-2rem;
+  bottom:-1rem;
+
+  font-family:var(--display);
+
+  font-size:7rem;
+
+  line-height:.7;
+
+  opacity:.08;
+}
+
+
+.craving-appy{
+  width:150px;
+
+  display:block;
+
+  margin:0 auto 2rem;
+
+  filter:drop-shadow(7px 7px 0 var(--ink));
+
+  transform:rotate(-4deg);
+}
+
+
+.craving-story-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(3rem,6vw,6rem);
+
+  line-height:.75;
+
+  letter-spacing:-.05em;
+
+  text-transform:uppercase;
+}
+
+
+.craving-story-copy{
+  max-width:410px;
+
+  font-family:var(--body);
+
+  font-size:.76rem;
+
+  line-height:1.6;
+
+  margin-top:1.5rem;
+}
+
+
+.craving-list{
+  flex:1 1 550px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:1rem;
+}
+
+
+.craving-card{
+  flex:1 1 220px;
+
+  min-height:190px;
+
+  background:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-sm);
+
+  padding:1.4rem;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:space-between;
+}
+
+
+.craving-card:nth-child(2){
+  background:var(--yellow);
+}
+
+
+.craving-card:nth-child(3){
+  background:var(--green);
+}
+
+
+.craving-card:nth-child(4){
+  background:var(--plum);
+
+  color:var(--cream);
+}
+
+
+.craving-card-label{
+  font-family:var(--body);
+
+  font-size:.58rem;
+
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+}
+
+
+.craving-card-title{
+  font-family:var(--display);
+
+  font-size:2.4rem;
+
+  line-height:.8;
+
+  text-transform:uppercase;
+
+  letter-spacing:-.04em;
+}
+
+
+.craving-card-detail{
+  font-family:var(--body);
+
+  font-size:.65rem;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   PROACTIVE SIGNAL
+   ========================================================= */
+
+.signal-panel{
+  background:var(--green);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-lg);
+
+  padding:clamp(2rem,5vw,4rem);
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+
+.signal-panel::before{
+  content:"!";
+
+  position:absolute;
+
+  right:5vw;
+  top:-2rem;
+
+  font-family:var(--display);
+
+  font-size:18rem;
+
+  line-height:1;
+
+  opacity:.08;
+}
+
+
+.signal-content{
+  position:relative;
+
+  z-index:2;
+
+  max-width:800px;
+}
+
+
+.signal-kicker{
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  margin-bottom:1rem;
+}
+
+
+.signal-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(4rem,8vw,8rem);
+
+  line-height:.72;
+
+  letter-spacing:-.055em;
+
+  text-transform:uppercase;
+}
+
+
+.signal-copy{
+  max-width:650px;
+
+  font-family:var(--body);
+
+  font-size:.8rem;
+
+  line-height:1.65;
+
+  margin:2rem 0;
+}
+
+
+.signal-badge{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:.7rem;
+
+  background:var(--cream);
+
+  border:3px solid var(--ink);
+
+  box-shadow:var(--shadow-sm);
+
+  padding:.8rem 1rem;
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+}
+
+
+.signal-badge-dot{
+  width:12px;
+  height:12px;
+
+  border-radius:50%;
+
+  background:var(--red);
+
+  border:2px solid var(--ink);
+}
+
+
+/* =========================================================
+   NEXT STEP
+   ========================================================= */
+
+.next-layout{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:1.5rem;
+}
+
+
+.next-copy{
+  flex:1 1 550px;
+
+  background:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-md);
+
+  padding:2.5rem;
+}
+
+
+.next-copy-title{
+  margin:0 0 1rem;
+
+  font-family:var(--display);
+
+  font-size:clamp(3.5rem,7vw,7rem);
+
+  line-height:.75;
+
+  letter-spacing:-.05em;
+
+  text-transform:uppercase;
+}
+
+
+.next-copy-text{
+  max-width:560px;
+
+  font-family:var(--body);
+
+  font-size:.8rem;
+
+  line-height:1.65;
+}
+
+
+.next-copy .brutal-btn{
+  margin-top:1.8rem;
+}
+
+
+.next-card{
+  flex:1 1 400px;
+
+  background:var(--purple);
+
+  color:var(--cream);
+
+  border:var(--border-thick);
+
+  box-shadow:var(--shadow-md);
+
+  padding:2.5rem;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+}
+
+
+.next-appy{
+  width:150px;
+
+  margin-bottom:1.5rem;
+
+  filter:drop-shadow(7px 7px 0 var(--ink));
+}
+
+
+.next-label{
+  font-family:var(--body);
+
+  font-size:.6rem;
+
+  font-weight:700;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  color:var(--yellow);
+}
+
+
+.next-title{
+  font-family:var(--display);
+
+  font-size:3rem;
+
+  line-height:.8;
+
+  margin:.7rem 0;
+
+  text-transform:uppercase;
+}
+
+
+.next-description{
+  max-width:340px;
+
+  font-family:var(--body);
+
+  font-size:.7rem;
+
+  line-height:1.55;
+
+  opacity:.82;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.insights-cta{
+  background:var(--yellow);
+
+  border-top:var(--border-thick);
+  border-bottom:var(--border-thick);
+
+  padding:4rem 5vw;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:2rem;
+}
+
+
+.insights-cta-copy{
+  font-family:var(--display);
+
+  font-size:clamp(2rem,5vw,4.5rem);
+
+  line-height:.8;
+
+  text-transform:uppercase;
+
+  letter-spacing:-.04em;
+
+  max-width:700px;
+
+  margin:0;
+}
+
+
+.insights-cta .brutal-btn{
+  flex-shrink:0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1050px){
+
+  .insights-appy{
+    width:160px;
+
+    right:4vw;
+
+    bottom:2rem;
+  }
+
+  .insights-title{
+    font-size:clamp(5rem,12vw,9rem);
+  }
+
+}
+
+
+@media(max-width:800px){
+
+  .insights-hero{
+    min-height:680px;
+
+    padding:7rem 6vw 5rem;
+  }
+
+  .insights-title{
+    font-size:clamp(4.5rem,17vw,8rem);
+  }
+
+  .insights-title .outline{
+    -webkit-text-stroke:2px var(--cream);
+
+    margin-left:5vw;
+  }
+
+  .insights-subtitle,
+  .insights-hero-bottom{
+    margin-left:5vw;
+  }
+
+  .insights-appy{
+    width:130px;
+
+    right:7vw;
+
+    bottom:1.5rem;
+  }
+
+  .insights-appy-tag{
+    right:5vw;
+
+    bottom:0;
+
+    font-size:.55rem;
+  }
+
+  .insights-main{
+    width:88vw;
+
+    padding-top:5rem;
+  }
+
+  .insights-section{
+    margin-bottom:6rem;
+  }
+
+  .pattern-main,
+  .flags-card,
+  .week-panel,
+  .craving-story,
+  .next-copy,
+  .next-card{
+    padding:1.7rem;
+  }
+
+  .week-chart{
+    height:220px;
+  }
+
+  .week-column-wrap{
+    height:170px;
+  }
+
+  .insights-cta{
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    padding:3rem 6vw;
+  }
+
+}
+
+
+@media(max-width:560px){
+
+  .insights-hero{
+    min-height:650px;
+
+    padding:6rem 20px 5rem;
+  }
+
+  .insights-kicker{
+    font-size:.58rem;
+  }
+
+  .insights-title{
+    font-size:clamp(4rem,20vw,6.5rem);
+  }
+
+  .insights-subtitle{
+    font-size:.78rem;
+
+    margin-top:2rem;
+  }
+
+  .insights-hero-bottom{
+    flex-wrap:wrap;
+  }
+
+  .insights-appy{
+    width:110px;
+
+    bottom:1rem;
+  }
+
+  .insights-main{
+    width:calc(100% - 32px);
+
+    padding-top:4rem;
+  }
+
+  .snapshot-card{
+    flex-basis:calc(50% - .6rem);
+
+    min-height:170px;
+
+    padding:1rem;
+  }
+
+  .snapshot-number{
+    font-size:3.6rem;
+  }
+
+  .snapshot-description{
+    font-size:.62rem;
+  }
+
+  .insights-section-title{
+    font-size:clamp(3rem,15vw,5rem);
+  }
+
+  .pattern-row{
+    gap:.5rem;
+  }
+
+  .pattern-row-label{
+    width:65px;
+
+    font-size:.5rem;
+  }
+
+  .pattern-row-value{
+    width:25px;
+
+    font-size:.75rem;
+  }
+
+  .pattern-bar{
+    height:15px;
+  }
+
+  .week-top{
+    flex-direction:column;
+  }
+
+  .week-stat{
+    white-space:normal;
+  }
+
+  .week-chart{
+    gap:.3rem;
+
+    height:190px;
+
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .week-column-wrap{
+    height:140px;
+  }
+
+  .week-day-label{
+    font-size:.48rem;
+  }
+
+  .craving-card{
+    min-height:145px;
+
+    flex-basis:calc(50% - .5rem);
+  }
+
+  .craving-card-title{
+    font-size:1.7rem;
+  }
+
+  .signal-title{
+    font-size:clamp(3.5rem,17vw,5.5rem);
+  }
+
+  .insights-cta-copy{
+    font-size:2.8rem;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto !important;
+
+    transition:none !important;
+
+    animation:none !important;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body class="insights-page">
+
+
+<!-- =========================================================
+     CURSOR
+     ========================================================= -->
+
+<canvas
+  id="trail-canvas"
+  aria-hidden="true">
+</canvas>
+
+<div
+  class="custom-appy-cursor"
+  id="appy-cursor"
+  aria-hidden="true">
+</div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<header class="insights-hero">
+
+  <div class="insights-hero-inner">
+
+    <div class="insights-hero-copy">
+
+      <p class="insights-kicker">
+        YOUR FOOD PATTERN
+      </p>
+
+
+      <h1 class="insights-title">
+
+        <span>WHAT</span>
+
+        <span class="outline">
+          SAFEBITE
+        </span>
+
+        <span>NOTICED.</span>
+
+      </h1>
+
+
+      <p class="insights-subtitle">
+
+        SafeBite doesn't stop at individual verdicts.
+        Your scans, swaps and cravings form a pattern —
+        and this is where that pattern starts to become useful.
+
+      </p>
+
+
+      <div class="insights-hero-bottom">
+
+        <span class="insights-period">
+          LAST 30 DAYS
+        </span>
+
+
+        <span class="insights-live">
+
+          <span class="insights-live-dot"></span>
+
+          PERSONAL VIEW
+
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <img
+      src="assets/appy/static/think.png"
+      class="insights-appy"
+      alt="Appy thinking about your food patterns">
+
+
+    <div class="insights-appy-tag">
+      I'M WATCHING 👀
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="insights-main">
+
+
+<!-- =========================================================
+     01 — SNAPSHOT
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      01 / AT A GLANCE
+    </p>
+
+    <h2 class="insights-section-title">
+      YOUR MONTH<br>
+      IN NUMBERS
+    </h2>
+
+  </div>
+
+
+  <div class="snapshot-wrap">
+
+
+    <article class="snapshot-card">
+
+      <span class="snapshot-label">
+        Foods checked
+      </span>
+
+      <span
+        class="snapshot-number"
+        data-count="42">
+        00
+      </span>
+
+      <span class="snapshot-description">
+        Products you've asked SafeBite to understand.
+      </span>
+
+    </article>
+
+
+    <article class="snapshot-card">
+
+      <span class="snapshot-label">
+        Safe choices
+      </span>
+
+      <span
+        class="snapshot-number"
+        data-count="29">
+        00
+      </span>
+
+      <span class="snapshot-description">
+        Foods that matched your current profile.
+      </span>
+
+    </article>
+
+
+    <article class="snapshot-card">
+
+      <span class="snapshot-label">
+        Flagged
+      </span>
+
+      <span
+        class="snapshot-number"
+        data-count="9">
+        00
+      </span>
+
+      <span class="snapshot-description">
+        Products where SafeBite found something to watch.
+      </span>
+
+    </article>
+
+
+    <article class="snapshot-card">
+
+      <span class="snapshot-label">
+        Swapped
+      </span>
+
+      <span
+        class="snapshot-number"
+        data-count="4">
+        00
+      </span>
+
+      <span class="snapshot-description">
+        Times a craving became a safer alternative.
+      </span>
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     02 — PATTERN
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      02 / THE PATTERN
+    </p>
+
+    <h2 class="insights-section-title">
+      WHAT KEEPS<br>
+      SHOWING UP
+    </h2>
+
+  </div>
+
+
+  <div class="pattern-layout">
+
+
+    <article class="pattern-main">
+
+      <p class="pattern-main-label">
+        SCAN CATEGORY
+      </p>
+
+
+      <h3 class="pattern-main-title">
+        YOUR SCANS<br>
+        HAVE A SHAPE.
+      </h3>
+
+
+      <p class="pattern-main-copy">
+
+        Across your recent scans, SafeBite sees more than
+        isolated YES or NO decisions. It can track the
+        kinds of products you check and the ingredients
+        that repeatedly appear.
+
+      </p>
+
+
+      <div class="pattern-chart">
+
+
+        <div class="pattern-row">
+
+          <span class="pattern-row-label">
+            Snacks
+          </span>
+
+          <div class="pattern-bar">
+
+            <div
+              class="pattern-bar-fill"
+              data-width="82%">
+            </div>
+
+          </div>
+
+          <span class="pattern-row-value">
+            18
+          </span>
+
+        </div>
+
+
+        <div class="pattern-row">
+
+          <span class="pattern-row-label">
+            Drinks
+          </span>
+
+          <div class="pattern-bar">
+
+            <div
+              class="pattern-bar-fill"
+              data-width="58%">
+            </div>
+
+          </div>
+
+          <span class="pattern-row-value">
+            11
+          </span>
+
+        </div>
+
+
+        <div class="pattern-row">
+
+          <span class="pattern-row-label">
+            Breakfast
+          </span>
+
+          <div class="pattern-bar">
+
+            <div
+              class="pattern-bar-fill"
+              data-width="38%">
+            </div>
+
+          </div>
+
+          <span class="pattern-row-value">
+            07
+          </span>
+
+        </div>
+
+
+        <div class="pattern-row">
+
+          <span class="pattern-row-label">
+            Desserts
+          </span>
+
+          <div class="pattern-bar">
+
+            <div
+              class="pattern-bar-fill"
+              data-width="25%">
+            </div>
+
+          </div>
+
+          <span class="pattern-row-value">
+            06
+          </span>
+
+        </div>
+
+
+      </div>
+
+    </article>
+
+
+    <article class="flags-card">
+
+      <span class="flags-label">
+        REPEATED FLAGS
+      </span>
+
+
+      <h3 class="flags-title">
+        WATCH<br>
+        THESE.
+      </h3>
+
+
+      <p class="flags-description">
+
+        Ingredients and additives that have appeared
+        most often in your flagged scans.
+
+      </p>
+
+
+      <div class="flag-list">
+
+
+        <div class="flag-item">
+
+          <span class="flag-rank">
+            01
+          </span>
+
+          <span class="flag-name">
+            Milk derivatives
+          </span>
+
+          <span class="flag-count">
+            06
+          </span>
+
+        </div>
+
+
+        <div class="flag-item">
+
+          <span class="flag-rank">
+            02
+          </span>
+
+          <span class="flag-name">
+            Soy
+          </span>
+
+          <span class="flag-count">
+            04
+          </span>
+
+        </div>
+
+
+        <div class="flag-item">
+
+          <span class="flag-rank">
+            03
+          </span>
+
+          <span class="flag-name">
+            Artificial colours
+          </span>
+
+          <span class="flag-count">
+            03
+          </span>
+
+        </div>
+
+
+        <div class="flag-item">
+
+          <span class="flag-rank">
+            04
+          </span>
+
+          <span class="flag-name">
+            Added sweeteners
+          </span>
+
+          <span class="flag-count">
+            03
+          </span>
+
+        </div>
+
+
+      </div>
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     03 — WEEKLY ACTIVITY
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      03 / RECENT ACTIVITY
+    </p>
+
+    <h2 class="insights-section-title">
+      WHEN YOU<br>
+      CHECK.
+    </h2>
+
+  </div>
+
+
+  <div class="week-panel">
+
+
+    <div class="week-top">
+
+      <h3 class="week-title">
+        LAST<br>
+        7 DAYS
+      </h3>
+
+
+      <span class="week-stat">
+        24 SCANS THIS WEEK
+      </span>
+
+    </div>
+
+
+    <div class="week-chart">
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="42%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Mon
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="31%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Tue
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="70%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Wed
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="48%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Thu
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="82%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Fri
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="26%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Sat
+        </span>
+
+      </div>
+
+
+      <div class="week-day">
+
+        <div class="week-column-wrap">
+
+          <div
+            class="week-column"
+            data-height="58%">
+          </div>
+
+        </div>
+
+        <span class="week-day-label">
+          Sun
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     04 — CRAVINGS
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      04 / CRAVINGS
+    </p>
+
+    <h2 class="insights-section-title">
+      WHAT YOU<br>
+      KEEP WANTING.
+    </h2>
+
+  </div>
+
+
+  <div class="craving-layout">
+
+
+    <article class="craving-story">
+
+
+      <img
+        src="assets/appy/static/drinkwalk.png"
+        class="craving-appy"
+        alt="Appy walking with a drink">
+
+
+      <h3 class="craving-story-title">
+
+        YOUR<br>
+        CRAVINGS<br>
+        HAVE A<br>
+        PATTERN.
+
+      </h3>
+
+
+      <p class="craving-story-copy">
+
+        SafeBite can look beyond product names and
+        understand the kind of experience you're trying
+        to find — sweet, crunchy, fizzy, creamy or
+        comforting.
+
+      </p>
+
+    </article>
+
+
+    <div class="craving-list">
+
+
+      <article class="craving-card">
+
+        <span class="craving-card-label">
+          MOST COMMON
+        </span>
+
+        <span class="craving-card-title">
+          SWEET
+        </span>
+
+        <span class="craving-card-detail">
+          11 craving searches
+        </span>
+
+      </article>
+
+
+      <article class="craving-card">
+
+        <span class="craving-card-label">
+          SECOND
+        </span>
+
+        <span class="craving-card-title">
+          FIZZY
+        </span>
+
+        <span class="craving-card-detail">
+          07 craving searches
+        </span>
+
+      </article>
+
+
+      <article class="craving-card">
+
+        <span class="craving-card-label">
+          THIRD
+        </span>
+
+        <span class="craving-card-title">
+          CRUNCHY
+        </span>
+
+        <span class="craving-card-detail">
+          05 craving searches
+        </span>
+
+      </article>
+
+
+      <article class="craving-card">
+
+        <span class="craving-card-label">
+          EMERGING
+        </span>
+
+        <span class="craving-card-title">
+          COMFORT
+        </span>
+
+        <span class="craving-card-detail">
+          04 craving searches
+        </span>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     05 — PROACTIVE SIGNAL
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      05 / THE QUIET THIRD JOURNEY
+    </p>
+
+  </div>
+
+
+  <article class="signal-panel">
+
+
+    <div class="signal-content">
+
+      <p class="signal-kicker">
+        SAFEBITE NOTICED SOMETHING
+      </p>
+
+
+      <h2 class="signal-title">
+        THREE<br>
+        FLAGS<br>
+        IN A ROW.
+      </h2>
+
+
+      <p class="signal-copy">
+
+        Your last three snack scans were flagged.
+        That doesn't mean the next one will be —
+        but it is a pattern worth noticing.
+
+        SafeBite's proactive layer uses your scan
+        sequence to surface signals like this before
+        they become another isolated decision.
+
+      </p>
+
+
+      <div class="signal-badge">
+
+        <span class="signal-badge-dot"></span>
+
+        PATTERN DETECTED · CONFIDENCE 82%
+
+      </div>
+
+    </div>
+
+  </article>
+
+</section>
+
+
+<!-- =========================================================
+     06 — NEXT STEP
+     ========================================================= -->
+
+<section class="insights-section">
+
+  <div class="insights-section-header">
+
+    <p class="insights-section-kicker">
+      06 / WHAT NEXT
+    </p>
+
+    <h2 class="insights-section-title">
+      DON'T JUST<br>
+      LOOK BACK.
+    </h2>
+
+  </div>
+
+
+  <div class="next-layout">
+
+
+    <article class="next-copy">
+
+      <h3 class="next-copy-title">
+
+        TURN THE<br>
+        PATTERN INTO<br>
+        A BETTER<br>
+        CHOICE.
+
+      </h3>
+
+
+      <p class="next-copy-text">
+
+        Your insights become useful when they change
+        what happens next.
+
+        Based on the things you've been checking and
+        the cravings you've been searching for, SafeBite
+        can surface alternatives that still match what
+        you wanted.
+
+      </p>
+
+
+      <a
+        href="craving-search.html"
+        class="brutal-btn brutal-btn--yellow">
+
+        FIND A SWAP →
+
+      </a>
+
+    </article>
+
+
+    <article class="next-card">
+
+
+      <img
+        src="assets/appy/static/think.png"
+        class="next-appy"
+        alt="Appy thinking">
+
+
+      <span class="next-label">
+        YOUR CURRENT SIGNAL
+      </span>
+
+
+      <h4 class="next-title">
+        SWEET<br>
+        + FIZZY
+      </h4>
+
+
+      <p class="next-description">
+
+        Your recent cravings lean toward sweet,
+        carbonated drinks. SafeBite can search the
+        craving space for alternatives that fit your
+        profile.
+
+      </p>
+
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     CTA
+     ========================================================= -->
+
+<section
+  class="insights-cta"
+  data-color="#FFF8E0">
+
+  <p class="insights-cta-copy">
+    THE MORE YOU USE SAFEBITE,
+    THE MORE USEFUL THE PATTERN BECOMES.
+  </p>
+
+
+  <a
+    href="scan.html"
+    class="brutal-btn brutal-btn--yellow">
+
+    SCAN SOMETHING →
+
+  </a>
+
+</section>
+
+
+<!-- =========================================================
+     ORIGINAL SAFEBITE FOOTER
+     ========================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-color="#FFF8E0">
+
+
+  <div class="footer-topbar">
+
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram">
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5">
+        </rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4">
+        </circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link">
+
+      HOW IT WORKS
+
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link">
+
+      HOW IT THINKS
+
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link">
+
+      RESULTS
+
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link">
+
+      ABOUT
+
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit">
+
+      SITE BY SAFEBITE
+
+    </span>
+
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay">
+
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10">
+
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8">
+
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05">
+
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09">
+
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07">
+
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11">
+
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08">
+
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05">
+
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09">
+
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07">
+
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04">
+
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6">
+
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03">
+
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4">
+
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05">
+
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   INSIGHTS ANIMATIONS
+   ========================================================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+
+  /* -------------------------------------------------------
+     HERO
+     ------------------------------------------------------- */
+
+  if(typeof gsap !== 'undefined'){
+
+    const heroTimeline = gsap.timeline({
+      defaults:{
+        ease:'power4.out'
+      }
+    });
+
+
+    heroTimeline.from(
+      '.insights-kicker',
+      {
+        y:30,
+        opacity:0,
+        duration:.6
+      }
+    );
+
+
+    heroTimeline.from(
+      '.insights-title span',
+      {
+        yPercent:110,
+        opacity:0,
+        rotate:2,
+        duration:1,
+        stagger:.12
+      },
+      '-=.25'
+    );
+
+
+    heroTimeline.from(
+      '.insights-subtitle',
+      {
+        y:25,
+        opacity:0,
+        duration:.7
+      },
+      '-=.55'
+    );
+
+
+    heroTimeline.from(
+      '.insights-hero-bottom',
+      {
+        y:20,
+        opacity:0,
+        duration:.6
+      },
+      '-=.45'
+    );
+
+
+    heroTimeline.from(
+      '.insights-appy',
+      {
+        scale:.5,
+        opacity:0,
+        rotate:-15,
+        duration:1,
+        ease:'back.out(1.7)'
+      },
+      '-=.8'
+    );
+
+
+    heroTimeline.from(
+      '.insights-appy-tag',
+      {
+        scale:0,
+        opacity:0,
+        rotate:10,
+        duration:.5,
+        ease:'back.out(2)'
+      },
+      '-=.45'
+    );
+
+
+    /* -----------------------------------------------------
+       SECTION REVEALS
+       ----------------------------------------------------- */
+
+    gsap.utils.toArray('.insights-section').forEach(section => {
+
+      const elements =
+        section.querySelectorAll(
+          '.insights-section-kicker, .insights-section-title, .snapshot-card, .pattern-main, .flags-card, .week-panel, .craving-story, .craving-card, .signal-panel, .next-copy, .next-card'
+        );
+
+
+      gsap.from(
+        elements,
+        {
+          y:50,
+          opacity:0,
+          duration:.8,
+          stagger:.08,
+          ease:'power3.out',
+
+          scrollTrigger:{
+            trigger:section,
+            start:'top 78%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+    /* -----------------------------------------------------
+       SNAPSHOT NUMBERS
+       ----------------------------------------------------- */
+
+    document.querySelectorAll(
+      '.snapshot-number'
+    ).forEach(number => {
+
+      const target =
+        Number(number.dataset.count);
+
+
+      gsap.fromTo(
+        number,
+        {
+          innerText:0
+        },
+        {
+          innerText:target,
+
+          duration:1.4,
+
+          snap:{
+            innerText:1
+          },
+
+          ease:'power2.out',
+
+          scrollTrigger:{
+            trigger:number,
+            start:'top 85%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+    /* -----------------------------------------------------
+       CATEGORY BARS
+       ----------------------------------------------------- */
+
+    document.querySelectorAll(
+      '.pattern-bar-fill'
+    ).forEach(bar => {
+
+      gsap.to(
+        bar,
+        {
+          width:bar.dataset.width,
+
+          duration:1.2,
+
+          ease:'power3.out',
+
+          scrollTrigger:{
+            trigger:bar,
+            start:'top 88%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+    /* -----------------------------------------------------
+       WEEKLY BARS
+       ----------------------------------------------------- */
+
+    document.querySelectorAll(
+      '.week-column'
+    ).forEach(bar => {
+
+      gsap.to(
+        bar,
+        {
+          height:bar.dataset.height,
+
+          duration:1,
+
+          ease:'power3.out',
+
+          scrollTrigger:{
+            trigger:bar,
+            start:'top 85%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+    /* -----------------------------------------------------
+       APPY FLOAT
+       ----------------------------------------------------- */
+
+    gsap.to(
+      '.insights-appy',
+      {
+        y:-12,
+        rotation:8,
+        duration:2.5,
+        repeat:-1,
+        yoyo:true,
+        ease:'sine.inOut'
+      }
+    );
+
+
+    gsap.to(
+      '.craving-appy',
+      {
+        y:-8,
+        rotation:-7,
+        duration:2,
+        repeat:-1,
+        yoyo:true,
+        ease:'sine.inOut'
+      }
+    );
+
+
+    gsap.to(
+      '.next-appy',
+      {
+        y:-10,
+        rotation:3,
+        duration:2.2,
+        repeat:-1,
+        yoyo:true,
+        ease:'sine.inOut'
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     CRAVING CARD INTERACTION
+     ======================================================= */
+
+  document.querySelectorAll(
+    '.craving-card'
+  ).forEach(card => {
+
+    card.addEventListener(
+      'mouseenter',
+      () => {
+
+        if(typeof gsap !== 'undefined'){
+
+          gsap.to(
+            card,
+            {
+              y:-7,
+              x:-3,
+              duration:.2,
+              ease:'power2.out'
+            }
+          );
+
+        }
+
+      }
+    );
+
+
+    card.addEventListener(
+      'mouseleave',
+      () => {
+
+        if(typeof gsap !== 'undefined'){
+
+          gsap.to(
+            card,
+            {
+              y:0,
+              x:0,
+              duration:.25,
+              ease:'power2.out'
+            }
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+});
+
+</script>
+
+</body>
+</html>

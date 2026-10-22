@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeBite — Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+
+<style>
+/* =========================================================
+   RESULTS — PAGE ART DIRECTION
+   ========================================================= */
+
+.results-page {
+  overflow-x: hidden;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* ---------- HERO ---------- */
+
+.results-hero {
+  min-height: 88vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--cream);
+  border-bottom: var(--border-thick);
+}
+
+.results-hero::before {
+  content: "";
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  border-radius: 50%;
+  background: var(--yellow);
+  right: -100px;
+  top: -120px;
+  border: var(--border-thick);
+  transform: rotate(-8deg);
+}
+
+.results-hero::after {
+  content: "";
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  background: var(--slate);
+  left: -100px;
+  bottom: -130px;
+  border: var(--border-thick);
+  transform: rotate(18deg);
+}
+
+.results-hero-inner {
+  width: min(1380px, calc(100% - 80px));
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 110px 0 100px;
+}
+
+.results-hero-copy {
+  max-width: 1000px;
+}
+
+.results-hero-kicker {
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.results-hero-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 11vw, 170px);
+  line-height: .82;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+}
+
+.results-hero-title .title-line {
+  display: block;
+  overflow: hidden;
+}
+
+.results-hero-title .accent {
+  color: var(--red);
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+
+.results-hero-description {
+  max-width: 620px;
+  margin-top: 45px;
+  font-family: var(--body);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.results-hero-sticker {
+  position: absolute;
+  right: 8%;
+  bottom: 13%;
+  width: 190px;
+  height: 190px;
+  background: var(--red);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(8deg);
+  z-index: 4;
+}
+
+.results-hero-sticker img {
+  width: 125px;
+  height: 125px;
+  object-fit: contain;
+}
+
+.results-hero-sticker span {
+  position: absolute;
+  left: 15px;
+  bottom: 12px;
+  font-family: var(--display);
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+/* ---------- SECTION COMMON ---------- */
+
+.results-section {
+  position: relative;
+  padding: 120px 0;
+  border-bottom: var(--border-thick);
+  overflow: hidden;
+}
+
+.results-section-inner {
+  width: min(1240px, calc(100% - 80px));
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.results-kicker {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.results-heading {
+  font-family: var(--display);
+  font-size: clamp(55px, 8vw, 110px);
+  line-height: .86;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+  margin: 0 0 45px;
+}
+
+.results-intro {
+  max-width: 680px;
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+/* ---------- BIG NUMBER BAND ---------- */
+
+.results-number-band {
+  background: var(--red);
+  color: var(--cream);
+}
+
+.results-number-band::after {
+  content: "MEASURED";
+  position: absolute;
+  font-family: var(--display);
+  font-size: 180px;
+  line-height: .8;
+  right: -25px;
+  bottom: 20px;
+  opacity: .09;
+  transform: rotate(-8deg);
+}
+
+.results-number-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: var(--border-thick);
+  border-left: var(--border-thick);
+}
+
+.result-big-card {
+  min-height: 300px;
+  padding: 38px;
+  border-right: var(--border-thick);
+  border-bottom: var(--border-thick);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--red);
+}
+
+.result-big-card:nth-child(2) {
+  background: var(--purple);
+}
+
+.result-big-card:nth-child(3) {
+  background: var(--slate);
+  color: var(--ink);
+}
+
+.result-big-value {
+  font-family: var(--display);
+  font-size: clamp(70px, 9vw, 125px);
+  line-height: .8;
+  letter-spacing: -.06em;
+}
+
+.result-big-label {
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+/* ---------- METRIC TABLE ---------- */
+
+.metric-section {
+  background: var(--purple);
+  color: var(--cream);
+}
+
+.metric-section::before {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border: 3px solid var(--yellow);
+  border-radius: 50%;
+  right: -130px;
+  top: 70px;
+}
+
+.metric-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 38px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.metric-status::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+
+.metric-table-wrap {
+  overflow-x: auto;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-lg);
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.results-table th {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: left;
+  padding: 20px 24px;
+  background: var(--yellow);
+  border-bottom: var(--border-thick);
+}
+
+.results-table td {
+  padding: 27px 24px;
+  font-family: var(--body);
+  font-size: 16px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.results-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.results-table td:nth-child(2) {
+  font-family: var(--display);
+  font-size: 27px;
+  text-transform: uppercase;
+}
+
+.tbd {
+  display: inline-block;
+  padding: 5px 9px;
+  margin-left: 8px;
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  background: var(--red);
+  color: var(--cream);
+  border: 2px solid var(--ink);
+  vertical-align: middle;
+}
+
+/* ---------- LAYER CARDS ---------- */
+
+.layer-section {
+  background: var(--cream);
+}
+
+.layer-section:nth-of-type(even) {
+  background: var(--slate);
+}
+
+.layer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.layer-card {
+  min-height: 330px;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+  position: relative;
+  background: var(--cream);
+  transform: rotate(var(--rotation));
+  transition:
+    transform .35s var(--ease-bounce),
+    box-shadow .35s ease;
+}
+
+.layer-card:hover {
+  transform: translate(-5px, -8px) rotate(0deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.layer-card:nth-child(1) {
+  --rotation: -1.5deg;
+  background: var(--yellow);
+}
+
+.layer-card:nth-child(2) {
+  --rotation: 1.2deg;
+  background: var(--red);
+  color: var(--cream);
+}
+
+.layer-card:nth-child(3) {
+  --rotation: -1deg;
+  background: var(--green);
+}
+
+.layer-number {
+  font-family: var(--display);
+  font-size: 62px;
+  line-height: 1;
+}
+
+.layer-name {
+  font-family: var(--display);
+  font-size: 30px;
+  line-height: .95;
+  text-transform: uppercase;
+  margin-top: 45px;
+}
+
+.layer-copy {
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 18px;
+  max-width: 310px;
+}
+
+/* ---------- COMPARISON ---------- */
+
+.comparison-section {
+  background: var(--footer-cream);
+}
+
+.comparison-layout {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.comparison-note {
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 440px;
+}
+
+.comparison-chart {
+  border: var(--border-thick);
+  box-shadow: var(--shadow-md);
+  background: var(--cream);
+  padding: 35px;
+}
+
+.comparison-row {
+  margin-bottom: 40px;
+}
+
+.comparison-row:last-child {
+  margin-bottom: 0;
+}
+
+.comparison-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 13px;
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.comparison-label strong {
+  font-family: var(--display);
+  font-size: 35px;
+}
+
+.bar-track {
+  height: 42px;
+  border: var(--border-thick);
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.bar-fill {
+  width: 0;
+  height: 100%;
+  background: var(--purple);
+  border-right: var(--border-thick);
+}
+
+.comparison-row:nth-child(2) .bar-fill {
+  background: var(--red);
+}
+
+/* ---------- HONESTY BLOCK ---------- */
+
+.honesty-section {
+  background: var(--green);
+}
+
+.honesty-layout {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.honesty-title {
+  font-family: var(--display);
+  font-size: clamp(60px, 8vw, 115px);
+  line-height: .84;
+  letter-spacing: -.05em;
+  text-transform: uppercase;
+}
+
+.honesty-copy {
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.honesty-list {
+  margin-top: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.honesty-list li {
+  padding: 15px 0;
+  border-top: 2px solid var(--ink);
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.honesty-list li:last-child {
+  border-bottom: 2px solid var(--ink);
+}
+
+.honesty-appy {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.honesty-appy img {
+  width: min(300px, 100%);
+  transform: rotate(5deg);
+  filter: drop-shadow(12px 12px 0 var(--ink));
+}
+
+/* ---------- CTA ---------- */
+
+.results-cta {
+  background: var(--yellow);
+  text-align: center;
+  padding: 100px 30px;
+  border-bottom: var(--border-thick);
+}
+
+.results-cta-kicker {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.results-cta-title {
+  font-family: var(--display);
+  font-size: clamp(55px, 8vw, 110px);
+  line-height: .85;
+  letter-spacing: -.05em;
+  text-transform: uppercase;
+  max-width: 900px;
+  margin: 0 auto 40px;
+}
+
+.results-cta .brutal-btn {
+  display: inline-block;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .results-hero-inner,
+  .results-section-inner {
+    width: min(100% - 40px, 1240px);
+  }
+
+  .results-hero {
+    min-height: 760px;
+  }
+
+  .results-hero-sticker {
+    width: 145px;
+    height: 145px;
+    right: 7%;
+    bottom: 7%;
+  }
+
+  .results-hero-sticker img {
+    width: 95px;
+    height: 95px;
+  }
+
+  .results-number-grid,
+  .layer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-layout,
+  .honesty-layout {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+}
+
+@media (max-width: 600px) {
+  .results-hero-inner,
+  .results-section-inner {
+    width: calc(100% - 28px);
+  }
+
+  .results-hero-inner {
+    padding-top: 90px;
+  }
+
+  .results-hero-title {
+    font-size: clamp(58px, 18vw, 100px);
+  }
+
+  .results-hero-description {
+    font-size: 16px;
+    margin-top: 32px;
+    max-width: 90%;
+  }
+
+  .results-hero-sticker {
+    width: 115px;
+    height: 115px;
+    right: 10px;
+    bottom: 35px;
+  }
+
+  .results-hero-sticker img {
+    width: 75px;
+    height: 75px;
+  }
+
+  .results-hero-sticker span {
+    font-size: 9px;
+    left: 8px;
+    bottom: 7px;
+  }
+
+  .results-section {
+    padding: 80px 0;
+  }
+
+  .results-heading {
+    font-size: 58px;
+  }
+
+  .result-big-card {
+    min-height: 240px;
+  }
+
+  .metric-table-wrap {
+    box-shadow: var(--shadow-md);
+  }
+
+  .comparison-chart {
+    padding: 22px;
+  }
+
+  .results-cta {
+    padding: 80px 20px;
+  }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .layer-card,
+  .bar-fill {
+    transition: none !important;
+  }
+}
+.results-hero, .results-section, .results-cta { border-bottom: 0 !important; }
+</style>
+</head>
+
+<body class="results-page color-wash">
+
+<!-- =========================================================
+     CURSOR
+     ========================================================= -->
+
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor" aria-hidden="true"></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html" class="is-active"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<header class="results-hero" id="hero" data-color="#FCF6E8">
+
+  <div class="results-hero-inner">
+
+    <div class="results-hero-copy">
+
+      <p class="results-hero-kicker">
+        DOES IT WORK?
+      </p>
+
+      <h1 class="results-hero-title split-title">
+        <span class="title-line">THE</span>
+        <span class="title-line">NUMBERS,</span>
+        <span class="title-line">
+          <span class="accent">HONESTLY.</span>
+        </span>
+      </h1>
+
+      <p class="results-hero-description">
+        Every metric below is what we've actually measured so far —
+        not a projection, not a pitch-deck estimate.
+      </p>
+
+    </div>
+
+    <div class="results-hero-sticker" data-speed="0.6">
+      <img src="assets/appy/static/think.png" alt="Appy thinking">
+      <span>NO FAKE NUMBERS</span>
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     BIG NUMBER INTRO
+     ========================================================= -->
+
+<section class="results-section results-number-band" data-color="#BD3647">
+
+  <div class="results-section-inner">
+
+    <p class="results-kicker" style="color:var(--yellow)">
+      CURRENT STATE
+    </p>
+
+    <h2 class="results-heading">
+      WHAT'S<br>ACTUALLY<br>MEASURED
+    </h2>
+
+    <div class="results-number-grid">
+
+      <article class="result-big-card">
+        <span class="result-big-value">CER</span>
+        <span class="result-big-label">
+          Character Error Rate
+        </span>
+      </article>
+
+      <article class="result-big-card">
+        <span class="result-big-value">mAP</span>
+        <span class="result-big-label">
+          Panel Detector
+        </span>
+      </article>
+
+      <article class="result-big-card">
+        <span class="result-big-value">VAE</span>
+        <span class="result-big-label">
+          Craving Embedding
+        </span>
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     OCR METRICS
+     ========================================================= -->
+
+<section class="results-section metric-section" id="ocr-metrics" data-color="#6B66A6">
+
+  <div class="results-section-inner">
+
+    <p class="results-kicker" style="color:var(--yellow)">
+      01 / PERCEPTION LAYER
+    </p>
+
+    <h2 class="results-heading" style="color:var(--cream)">
+      OCR<br>METRICS
+    </h2>
+
+    <div class="metric-status">
+      In progress — early validation pass
+    </div>
+
+    <div class="metric-table-wrap">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Character Error Rate (CER)</td>
+
+            <td>
+              —
+              <span class="tbd">TBD</span>
+            </td>
+
+            <td>
+              Placeholder — fill in from your latest run
+            </td>
+          </tr>
+
+          <tr>
+            <td>Word Error Rate (WER)</td>
+
+            <td>
+              —
+              <span class="tbd">TBD</span>
+            </td>
+
+            <td>
+              Placeholder — fill in from your latest run
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     DETECTOR METRICS
+     ========================================================= -->
+
+<section class="results-section metric-section" id="detector-metrics" data-color="#8FA3C4">
+
+  <div class="results-section-inner">
+
+    <p class="results-kicker">
+      02 / PERCEPTION LAYER
+    </p>
+
+    <h2 class="results-heading">
+      DETECTOR<br>METRICS
+    </h2>
+
+    <div class="metric-status">
+      In progress — final mAP pending
+    </div>
+
+    <div class="metric-table-wrap">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>mAP — Panel Detector</td>
+
+            <td>
+              —
+              <span class="tbd">TBD</span>
+            </td>
+
+            <td>
+              Placeholder — not final
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     GENERATION METRICS
+     ========================================================= -->
+
+<section class="results-section metric-section" id="generation-metrics" data-color="#A2BF8A">
+
+  <div class="results-section-inner">
+
+    <p class="results-kicker" style="color:var(--red)">
+      03 / GENERATION LAYER
+    </p>
+
+    <h2 class="results-heading" style="color:var(--ink)">
+      GENERATION<br>METRICS
+    </h2>
+
+    <div class="metric-status">
+      In progress — text generation still being scored
+    </div>
+
+    <div class="metric-table-wrap">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>BLEU</td>
+
+            <td>
+              —
+              <span class="tbd">TBD</span>
+            </td>
+
+            <td>
+              Placeholder — fill in from your latest run
+            </td>
+          </tr>
+
+          <tr>
+            <td>ROUGE</td>
+
+            <td>
+              —
+              <span class="tbd">TBD</span>
+            </td>
+
+            <td>
+              Placeholder — fill in from your latest run
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     SYSTEM LAYERS
+     ========================================================= -->
+
+<section class="results-section layer-section" data-color="#FCF6E8">
+
+  <div class="results-section-inner">
+
+    <p class="results-kicker" style="color:var(--red)">
+      HOW WE MEASURE IT
+    </p>
+
+    <h2 class="results-heading">
+      THREE<br>LAYERS.
+    </h2>
+
+    <div class="layer-grid">
+
+      <article class="layer-card">
+
+        <span class="layer-number">01</span>
+
+        <h3 class="layer-name">
+          Perception
+        </h3>
+
+        <p class="layer-copy">
+          OCR and visual detection turn a photographed food
+          package into structured ingredient information.
+        </p>
+
+      </article>
+
+
+      <article class="layer-card">
+
+        <span class="layer-number">02</span>
+
+        <h3 class="layer-name">
+          Reasoning
+        </h3>
+
+        <p class="layer-copy">
+          Ingredient information is checked against the user's
+          allergen profile before a safety decision is surfaced.
+        </p>
+
+      </article>
+
+
+      <article class="layer-card">
+
+        <span class="layer-number">03</span>
+
+        <h3 class="layer-name">
+          Generation
+        </h3>
+
+        <p class="layer-copy">
+          Swap explanations translate model output into
+          understandable recommendations for the user.
+        </p>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     VAE COMPARISON
+     ========================================================= -->
+
+<section class="results-section comparison-section" id="vae-comparison" data-color="#FFF8E0">
+
+  <div class="results-section-inner">
+
+    <div class="comparison-layout">
+
+      <div>
+
+        <p class="results-kicker" style="color:var(--red)">
+          SWAP RANKING
+        </p>
+
+        <h2 class="results-heading">
+          VAE<br>VS.<br>RULES
+        </h2>
+
+        <p class="comparison-note">
+          How the learned craving embedding stacks up against
+          a simple hand-weighted scoring rule on swap relevance.
+        </p>
+
+        <p class="comparison-note" style="margin-top:20px;">
+          The percentages shown here are placeholders and must
+          be replaced with the real evaluation numbers.
+        </p>
+
+      </div>
+
+
+      <div class="comparison-chart">
+
+        <div class="comparison-row">
+
+          <div class="comparison-label">
+            <span>VAE-based ranking</span>
+            <strong>72%</strong>
+          </div>
+
+          <div class="bar-track">
+            <div class="bar-fill" data-width="72"></div>
+          </div>
+
+        </div>
+
+
+        <div class="comparison-row">
+
+          <div class="comparison-label">
+            <span>Hand-weighted rule</span>
+            <strong>58%</strong>
+          </div>
+
+          <div class="bar-track">
+            <div class="bar-fill" data-width="58"></div>
+          </div>
+
+        </div>
+
+        <p style="
+          margin-top:30px;
+          font-family:var(--body);
+          font-size:11px;
+          font-weight:800;
+          text-transform:uppercase;
+          letter-spacing:.08em;
+        ">
+          PLACEHOLDER CHART — REPLACE WITH REAL EVALUATION DATA
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     HONESTY / LIMITATIONS
+     ========================================================= -->
+
+<section class="results-section honesty-section" data-color="#A2BF8A">
+
+  <div class="results-section-inner">
+
+    <div class="honesty-layout">
+
+      <div>
+
+        <p class="results-kicker" style="color:var(--red)">
+          WHAT WE ARE NOT CLAIMING
+        </p>
+
+        <h2 class="honesty-title">
+          HONEST<br>BY DESIGN.
+        </h2>
+
+        <p class="honesty-copy" style="margin-top:35px;">
+          A model isn't validated because a number looks impressive.
+          These results stay marked as provisional until the relevant
+          evaluation runs are complete.
+        </p>
+
+        <ul class="honesty-list">
+
+          <li>
+            No invented accuracy numbers
+          </li>
+
+          <li>
+            No projected benchmark presented as measured
+          </li>
+
+          <li>
+            No final claim before holdout evaluation
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <div class="honesty-appy">
+
+        <img
+          src="assets/appy/static/think.png"
+          alt="Appy thinking about the results"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+     ========================================================= -->
+
+<section class="results-cta" data-color="#F2DB66">
+
+  <p class="results-cta-kicker">
+    WANT THE FULL SYSTEM?
+  </p>
+
+  <h2 class="results-cta-title">
+    SEE HOW<br>IT THINKS.
+  </h2>
+
+  <a href="architecture.html" class="brutal-btn brutal-btn--dark">
+    EXPLORE THE ARCHITECTURE →
+  </a>
+
+</section>
+
+
+<!-- =========================================================
+     SHARED FOOTER
+     ========================================================= -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a href="#" class="footer-social-icon" aria-label="Instagram">
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1"></circle>
+      </svg>
+    </a>
+
+    <a href="how-it-works.html" class="footer-topbar-link">
+      HOW IT WORKS
+    </a>
+
+    <a href="architecture.html" class="footer-topbar-link">
+      ARCHITECTURE
+    </a>
+
+    <a href="results.html" class="footer-topbar-link">
+      RESULTS
+    </a>
+
+    <a href="about.html" class="footer-topbar-link">
+      ABOUT
+    </a>
+
+    <span class="footer-topbar-link footer-topbar-credit">
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div class="footer-flatlay" id="footer-flatlay">
+
+    <img src="assets/footer/vase-flowers.png"
+         class="fl-item"
+         id="fl-vase"
+         alt=""
+         data-depth="0.10">
+
+    <img src="assets/footer/wine-glass-1.png"
+         class="fl-item"
+         id="fl-wineglass1"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/fork.png"
+         class="fl-item"
+         id="fl-fork"
+         alt=""
+         data-depth="0.08"
+         data-rotate="-8">
+
+    <img src="assets/footer/sausage-plate.png"
+         class="fl-item"
+         id="fl-sausage"
+         alt=""
+         data-depth="0.05">
+
+    <img src="assets/footer/wine-bottle.png"
+         class="fl-item"
+         id="fl-bottle"
+         alt=""
+         data-depth="0.09">
+
+    <img src="assets/footer/candle-2.png"
+         class="fl-item"
+         id="fl-candle2"
+         alt=""
+         data-depth="0.07">
+
+    <img src="assets/footer/salt-pepper.png"
+         class="fl-item"
+         id="fl-saltpepper"
+         alt=""
+         data-depth="0.11">
+
+    <img src="assets/footer/cheese-block.png"
+         class="fl-item"
+         id="fl-cheese"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/candle-1.png"
+         class="fl-item"
+         id="fl-candle1"
+         alt=""
+         data-depth="0.08">
+
+    <img src="assets/footer/olives-bowl.png"
+         class="fl-item"
+         id="fl-olivesbowl"
+         alt=""
+         data-depth="0.05">
+
+    <img src="assets/footer/olives-loose.png"
+         class="fl-item"
+         id="fl-olivesloose"
+         alt=""
+         data-depth="0.09">
+
+    <img src="assets/footer/jar.png"
+         class="fl-item"
+         id="fl-jar"
+         alt=""
+         data-depth="0.07">
+
+    <img src="assets/footer/bread-board.png"
+         class="fl-item"
+         id="fl-bread"
+         alt=""
+         data-depth="0.04">
+
+    <img src="assets/footer/spoon.png"
+         class="fl-item"
+         id="fl-spoon"
+         alt=""
+         data-depth="0.10"
+         data-rotate="6">
+
+    <img src="assets/footer/wine-glass-2.png"
+         class="fl-item"
+         id="fl-wineglass2"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/charcuterie-board.png"
+         class="fl-item"
+         id="fl-charcuterie"
+         alt=""
+         data-depth="0.03">
+
+    <img src="assets/footer/knife.png"
+         class="fl-item"
+         id="fl-knife"
+         alt=""
+         data-depth="0.08"
+         data-rotate="-4">
+
+    <img src="assets/footer/hat-plate.png"
+         class="fl-item"
+         id="fl-hat"
+         alt=""
+         data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+<script>
+/* =========================================================
+   RESULTS PAGE ANIMATION
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  if (typeof gsap === "undefined") return;
+
+  if (typeof ScrollTrigger !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+
+  /* ---------- HERO ---------- */
+
+  const titleLines = document.querySelectorAll(
+    ".results-hero-title .title-line"
+  );
+
+  gsap.from(titleLines, {
+    yPercent: 110,
+    opacity: 0,
+    duration: 1.1,
+    stagger: 0.12,
+    ease: "power4.out"
+  });
+
+
+  gsap.from(".results-hero-kicker", {
+    y: 25,
+    opacity: 0,
+    duration: .8,
+    delay: .2,
+    ease: "power3.out"
+  });
+
+
+  gsap.from(".results-hero-description", {
+    y: 30,
+    opacity: 0,
+    duration: .9,
+    delay: .55,
+    ease: "power3.out"
+  });
+
+
+  gsap.from(".results-hero-sticker", {
+    scale: .4,
+    rotation: -20,
+    opacity: 0,
+    duration: 1,
+    delay: .75,
+    ease: "back.out(1.7)"
+  });
+
+
+  /* ---------- FLOATING STICKER ---------- */
+
+  gsap.to(".results-hero-sticker", {
+    y: -14,
+    rotation: 11,
+    duration: 2.4,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut"
+  });
+
+
+  /* ---------- SECTION HEADINGS ---------- */
+
+  if (typeof ScrollTrigger !== "undefined") {
+
+    gsap.utils.toArray(".results-heading").forEach((heading) => {
+
+      gsap.from(heading, {
+        y: 70,
+        opacity: 0,
+        duration: 1,
+        ease: "power4.out",
+
+        scrollTrigger: {
+          trigger: heading,
+          start: "top 82%",
+          once: true
+        }
+
+      });
+
+    });
+
+
+    /* ---------- BIG CARDS ---------- */
+
+    gsap.utils.toArray(".result-big-card").forEach((card, index) => {
+
+      gsap.from(card, {
+        y: 70,
+        opacity: 0,
+        rotation: index % 2 === 0 ? -4 : 4,
+        duration: .9,
+        delay: index * .1,
+        ease: "back.out(1.4)",
+
+        scrollTrigger: {
+          trigger: card,
+          start: "top 85%",
+          once: true
+        }
+
+      });
+
+    });
+
+
+    /* ---------- METRIC TABLES ---------- */
+
+    gsap.utils.toArray(".metric-table-wrap").forEach((table) => {
+
+      gsap.from(table, {
+        y: 55,
+        opacity: 0,
+        duration: .9,
+        ease: "power3.out",
+
+        scrollTrigger: {
+          trigger: table,
+          start: "top 82%",
+          once: true
+        }
+
+      });
+
+    });
+
+
+    /* ---------- LAYER CARDS ---------- */
+
+    gsap.utils.toArray(".layer-card").forEach((card, index) => {
+
+      gsap.from(card, {
+        y: 90,
+        opacity: 0,
+        duration: .9,
+        delay: index * .12,
+        ease: "back.out(1.5)",
+
+        scrollTrigger: {
+          trigger: card,
+          start: "top 88%",
+          once: true
+        }
+
+      });
+
+    });
+
+
+    /* ---------- COMPARISON BARS ---------- */
+
+    gsap.utils.toArray(".bar-fill").forEach((bar) => {
+
+      const width = bar.dataset.width;
+
+      gsap.to(bar, {
+        width: width + "%",
+        duration: 1.4,
+        ease: "power3.out",
+
+        scrollTrigger: {
+          trigger: bar,
+          start: "top 85%",
+          once: true
+        }
+
+      });
+
+    });
+
+
+    /* ---------- APPY ---------- */
+
+    gsap.from(".honesty-appy img", {
+
+      y: 80,
+      rotation: -12,
+      opacity: 0,
+      duration: 1.1,
+      ease: "back.out(1.5)",
+
+      scrollTrigger: {
+        trigger: ".honesty-appy",
+        start: "top 80%",
+        once: true
+      }
+
+    });
+
+
+    /* ---------- FOOTER PARALLAX ---------- */
+
+    const footerItems = document.querySelectorAll(
+      ".footer-flatlay .fl-item"
+    );
+
+    footerItems.forEach((item) => {
+
+      const depth = parseFloat(
+        item.dataset.depth || "0.05"
+      );
+
+      gsap.to(item, {
+
+        y: -100 * depth,
+
+        ease: "none",
+
+        scrollTrigger: {
+          trigger: "#footer-flatlay",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+
+      });
+
+    });
+
+  }
+
+});
+</script>
+
+</body>
+</html>

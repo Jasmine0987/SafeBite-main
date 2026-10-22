@@ -1,0 +1,3575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Safety — SafeBite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pages.css">
+
+  <style>
+    /* =========================================================
+       SAFEBITE SAFETY PAGE
+       ========================================================= */
+
+    .safety-page {
+      background: var(--cream);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* =========================================================
+       NAVIGATION
+       Keep navigation above the page content.
+       ========================================================= */
+
+    .safety-page .navbar {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      width: 100% !important;
+      z-index: 1000 !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+
+    .safety-page main {
+      position: relative;
+      z-index: 1;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Prevent any section from moving underneath nav */
+    .safety-page .safety-hero {
+      margin-top: 0 !important;
+    }
+
+    /* =========================================================
+       GLOBAL REVEAL SAFETY
+       ========================================================= */
+
+    .safety-page .reveal {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* =========================================================
+       BEE CURSOR
+       ========================================================= */
+
+    #custom-appy-cursor {
+      position: fixed;
+      width: 62px;
+      height: 62px;
+      left: 0;
+      top: 0;
+      z-index: 99999;
+      pointer-events: none;
+      background-image: url("assets/cursor/bee-idle.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      will-change: transform;
+    }
+
+    body.cursor-ready #custom-appy-cursor {
+      opacity: 1;
+    }
+
+    #trail-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99990;
+      pointer-events: none;
+    }
+
+    .safety-page a,
+    .safety-page button {
+      cursor: none;
+    }
+
+    @media (max-width: 800px) {
+      #custom-appy-cursor,
+      #trail-canvas {
+        display: none;
+      }
+
+      .safety-page a,
+      .safety-page button {
+        cursor: pointer;
+      }
+    }
+
+    /* =========================================================
+       WRAPPER
+       ========================================================= */
+
+    .safety-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .safety-hero {
+      position: relative;
+      min-height: 78vh;
+      padding: 92px 6vw 72px;
+      background: var(--cream);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .safety-hero::before {
+      content: "";
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border-radius: 50%;
+      background: var(--yellow);
+      right: -170px;
+      top: 80px;
+      opacity: .75;
+      transform: rotate(12deg);
+    }
+
+    .safety-hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      background: var(--slate);
+      left: -110px;
+      bottom: -120px;
+      border-radius: 45% 55% 50% 40%;
+      transform: rotate(-18deg);
+    }
+
+    .safety-hero-inner {
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr);
+      gap: 70px;
+      align-items: center;
+    }
+
+    .safety-hero-copy {
+      position: relative;
+      z-index: 4;
+    }
+
+    .safety-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 15px;
+      background: var(--red);
+      color: var(--cream);
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0 var(--black);
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+      margin-bottom: 27px;
+    }
+
+    .safety-kicker-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      animation: safetyPulse 1.7s ease-in-out infinite;
+    }
+
+    @keyframes safetyPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.45);
+      }
+    }
+
+    .safety-title {
+      margin: 0;
+      max-width: 850px;
+      font-family: var(--display) !important;
+      font-weight: 800 !important;
+      font-size: clamp(62px, 8.7vw, 142px);
+      line-height: .82;
+      letter-spacing: -.065em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-wrap: balance;
+    }
+
+    .safety-title span {
+      display: inline-block;
+      color: var(--red);
+      position: relative;
+    }
+
+    .safety-title span::after {
+      content: "";
+      position: absolute;
+      height: 13px;
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      left: 3%;
+      right: -4%;
+      bottom: 4px;
+      z-index: -1;
+      transform: rotate(-2deg);
+    }
+
+    .safety-intro {
+      max-width: 650px;
+      margin: 32px 0 0;
+      font-family: var(--body);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .safety-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .safety-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 13px 22px;
+      border: 3px solid var(--black);
+      font-family: var(--display);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 13px;
+      text-decoration: none;
+      transition:
+        transform .25s cubic-bezier(.5,1.8,.5,1),
+        box-shadow .25s ease;
+      box-shadow: 7px 7px 0 var(--black);
+      background: var(--red);
+      color: var(--cream);
+    }
+
+    .safety-button:hover {
+      transform: translate(4px, 4px) rotate(-1deg);
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    .safety-button.secondary {
+      background: var(--yellow);
+      color: var(--black);
+    }
+
+    /* =========================================================
+       HERO APPY
+       ========================================================= */
+
+    .safety-hero-art {
+      position: relative;
+      min-height: 550px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .appy-stage {
+      position: relative;
+      width: min(100%, 560px);
+      min-height: 510px;
+    }
+
+    .appy-stage-paper {
+      position: absolute;
+      width: 410px;
+      height: 450px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(4deg);
+      background: var(--purple);
+      border: 4px solid var(--black);
+      box-shadow: 15px 15px 0 var(--black);
+    }
+
+    .appy-stage-paper::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 2px dashed var(--cream);
+      opacity: .7;
+    }
+
+    .appy-stage-paper.two {
+      background: var(--green);
+      transform: translate(-50%, -50%) rotate(-6deg);
+      z-index: 0;
+    }
+
+    .appy-stage-paper.three {
+      background: var(--slate);
+      transform: translate(-50%, -50%) rotate(9deg);
+      z-index: -1;
+    }
+
+    .appy-main {
+      position: absolute;
+      z-index: 5;
+      width: 280px;
+      height: 280px;
+      object-fit: contain;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(9px 11px 0 var(--black));
+    }
+
+    .appy-name {
+      position: absolute;
+      z-index: 7;
+      top: 38px;
+      left: 20px;
+      padding: 10px 17px;
+      background: var(--cream);
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0 var(--black);
+      font-family: var(--display);
+      font-size: 15px;
+      text-transform: uppercase;
+      transform: rotate(-5deg);
+    }
+
+    .appy-status {
+      position: absolute;
+      z-index: 7;
+      right: 3px;
+      top: 95px;
+      width: 175px;
+      padding: 14px;
+      background: var(--yellow);
+      border: 3px solid var(--black);
+      box-shadow: 7px 7px 0 var(--black);
+      transform: rotate(4deg);
+    }
+
+    .appy-status-label {
+      display: block;
+      font-family: var(--body);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 5px;
+    }
+
+    .appy-status-value {
+      font-family: var(--display);
+      font-size: 22px;
+      text-transform: uppercase;
+    }
+
+    .appy-note {
+      position: absolute;
+      z-index: 7;
+      bottom: 52px;
+      left: 20px;
+      width: 195px;
+      padding: 15px;
+      background: var(--cream);
+      border: 3px solid var(--black);
+      box-shadow: 7px 7px 0 var(--black);
+      font-family: var(--body);
+      font-size: 12px;
+      line-height: 1.4;
+      transform: rotate(-4deg);
+    }
+
+    .appy-note strong {
+      font-family: var(--display);
+      font-size: 14px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .safety-star {
+      position: absolute;
+      z-index: 8;
+      width: 85px;
+      height: 85px;
+      right: 32px;
+      bottom: 55px;
+      background: var(--red);
+      border: 3px solid var(--black);
+      clip-path: polygon(
+        50% 0%,
+        61% 34%,
+        98% 35%,
+        68% 56%,
+        79% 92%,
+        50% 70%,
+        20% 92%,
+        31% 56%,
+        2% 35%,
+        39% 34%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(12deg);
+      filter: drop-shadow(5px 5px 0 var(--black));
+    }
+
+    .safety-star span {
+      font-family: var(--display);
+      font-size: 11px;
+      text-transform: uppercase;
+      text-align: center;
+      transform: rotate(-12deg);
+    }
+
+    /* =========================================================
+       PRINCIPLE STRIP
+       ========================================================= */
+
+    .safety-principle {
+      position: relative;
+      background: var(--red);
+      color: var(--cream);
+      border-top: 4px solid var(--black);
+      border-bottom: 4px solid var(--black);
+      padding: 25px 6vw;
+      overflow: hidden;
+    }
+
+    .safety-principle-inner {
+      max-width: 1450px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .principle-main {
+      font-family: var(--display);
+      font-size: clamp(25px, 3vw, 48px);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .principle-side {
+      max-width: 430px;
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* =========================================================
+       VERDICT SECTION
+       ========================================================= */
+
+    .verdict-section {
+      position: relative;
+      padding: 100px 6vw 110px;
+      background: var(--slate);
+      overflow: hidden;
+    }
+
+    .section-heading {
+      max-width: 1450px;
+      margin: 0 auto 55px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--display);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      padding: 8px 12px;
+      background: var(--cream);
+      border: 3px solid var(--black);
+      box-shadow: 5px 5px 0 var(--black);
+      margin-bottom: 20px;
+      transform: rotate(1deg);
+    }
+
+    .section-title {
+      margin: 0;
+      max-width: 900px;
+      font-family: var(--display) !important;
+      font-weight: 800 !important;
+      font-size: clamp(48px, 6.4vw, 96px);
+      line-height: .86;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+
+    .section-description {
+      max-width: 660px;
+      margin: 23px 0 0;
+      font-family: var(--body);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .verdict-cards {
+      max-width: 1450px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .verdict-card {
+      position: relative;
+      min-height: 330px;
+      padding: 30px;
+      background: var(--cream);
+      border: 4px solid var(--black);
+      box-shadow: 11px 11px 0 var(--black);
+      transition:
+        transform .35s cubic-bezier(.5,1.8,.5,1),
+        box-shadow .35s ease;
+      overflow: hidden;
+    }
+
+    .verdict-card:nth-child(1) {
+      transform: rotate(-1.5deg);
+    }
+
+    .verdict-card:nth-child(2) {
+      background: var(--yellow);
+      transform: rotate(1.2deg);
+    }
+
+    .verdict-card:nth-child(3) {
+      background: var(--green);
+      transform: rotate(-.8deg);
+    }
+
+    .verdict-card:hover {
+      transform: translateY(-12px) rotate(0deg);
+      box-shadow: 16px 18px 0 var(--black);
+    }
+
+    .verdict-number {
+      font-family: var(--display);
+      font-size: 76px;
+      line-height: .8;
+      opacity: .13;
+      position: absolute;
+      right: 18px;
+      top: 15px;
+    }
+
+    .verdict-icon {
+      width: 66px;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--black);
+      background: var(--red);
+      box-shadow: 5px 5px 0 var(--black);
+      margin-bottom: 30px;
+      font-family: var(--display);
+      font-size: 26px;
+    }
+
+    .verdict-card:nth-child(2) .verdict-icon {
+      background: var(--purple);
+      color: var(--cream);
+    }
+
+    .verdict-card:nth-child(3) .verdict-icon {
+      background: var(--slate);
+    }
+
+    .verdict-card h3 {
+      margin: 0 0 12px;
+      font-family: var(--display) !important;
+      font-size: 31px;
+      text-transform: uppercase;
+      line-height: .95;
+    }
+
+    .verdict-card p {
+      margin: 0;
+      font-family: var(--body);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 370px;
+    }
+
+    .verdict-tag {
+      position: absolute;
+      left: 30px;
+      bottom: 26px;
+      font-family: var(--display);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    /* =========================================================
+       SAFETY LAB
+       ========================================================= */
+
+    .safety-lab {
+      position: relative;
+      background: var(--cream);
+      padding: 110px 6vw;
+      overflow: hidden;
+    }
+
+    .safety-lab-inner {
+      max-width: 1450px;
+      margin: auto;
+    }
+
+    .lab-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .lab-header .section-heading {
+      margin: 0;
+    }
+
+    .lab-badge {
+      flex: 0 0 auto;
+      padding: 13px 17px;
+      border: 3px solid var(--black);
+      background: var(--yellow);
+      box-shadow: 6px 6px 0 var(--black);
+      font-family: var(--display);
+      text-transform: uppercase;
+      font-size: 11px;
+      transform: rotate(3deg);
+    }
+
+    .lab-console {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      border: 4px solid var(--black);
+      box-shadow: 13px 13px 0 var(--black);
+      background: var(--purple);
+      min-height: 510px;
+    }
+
+    .lab-pipeline {
+      padding: 38px;
+      border-right: 4px solid var(--black);
+      background: var(--yellow);
+    }
+
+    .pipeline-title {
+      font-family: var(--display);
+      text-transform: uppercase;
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 30px;
+    }
+
+    .pipeline-step {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      padding: 17px 14px;
+      margin-bottom: 13px;
+      border: 3px solid var(--black);
+      background: var(--cream);
+      box-shadow: 5px 5px 0 var(--black);
+      transition: transform .3s ease, background .3s ease;
+    }
+
+    .pipeline-step.active {
+      background: var(--red);
+      color: var(--cream);
+      transform: translateX(9px) rotate(-1deg);
+    }
+
+    .pipeline-step.done {
+      background: var(--green);
+    }
+
+    .pipeline-index {
+      width: 35px;
+      height: 35px;
+      flex: 0 0 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--black);
+      font-family: var(--display);
+      background: var(--slate);
+    }
+
+    .pipeline-step strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+
+    .pipeline-step small {
+      display: block;
+      font-family: var(--body);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .lab-screen {
+      padding: 38px;
+      color: var(--cream);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 2px dashed rgba(252,246,232,.55);
+      padding-bottom: 18px;
+    }
+
+    .screen-title {
+      font-family: var(--display);
+      font-size: 25px;
+      text-transform: uppercase;
+    }
+
+    .screen-led {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      box-shadow: 0 0 0 5px rgba(242,219,102,.16);
+    }
+
+    .screen-output {
+      flex: 1;
+      padding: 30px 0;
+    }
+
+    .scan-line {
+      position: relative;
+      height: 8px;
+      background: rgba(252,246,232,.16);
+      border: 1px solid rgba(252,246,232,.4);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .scan-line::after {
+      content: "";
+      position: absolute;
+      width: 30%;
+      height: 100%;
+      left: -30%;
+      background: var(--yellow);
+      animation: scanner 2.3s linear infinite;
+    }
+
+    @keyframes scanner {
+      from {
+        left: -30%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    .ingredient-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 18px 0 25px;
+    }
+
+    .ingredient-chip {
+      padding: 9px 11px;
+      border: 2px solid var(--cream);
+      font-family: var(--display);
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: .8;
+      transition: all .2s ease;
+    }
+
+    .ingredient-chip.flag {
+      background: var(--red);
+      border-color: var(--black);
+      color: var(--cream);
+      opacity: 1;
+      transform: rotate(-2deg);
+    }
+
+    .screen-verdict {
+      border: 3px solid var(--cream);
+      padding: 25px;
+      margin-top: auto;
+    }
+
+    .screen-verdict-label {
+      font-family: var(--body);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: .12em;
+      opacity: .7;
+    }
+
+    .screen-verdict-value {
+      font-family: var(--display);
+      font-size: clamp(38px, 5vw, 70px);
+      line-height: .9;
+      text-transform: uppercase;
+      margin-top: 9px;
+      color: var(--yellow);
+    }
+
+    .screen-verdict-copy {
+      margin: 15px 0 0;
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 580px;
+    }
+
+    .lab-controls {
+      margin-top: 27px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lab-button {
+      border: 3px solid var(--cream);
+      background: transparent;
+      color: var(--cream);
+      padding: 11px 15px;
+      font-family: var(--display);
+      text-transform: uppercase;
+      font-size: 11px;
+      transition: .25s ease;
+    }
+
+    .lab-button:hover {
+      background: var(--cream);
+      color: var(--purple);
+    }
+
+    /* =========================================================
+       APPY NOTE
+       ========================================================= */
+
+    .safety-note-section {
+      position: relative;
+      padding: 95px 6vw;
+      background: var(--green);
+      overflow: hidden;
+    }
+
+    .notes-layout {
+      max-width: 1250px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .note-appy {
+      position: relative;
+      min-height: 420px;
+    }
+
+    .note-appy-back {
+      position: absolute;
+      inset: 40px 35px 25px;
+      background: var(--purple);
+      border: 4px solid var(--black);
+      box-shadow: 12px 12px 0 var(--black);
+      transform: rotate(-7deg);
+    }
+
+    .note-appy img {
+      position: absolute;
+      width: 275px;
+      height: 275px;
+      object-fit: contain;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(8px 10px 0 var(--black));
+      z-index: 3;
+    }
+
+    .note-label {
+      position: absolute;
+      right: -10px;
+      top: 38px;
+      z-index: 5;
+      background: var(--yellow);
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0 var(--black);
+      padding: 12px;
+      font-family: var(--display);
+      font-size: 12px;
+      text-transform: uppercase;
+      transform: rotate(5deg);
+    }
+
+    .note-copy {
+      position: relative;
+    }
+
+    .note-copy h2 {
+      margin: 0;
+      font-family: var(--display) !important;
+      font-size: clamp(48px, 6vw, 84px);
+      line-height: .84;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+
+    .note-copy h2 span {
+      color: var(--red);
+    }
+
+    .note-copy p {
+      max-width: 610px;
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.7;
+      margin: 25px 0 0;
+    }
+
+    .note-list {
+      margin: 27px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 11px;
+    }
+
+    .note-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-family: var(--body);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .note-list li::before {
+      content: "→";
+      font-family: var(--display);
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    /* =========================================================
+       UNCLEAR
+       ========================================================= */
+
+    .unclear-section {
+      background: var(--purple);
+      color: var(--cream);
+      padding: 100px 6vw;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .unclear-inner {
+      max-width: 1450px;
+      margin: auto;
+      position: relative;
+    }
+
+    .unclear-big {
+      font-family: var(--display);
+      font-size: clamp(70px, 12vw, 180px);
+      line-height: .75;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      opacity: .98;
+      margin: 0 0 50px;
+      transform: rotate(-2deg);
+    }
+
+    .unclear-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 55px;
+      align-items: start;
+    }
+
+    .unclear-copy {
+      max-width: 720px;
+    }
+
+    .unclear-copy h3 {
+      font-family: var(--display) !important;
+      font-size: 38px;
+      line-height: .95;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+
+    .unclear-copy p {
+      font-family: var(--body);
+      line-height: 1.7;
+      font-size: 15px;
+      opacity: .88;
+    }
+
+    .unclear-card {
+      background: var(--cream);
+      color: var(--black);
+      border: 4px solid var(--black);
+      box-shadow: 11px 11px 0 var(--black);
+      padding: 28px;
+      transform: rotate(2deg);
+    }
+
+    .unclear-card-title {
+      font-family: var(--display);
+      text-transform: uppercase;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .unclear-meter {
+      height: 20px;
+      border: 3px solid var(--black);
+      display: flex;
+      margin-bottom: 14px;
+    }
+
+    .unclear-meter span {
+      flex: 1;
+      border-right: 2px solid var(--black);
+    }
+
+    .unclear-meter span:last-child {
+      border-right: 0;
+    }
+
+    .unclear-meter span:nth-child(1) {
+      background: var(--green);
+    }
+
+    .unclear-meter span:nth-child(2) {
+      background: var(--yellow);
+    }
+
+    .unclear-meter span:nth-child(3) {
+      background: var(--red);
+    }
+
+    .unclear-card p {
+      font-family: var(--body);
+      font-size: 12px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* =========================================================
+       FINAL
+       ========================================================= */
+
+    .safety-final {
+      position: relative;
+      background: var(--yellow);
+      padding: 105px 6vw 120px;
+      border-top: 4px solid var(--black);
+      overflow: hidden;
+    }
+
+    .final-inner {
+      max-width: 1250px;
+      margin: auto;
+      position: relative;
+      text-align: center;
+    }
+
+    .final-appy {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      right: 2%;
+      top: -30px;
+      object-fit: contain;
+      filter: drop-shadow(6px 7px 0 var(--black));
+      transform: rotate(8deg);
+    }
+
+    .final-inner h2 {
+      margin: 0 auto;
+      max-width: 1000px;
+      font-family: var(--display) !important;
+      font-size: clamp(55px, 8vw, 115px);
+      line-height: .8;
+      letter-spacing: -.065em;
+      text-transform: uppercase;
+    }
+
+    .final-inner h2 span {
+      color: var(--red);
+    }
+
+    .final-inner p {
+      max-width: 650px;
+      margin: 27px auto 0;
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .final-actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================================
+       DECORATION
+       ========================================================= */
+
+    .paper-dot {
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid var(--black);
+      pointer-events: none;
+    }
+
+    .paper-dot.one {
+      width: 42px;
+      height: 42px;
+      background: var(--red);
+      left: 8%;
+      top: 17%;
+    }
+
+    .paper-dot.two {
+      width: 28px;
+      height: 28px;
+      background: var(--green);
+      right: 17%;
+      bottom: 16%;
+    }
+
+    .paper-cross {
+      position: absolute;
+      width: 65px;
+      height: 65px;
+      right: 5%;
+      top: 23%;
+      transform: rotate(13deg);
+    }
+
+    .paper-cross::before,
+    .paper-cross::after {
+      content: "";
+      position: absolute;
+      background: var(--red);
+      border: 2px solid var(--black);
+    }
+
+    .paper-cross::before {
+      width: 20px;
+      height: 65px;
+      left: 22px;
+    }
+
+    .paper-cross::after {
+      height: 20px;
+      width: 65px;
+      top: 22px;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      .safety-hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .safety-hero-art {
+        min-height: 470px;
+      }
+
+      .safety-hero {
+        padding-top: 75px;
+      }
+
+      .verdict-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .verdict-card {
+        min-height: 280px;
+      }
+
+      .lab-console {
+        grid-template-columns: 1fr;
+      }
+
+      .lab-pipeline {
+        border-right: 0;
+        border-bottom: 4px solid var(--black);
+      }
+
+      .notes-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .note-appy {
+        max-width: 550px;
+        width: 100%;
+        margin: auto;
+      }
+
+      .unclear-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+
+      .safety-hero {
+        padding: 65px 22px 55px;
+        min-height: auto;
+      }
+
+      .safety-hero-art {
+        min-height: 390px;
+      }
+
+      .appy-stage {
+        min-height: 390px;
+      }
+
+      .appy-stage-paper {
+        width: 290px;
+        height: 330px;
+      }
+
+      .appy-main {
+        width: 210px;
+        height: 210px;
+      }
+
+      .appy-status {
+        right: -5px;
+        top: 55px;
+        width: 135px;
+      }
+
+      .appy-note {
+        bottom: 20px;
+        left: -3px;
+        width: 160px;
+      }
+
+      .safety-star {
+        right: 3px;
+        bottom: 30px;
+        width: 65px;
+        height: 65px;
+      }
+
+      .safety-principle,
+      .verdict-section,
+      .safety-lab,
+      .safety-note-section,
+      .unclear-section,
+      .safety-final {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .safety-principle-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .lab-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .lab-pipeline,
+      .lab-screen {
+        padding: 25px;
+      }
+
+      .final-appy {
+        position: relative;
+        right: auto;
+        top: auto;
+        width: 115px;
+        height: 115px;
+        margin-bottom: 20px;
+      }
+
+      .note-appy {
+        min-height: 330px;
+      }
+    }
+  </style>
+
+
+
+<link rel="stylesheet" href="cursor.css">
+</head>
+
+
+<body class="safety-page">
+
+  <!-- =======================================================
+       GLOBAL SAFEBITE CURSOR
+       ======================================================= -->
+
+  <canvas id="trail-canvas" aria-hidden="true"></canvas>
+
+  <div
+    id="custom-appy-cursor"
+    aria-hidden="true"
+  ></div>
+
+
+  <div class="safety-wrap">
+
+
+    <!-- =====================================================
+         ORIGINAL SAFEBITE NAVIGATION
+         ===================================================== -->
+
+    <!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <main>
+
+
+      <!-- ===================================================
+           HERO
+           =================================================== -->
+
+      <section class="safety-hero">
+
+        <div
+          class="paper-dot one"
+          data-speed="0.4"
+        ></div>
+
+        <div
+          class="paper-dot two"
+          data-speed="-0.25"
+        ></div>
+
+        <div
+          class="paper-cross"
+          data-speed="0.3"
+        ></div>
+
+
+        <div class="safety-hero-inner">
+
+
+          <div class="safety-hero-copy">
+
+            <div class="safety-kicker safety-reveal">
+
+              <span class="safety-kicker-dot"></span>
+
+              SAFETY FIRST
+
+            </div>
+
+
+            <h1 class="safety-title safety-reveal">
+
+              FOOD
+
+              <span>
+                SAFETY
+              </span>
+
+              WITHOUT
+
+              GUESSWORK.
+
+            </h1>
+
+
+            <p class="safety-intro safety-reveal">
+
+              SafeBite turns ingredient information into a clear,
+              explainable safety result — designed to help you understand
+              what was detected, what was matched, and where uncertainty remains.
+
+            </p>
+
+
+            <div class="safety-actions safety-reveal">
+
+              <a
+                href="scan.html"
+                class="safety-button"
+              >
+                SCAN A LABEL
+              </a>
+
+
+              <a
+                href="#safety-lab"
+                class="safety-button secondary"
+              >
+                SEE IT THINK
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- APPY -->
+
+          <div class="safety-hero-art">
+
+            <div class="appy-stage">
+
+              <div class="appy-stage-paper three"></div>
+
+              <div class="appy-stage-paper two"></div>
+
+              <div class="appy-stage-paper"></div>
+
+
+              <div class="appy-name">
+                APPY / SAFETY MODE
+              </div>
+
+
+              <div class="appy-status">
+
+                <span class="appy-status-label">
+                  CURRENT STATE
+                </span>
+
+                <span class="appy-status-value">
+                  CHECKING
+                </span>
+
+              </div>
+
+
+              <img
+                id="heroAppy"
+                class="appy-main"
+                src="assets/appy/static/think.png"
+                alt="Appy thinking"
+              >
+
+
+              <div class="appy-note">
+
+                <strong>
+                  NO BLACK BOX.
+                </strong>
+
+                Every safety result follows a visible decision path.
+
+              </div>
+
+
+              <div class="safety-star">
+
+                <span>
+                  READ<br>
+                  MATCH<br>
+                  CHECK
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           PRINCIPLE
+           =================================================== -->
+
+      <section class="safety-principle">
+
+        <div class="safety-principle-inner">
+
+          <div class="principle-main">
+            DETECT → READ → MATCH → EXPLAIN
+          </div>
+
+          <div class="principle-side">
+
+            Safety is intentionally separated from recommendation.
+            The safety verdict is deterministic so that the same detected
+            ingredient information produces the same rule-based outcome.
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           VERDICTS
+           =================================================== -->
+
+      <section class="verdict-section">
+
+        <div class="section-heading">
+
+          <span class="section-label">
+            01 / THE VERDICT
+          </span>
+
+          <h2 class="section-title">
+
+            THREE STATES.
+
+            NO FAKE CERTAINTY.
+
+          </h2>
+
+
+          <p class="section-description">
+
+            SafeBite does not force every scan into a simple yes or no.
+            The system distinguishes between information that can be safely
+            resolved, information that contains a known allergen, and
+            information that cannot be resolved with enough confidence.
+
+          </p>
+
+        </div>
+
+
+        <div class="verdict-cards">
+
+
+          <article class="verdict-card safety-reveal">
+
+            <span class="verdict-number">
+              01
+            </span>
+
+            <div class="verdict-icon">
+              ✓
+            </div>
+
+            <h3>
+              SAFE
+            </h3>
+
+            <p>
+
+              The extracted ingredient information does not match the
+              allergens currently selected in the user's profile.
+
+            </p>
+
+            <span class="verdict-tag">
+              MATCH RESULT / CLEAR
+            </span>
+
+          </article>
+
+
+          <article class="verdict-card safety-reveal">
+
+            <span class="verdict-number">
+              02
+            </span>
+
+            <div class="verdict-icon">
+              !
+            </div>
+
+            <h3>
+              FLAGGED
+            </h3>
+
+            <p>
+
+              A detected ingredient or known synonym matches an allergen
+              in the user's configured safety profile.
+
+            </p>
+
+            <span class="verdict-tag">
+              MATCH RESULT / FLAG
+            </span>
+
+          </article>
+
+
+          <article class="verdict-card safety-reveal">
+
+            <span class="verdict-number">
+              03
+            </span>
+
+            <div class="verdict-icon">
+              ?
+            </div>
+
+            <h3>
+              UNCLEAR
+            </h3>
+
+            <p>
+
+              The available image, OCR output, or ingredient information
+              is insufficient to confidently resolve the safety result.
+
+            </p>
+
+            <span class="verdict-tag">
+              MATCH RESULT / REVIEW
+            </span>
+
+          </article>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           INTERACTIVE LAB
+           =================================================== -->
+
+      <section
+        class="safety-lab"
+        id="safety-lab"
+      >
+
+        <div class="safety-lab-inner">
+
+
+          <div class="lab-header">
+
+            <div class="section-heading">
+
+              <span class="section-label">
+                02 / TRY THE LOGIC
+              </span>
+
+              <h2 class="section-title">
+
+                WATCH A
+
+                SAFETY CHECK
+
+                HAPPEN.
+
+              </h2>
+
+
+              <p class="section-description">
+
+                This interactive demonstration mirrors the conceptual
+                stages of SafeBite's scan pipeline. It is a visual explainer,
+                not a live medical or diagnostic assessment.
+
+              </p>
+
+            </div>
+
+
+            <div class="lab-badge">
+              FRONT-END DEMO
+            </div>
+
+          </div>
+
+
+          <div class="lab-console">
+
+
+            <div class="lab-pipeline">
+
+              <div class="pipeline-title">
+                Decision path
+              </div>
+
+
+              <div
+                class="pipeline-step"
+                data-step="1"
+              >
+
+                <span class="pipeline-index">
+                  01
+                </span>
+
+                <div>
+
+                  <strong>
+                    Detect
+                  </strong>
+
+                  <small>
+                    Find the ingredient panel
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <div
+                class="pipeline-step"
+                data-step="2"
+              >
+
+                <span class="pipeline-index">
+                  02
+                </span>
+
+                <div>
+
+                  <strong>
+                    Read
+                  </strong>
+
+                  <small>
+                    Extract visible text
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <div
+                class="pipeline-step"
+                data-step="3"
+              >
+
+                <span class="pipeline-index">
+                  03
+                </span>
+
+                <div>
+
+                  <strong>
+                    Match
+                  </strong>
+
+                  <small>
+                    Compare against allergens
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <div
+                class="pipeline-step"
+                data-step="4"
+              >
+
+                <span class="pipeline-index">
+                  04
+                </span>
+
+                <div>
+
+                  <strong>
+                    Verdict
+                  </strong>
+
+                  <small>
+                    Return a deterministic state
+                  </small>
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="lab-screen">
+
+
+              <div class="screen-top">
+
+                <div class="screen-title">
+                  SAFEBITE / SAFETY ENGINE
+                </div>
+
+                <div class="screen-led"></div>
+
+              </div>
+
+
+              <div class="screen-output">
+
+                <div class="scan-line"></div>
+
+
+                <div>
+
+                  <span class="screen-verdict-label">
+                    Example ingredient panel
+                  </span>
+
+
+                  <div class="ingredient-row">
+
+                    <span class="ingredient-chip">
+                      WHEAT FLOUR
+                    </span>
+
+                    <span class="ingredient-chip flag">
+                      MILK
+                    </span>
+
+                    <span class="ingredient-chip">
+                      SUGAR
+                    </span>
+
+                    <span class="ingredient-chip">
+                      COCOA
+                    </span>
+
+                    <span class="ingredient-chip">
+                      SALT
+                    </span>
+
+                    <span class="ingredient-chip">
+                      SOY LECITHIN
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="screen-verdict">
+
+                  <div class="screen-verdict-label">
+                    Demo output
+                  </div>
+
+                  <div
+                    class="screen-verdict-value"
+                    id="demoVerdict"
+                  >
+                    READY
+                  </div>
+
+                  <p
+                    class="screen-verdict-copy"
+                    id="demoCopy"
+                  >
+                    Press RUN CHECK to animate the decision path.
+                  </p>
+
+                </div>
+
+
+              </div>
+
+
+              <div class="lab-controls">
+
+                <button
+                  type="button"
+                  class="lab-button"
+                  id="runSafetyDemo"
+                >
+                  RUN CHECK
+                </button>
+
+
+                <button
+                  type="button"
+                  class="lab-button"
+                  id="resetSafetyDemo"
+                >
+                  RESET
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           APPY EXPLANATION
+           =================================================== -->
+
+      <section class="safety-note-section">
+
+        <div class="notes-layout">
+
+
+          <div class="note-appy safety-reveal">
+
+            <div class="note-appy-back"></div>
+
+
+            <img
+              id="noteAppy"
+              src="assets/appy/static/eat.png"
+              alt="Appy"
+            >
+
+
+            <div class="note-label">
+              APPY'S RULE
+            </div>
+
+          </div>
+
+
+          <div class="note-copy safety-reveal">
+
+            <h2>
+
+              SAFETY
+
+              SHOULD BE
+
+              <span>
+                EXPLAINABLE.
+              </span>
+
+            </h2>
+
+
+            <p>
+
+              A result is more useful when you can understand why it was
+              produced. SafeBite separates learned perception from the
+              final allergen decision, making the safety layer easier to
+              inspect and reason about.
+
+            </p>
+
+
+            <ul class="note-list">
+
+              <li>
+                Ingredient text is extracted from the detected panel.
+              </li>
+
+              <li>
+                Extracted terms are cleaned and tokenized before matching.
+              </li>
+
+              <li>
+                Deterministic allergen rules compare the result against
+                the user's configured profile.
+              </li>
+
+              <li>
+                Unresolved information remains explicitly unclear instead
+                of being presented as certain.
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           UNCLEAR
+           =================================================== -->
+
+      <section class="unclear-section">
+
+        <div class="unclear-inner">
+
+          <div class="unclear-big">
+            UNCLEAR
+          </div>
+
+
+          <div class="unclear-grid">
+
+
+            <div class="unclear-copy">
+
+              <h3>
+
+                Sometimes the safest answer is:
+                "We don't know yet."
+
+              </h3>
+
+
+              <p>
+
+                OCR can miss text. Packaging can be damaged. Ingredients
+                can be ambiguous. A system that hides these limitations
+                creates false confidence.
+
+              </p>
+
+
+              <p>
+
+                SafeBite therefore treats uncertainty as a first-class
+                outcome. The interface can surface that uncertainty instead
+                of silently turning an incomplete observation into a confident
+                safety claim.
+
+              </p>
+
+            </div>
+
+
+            <div class="unclear-card">
+
+              <div class="unclear-card-title">
+                Information confidence
+              </div>
+
+
+              <div class="unclear-meter">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+              </div>
+
+
+              <p>
+
+                GREEN represents information that can be resolved.
+                YELLOW represents information requiring caution.
+                RED represents information that should not be treated
+                as resolved by the system.
+
+              </p>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           FINAL CTA
+           =================================================== -->
+
+      <section class="safety-final">
+
+        <div class="final-inner">
+
+
+          <img
+            class="final-appy"
+            id="finalAppy"
+            src="assets/appy/static/think.png"
+            alt="Appy"
+          >
+
+
+          <h2>
+
+            KNOW WHAT
+
+            <span>
+              YOU'RE
+            </span>
+
+            READING.
+
+          </h2>
+
+
+          <p>
+
+            Explore the scan flow and see how SafeBite turns a food label
+            into an explainable safety result.
+
+          </p>
+
+
+          <div class="final-actions">
+
+            <a
+              href="scan.html"
+              class="safety-button"
+            >
+              START A SCAN
+            </a>
+
+
+            <a
+              href="how-it-works.html"
+              class="safety-button secondary"
+            >
+              HOW IT WORKS
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         EXACT SAFEBITE FOOTER
+         ===================================================== -->
+
+    <footer
+      class="footer"
+      id="footer"
+      data-color="#FFF8E0"
+    >
+
+      <div class="footer-topbar">
+
+        <a
+          href="#"
+          class="footer-social-icon"
+          aria-label="Instagram"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+            ></circle>
+
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            ></circle>
+
+          </svg>
+
+        </a>
+
+
+        <a
+          href="how-it-works.html"
+          class="footer-topbar-link"
+        >
+          HOW IT WORKS
+        </a>
+
+
+        <a
+          href="architecture.html"
+          class="footer-topbar-link"
+        >
+          HOW IT THINKS
+        </a>
+
+
+        <a
+          href="results.html"
+          class="footer-topbar-link"
+        >
+          RESULTS
+        </a>
+
+
+        <a
+          href="about.html"
+          class="footer-topbar-link"
+        >
+          ABOUT
+        </a>
+
+
+        <span
+          class="footer-topbar-link footer-topbar-credit"
+        >
+          SITE BY SAFEBITE
+        </span>
+
+      </div>
+
+
+      <div
+        class="footer-flatlay"
+        id="footer-flatlay"
+      >
+
+        <img
+          src="assets/footer/vase-flowers.png"
+          class="fl-item"
+          id="fl-vase"
+          alt=""
+          data-depth="0.10"
+        >
+
+        <img
+          src="assets/footer/wine-glass-1.png"
+          class="fl-item"
+          id="fl-wineglass1"
+          alt=""
+          data-depth="0.06"
+        >
+
+        <img
+          src="assets/footer/fork.png"
+          class="fl-item"
+          id="fl-fork"
+          alt=""
+          data-depth="0.08"
+          data-rotate="-8"
+        >
+
+        <img
+          src="assets/footer/sausage-plate.png"
+          class="fl-item"
+          id="fl-sausage"
+          alt=""
+          data-depth="0.05"
+        >
+
+        <img
+          src="assets/footer/wine-bottle.png"
+          class="fl-item"
+          id="fl-bottle"
+          alt=""
+          data-depth="0.09"
+        >
+
+        <img
+          src="assets/footer/candle-2.png"
+          class="fl-item"
+          id="fl-candle2"
+          alt=""
+          data-depth="0.07"
+        >
+
+        <img
+          src="assets/footer/salt-pepper.png"
+          class="fl-item"
+          id="fl-saltpepper"
+          alt=""
+          data-depth="0.11"
+        >
+
+        <img
+          src="assets/footer/cheese-block.png"
+          class="fl-item"
+          id="fl-cheese"
+          alt=""
+          data-depth="0.06"
+        >
+
+        <img
+          src="assets/footer/candle-1.png"
+          class="fl-item"
+          id="fl-candle1"
+          alt=""
+          data-depth="0.08"
+        >
+
+        <img
+          src="assets/footer/olives-bowl.png"
+          class="fl-item"
+          id="fl-olivesbowl"
+          alt=""
+          data-depth="0.05"
+        >
+
+        <img
+          src="assets/footer/olives-loose.png"
+          class="fl-item"
+          id="fl-olivesloose"
+          alt=""
+          data-depth="0.09"
+        >
+
+        <img
+          src="assets/footer/jar.png"
+          class="fl-item"
+          id="fl-jar"
+          alt=""
+          data-depth="0.07"
+        >
+
+        <img
+          src="assets/footer/bread-board.png"
+          class="fl-item"
+          id="fl-bread"
+          alt=""
+          data-depth="0.04"
+        >
+
+        <img
+          src="assets/footer/spoon.png"
+          class="fl-item"
+          id="fl-spoon"
+          alt=""
+          data-depth="0.10"
+          data-rotate="6"
+        >
+
+        <img
+          src="assets/footer/wine-glass-2.png"
+          class="fl-item"
+          id="fl-wineglass2"
+          alt=""
+          data-depth="0.06"
+        >
+
+        <img
+          src="assets/footer/charcuterie-board.png"
+          class="fl-item"
+          id="fl-charcuterie"
+          alt=""
+          data-depth="0.03"
+        >
+
+        <img
+          src="assets/footer/knife.png"
+          class="fl-item"
+          id="fl-knife"
+          alt=""
+          data-depth="0.08"
+          data-rotate="-4"
+        >
+
+        <img
+          src="assets/footer/hat-plate.png"
+          class="fl-item"
+          id="fl-hat"
+          alt=""
+          data-depth="0.05"
+        >
+
+      </div>
+
+    </footer>
+
+  </div>
+
+
+  <!-- =======================================================
+       GSAP
+       ======================================================= -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      if (typeof gsap === "undefined") {
+        return;
+      }
+
+
+      if (typeof ScrollTrigger !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+
+
+      /* =====================================================
+         BEE CURSOR
+         ===================================================== */
+
+      const cursor =
+        document.getElementById("custom-appy-cursor");
+
+
+      if (
+        cursor &&
+        window.innerWidth > 800
+      ) {
+
+        document.body.classList.add("cursor-ready");
+
+
+        let mouseX =
+          window.innerWidth / 2;
+
+        let mouseY =
+          window.innerHeight / 2;
+
+
+        window.addEventListener(
+          "mousemove",
+          (event) => {
+
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+
+
+            gsap.to(cursor, {
+
+              x: mouseX,
+              y: mouseY,
+
+              duration: .22,
+
+              ease: "power3.out"
+
+            });
+
+          }
+        );
+
+
+        const interactive =
+          document.querySelectorAll(
+            "a, button, .verdict-card, .pipeline-step, .appy-main"
+          );
+
+
+        interactive.forEach((item) => {
+
+          item.addEventListener(
+            "mouseenter",
+            () => {
+
+              gsap.to(cursor, {
+
+                width: 74,
+                height: 74,
+
+                duration: .2,
+
+                ease: "back.out(2)"
+
+              });
+
+            }
+          );
+
+
+          item.addEventListener(
+            "mouseleave",
+            () => {
+
+              gsap.to(cursor, {
+
+                width: 62,
+                height: 62,
+
+                duration: .2,
+
+                ease: "power2.out"
+
+              });
+
+            }
+          );
+
+        });
+
+      }
+
+
+      /* =====================================================
+         HERO REVEAL
+         ===================================================== */
+
+      gsap.fromTo(
+
+        ".safety-hero .safety-reveal",
+
+        {
+          opacity: 0,
+          y: 45
+        },
+
+        {
+          opacity: 1,
+          y: 0,
+
+          duration: .85,
+
+          stagger: .13,
+
+          ease: "power4.out",
+
+          delay: .15
+
+        }
+
+      );
+
+
+      /* =====================================================
+         APPY FLOAT
+         ===================================================== */
+
+      const heroAppy =
+        document.getElementById("heroAppy");
+
+
+      if (heroAppy) {
+
+        gsap.to(heroAppy, {
+
+          y: -15,
+          rotation: 2,
+
+          duration: 2.4,
+
+          repeat: -1,
+          yoyo: true,
+
+          ease: "sine.inOut"
+
+        });
+
+      }
+
+
+      /* =====================================================
+         APPY STATUS
+         ===================================================== */
+
+      const appyStatus =
+        document.querySelector(
+          ".appy-status-value"
+        );
+
+
+      if (appyStatus) {
+
+        const states = [
+          "CHECKING",
+          "READING",
+          "MATCHING",
+          "READY"
+        ];
+
+
+        let stateIndex = 0;
+
+
+        setInterval(() => {
+
+          stateIndex =
+            (stateIndex + 1) %
+            states.length;
+
+
+          gsap.to(
+            appyStatus,
+            {
+
+              opacity: 0,
+              y: 5,
+
+              duration: .18,
+
+              onComplete: () => {
+
+                appyStatus.textContent =
+                  states[stateIndex];
+
+
+                gsap.to(
+                  appyStatus,
+                  {
+
+                    opacity: 1,
+                    y: 0,
+
+                    duration: .2
+
+                  }
+                );
+
+              }
+
+            }
+          );
+
+        }, 2200);
+
+      }
+
+
+      /* =====================================================
+         PARALLAX
+         ===================================================== */
+
+      if (
+        typeof ScrollTrigger !== "undefined"
+      ) {
+
+        gsap.to(
+          ".appy-stage-paper",
+          {
+
+            y: -55,
+            rotation: "+=3",
+
+            ease: "none",
+
+            scrollTrigger: {
+
+              trigger: ".safety-hero",
+
+              start: "top top",
+
+              end: "bottom top",
+
+              scrub: 1
+
+            }
+
+          }
+        );
+
+
+        gsap.to(
+          ".appy-main",
+          {
+
+            y: -85,
+            rotation: -3,
+
+            ease: "none",
+
+            scrollTrigger: {
+
+              trigger: ".safety-hero",
+
+              start: "top top",
+
+              end: "bottom top",
+
+              scrub: 1.2
+
+            }
+
+          }
+        );
+
+
+        gsap.to(
+          ".paper-dot.one",
+          {
+
+            y: -120,
+            x: 30,
+
+            ease: "none",
+
+            scrollTrigger: {
+
+              trigger: ".safety-hero",
+
+              start: "top bottom",
+
+              end: "bottom top",
+
+              scrub: 1
+
+            }
+
+          }
+        );
+
+
+        gsap.to(
+          ".paper-cross",
+          {
+
+            rotation: 65,
+            y: -90,
+
+            ease: "none",
+
+            scrollTrigger: {
+
+              trigger: ".safety-hero",
+
+              start: "top bottom",
+
+              end: "bottom top",
+
+              scrub: 1
+
+            }
+
+          }
+        );
+
+      }
+
+
+      /* =====================================================
+         SCROLL REVEALS
+         ===================================================== */
+
+      document
+        .querySelectorAll(".safety-reveal")
+        .forEach((element) => {
+
+          if (
+            element.closest(".safety-hero")
+          ) {
+            return;
+          }
+
+
+          gsap.fromTo(
+
+            element,
+
+            {
+              opacity: 0,
+              y: 45
+            },
+
+            {
+              opacity: 1,
+              y: 0,
+
+              duration: .75,
+
+              ease: "power3.out",
+
+              scrollTrigger: {
+
+                trigger: element,
+
+                start: "top 84%",
+
+                once: true
+
+              }
+
+            }
+
+          );
+
+        });
+
+
+      /* =====================================================
+         VERDICT CARDS
+         ===================================================== */
+
+      document
+        .querySelectorAll(".verdict-card")
+        .forEach((card, index) => {
+
+
+          gsap.fromTo(
+
+            card,
+
+            {
+              opacity: 0,
+              y: 70,
+              rotation:
+                index === 1
+                  ? 5
+                  : -5
+            },
+
+            {
+              opacity: 1,
+              y: 0,
+
+              rotation:
+                index === 1
+                  ? 1.2
+                  : index === 0
+                    ? -1.5
+                    : -.8,
+
+              duration: .8,
+
+              ease: "back.out(1.3)",
+
+              scrollTrigger: {
+
+                trigger: card,
+
+                start: "top 83%",
+
+                once: true
+
+              }
+
+            }
+
+          );
+
+        });
+
+
+      /* =====================================================
+         MAGNETIC BUTTONS
+         ===================================================== */
+
+      document
+        .querySelectorAll(".safety-button")
+        .forEach((button) => {
+
+
+          button.addEventListener(
+            "mousemove",
+            (event) => {
+
+              const rect =
+                button.getBoundingClientRect();
+
+
+              const x =
+                (
+                  event.clientX -
+                  rect.left -
+                  rect.width / 2
+                ) * .12;
+
+
+              const y =
+                (
+                  event.clientY -
+                  rect.top -
+                  rect.height / 2
+                ) * .12;
+
+
+              gsap.to(
+                button,
+                {
+
+                  x,
+                  y,
+
+                  duration: .25,
+
+                  ease: "power2.out"
+
+                }
+              );
+
+            }
+          );
+
+
+          button.addEventListener(
+            "mouseleave",
+            () => {
+
+              gsap.to(
+                button,
+                {
+
+                  x: 0,
+                  y: 0,
+
+                  duration: .4,
+
+                  ease:
+                    "elastic.out(1,.45)"
+
+                }
+              );
+
+            }
+          );
+
+        });
+
+
+      /* =====================================================
+         APPY NOTE
+         ===================================================== */
+
+      const noteAppy =
+        document.getElementById("noteAppy");
+
+
+      if (noteAppy) {
+
+        noteAppy.addEventListener(
+          "mouseenter",
+          () => {
+
+            noteAppy.src =
+              "assets/appy/static/think.png";
+
+
+            gsap.to(
+              noteAppy,
+              {
+
+                scale: 1.08,
+                rotation: -4,
+
+                duration: .35,
+
+                ease: "back.out(2)"
+
+              }
+            );
+
+          }
+        );
+
+
+        noteAppy.addEventListener(
+          "mouseleave",
+          () => {
+
+            noteAppy.src =
+              "assets/appy/static/eat.png";
+
+
+            gsap.to(
+              noteAppy,
+              {
+
+                scale: 1,
+                rotation: 0,
+
+                duration: .35,
+
+                ease: "power2.out"
+
+              }
+            );
+
+          }
+        );
+
+      }
+
+
+      /* =====================================================
+         FINAL APPY
+         ===================================================== */
+
+      const finalAppy =
+        document.getElementById("finalAppy");
+
+
+      if (finalAppy) {
+
+        gsap.to(finalAppy, {
+
+          y: -12,
+          rotation: -5,
+
+          duration: 1.8,
+
+          repeat: -1,
+          yoyo: true,
+
+          ease: "sine.inOut"
+
+        });
+
+      }
+
+
+      /* =====================================================
+         SAFETY DEMO
+         ===================================================== */
+
+      const runButton =
+        document.getElementById(
+          "runSafetyDemo"
+        );
+
+
+      const resetButton =
+        document.getElementById(
+          "resetSafetyDemo"
+        );
+
+
+      const verdict =
+        document.getElementById(
+          "demoVerdict"
+        );
+
+
+      const copy =
+        document.getElementById(
+          "demoCopy"
+        );
+
+
+      const steps =
+        document.querySelectorAll(
+          ".pipeline-step"
+        );
+
+
+      let demoRunning = false;
+
+
+      function resetDemo() {
+
+        demoRunning = false;
+
+
+        steps.forEach((step) => {
+
+          step.classList.remove(
+            "active"
+          );
+
+          step.classList.remove(
+            "done"
+          );
+
+        });
+
+
+        if (verdict) {
+          verdict.textContent =
+            "READY";
+        }
+
+
+        if (copy) {
+
+          copy.textContent =
+            "Press RUN CHECK to animate the decision path.";
+
+        }
+
+      }
+
+
+      async function runDemo() {
+
+        if (demoRunning) {
+          return;
+        }
+
+
+        demoRunning = true;
+
+
+        resetDemo();
+
+
+        const stages = [
+
+          {
+            title: "DETECT",
+            text:
+              "Ingredient panel detected."
+          },
+
+          {
+            title: "READ",
+            text:
+              "Ingredient text extracted from the example panel."
+          },
+
+          {
+            title: "MATCH",
+            text:
+              "Detected terms compared with the configured allergen set."
+          },
+
+          {
+            title: "FLAGGED",
+            text:
+              "Example output: MILK is shown as a matched allergen."
+          }
+
+        ];
+
+
+        for (
+          let i = 0;
+          i < steps.length;
+          i++
+        ) {
+
+
+          steps.forEach(
+            (step, index) => {
+
+              step.classList.remove(
+                "active"
+              );
+
+
+              if (index < i) {
+
+                step.classList.add(
+                  "done"
+                );
+
+              }
+
+            }
+          );
+
+
+          steps[i].classList.add(
+            "active"
+          );
+
+
+          if (verdict) {
+
+            verdict.textContent =
+              stages[i].title;
+
+          }
+
+
+          if (copy) {
+
+            copy.textContent =
+              stages[i].text;
+
+          }
+
+
+          gsap.fromTo(
+
+            steps[i],
+
+            {
+              x: 0
+            },
+
+            {
+              x: 9,
+
+              duration: .25,
+
+              yoyo: true,
+
+              repeat: 1,
+
+              ease: "power2.out"
+
+            }
+
+          );
+
+
+          await new Promise(
+            (resolve) => {
+
+              setTimeout(
+                resolve,
+                850
+              );
+
+            }
+          );
+
+        }
+
+
+        steps.forEach(
+          (step) => {
+
+            step.classList.remove(
+              "active"
+            );
+
+            step.classList.add(
+              "done"
+            );
+
+          }
+        );
+
+
+        if (verdict) {
+
+          verdict.textContent =
+            "FLAGGED";
+
+        }
+
+
+        if (copy) {
+
+          copy.textContent =
+            "Demo complete: the example panel contains MILK, which is represented here as a matched allergen.";
+
+        }
+
+
+        demoRunning = false;
+
+      }
+
+
+      if (runButton) {
+
+        runButton.addEventListener(
+          "click",
+          runDemo
+        );
+
+      }
+
+
+      if (resetButton) {
+
+        resetButton.addEventListener(
+          "click",
+          resetDemo
+        );
+
+      }
+
+
+      /* =====================================================
+         PIPELINE HOVER
+         ===================================================== */
+
+      steps.forEach((step) => {
+
+        step.addEventListener(
+          "mouseenter",
+          () => {
+
+            if (demoRunning) {
+              return;
+            }
+
+
+            gsap.to(
+              step,
+              {
+
+                x: 7,
+
+                duration: .25,
+
+                ease: "power2.out"
+
+              }
+            );
+
+          }
+        );
+
+
+        step.addEventListener(
+          "mouseleave",
+          () => {
+
+            if (demoRunning) {
+              return;
+            }
+
+
+            gsap.to(
+              step,
+              {
+
+                x: 0,
+
+                duration: .25,
+
+                ease: "power2.out"
+
+              }
+            );
+
+          }
+        );
+
+      });
+
+
+      /* =====================================================
+         INGREDIENT CHIPS
+         ===================================================== */
+
+      document
+        .querySelectorAll(".ingredient-chip")
+        .forEach((chip) => {
+
+
+          chip.addEventListener(
+            "mouseenter",
+            () => {
+
+              gsap.to(
+                chip,
+                {
+
+                  y: -5,
+                  rotation: -2,
+
+                  duration: .2,
+
+                  ease: "back.out(2)"
+
+                }
+              );
+
+            }
+          );
+
+
+          chip.addEventListener(
+            "mouseleave",
+            () => {
+
+              gsap.to(
+                chip,
+                {
+
+                  y: 0,
+                  rotation: 0,
+
+                  duration: .25,
+
+                  ease: "power2.out"
+
+                }
+              );
+
+            }
+          );
+
+        });
+
+
+      /* =====================================================
+         UNCLEAR PARALLAX
+         ===================================================== */
+
+      if (
+        typeof ScrollTrigger !== "undefined"
+      ) {
+
+        gsap.to(
+          ".unclear-big",
+          {
+
+            x: 90,
+            rotation: 2,
+
+            ease: "none",
+
+            scrollTrigger: {
+
+              trigger:
+                ".unclear-section",
+
+              start:
+                "top bottom",
+
+              end:
+                "bottom top",
+
+              scrub: 1
+
+            }
+
+          }
+        );
+
+      }
+
+
+      /* =====================================================
+         FINAL CTA
+         ===================================================== */
+
+      if (
+        typeof ScrollTrigger !== "undefined"
+      ) {
+
+        gsap.fromTo(
+
+          ".final-inner h2",
+
+          {
+            opacity: 0,
+            y: 65,
+            scale: .94
+          },
+
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+
+            duration: 1,
+
+            ease: "power4.out",
+
+            scrollTrigger: {
+
+              trigger:
+                ".safety-final",
+
+              start:
+                "top 75%",
+
+              once: true
+
+            }
+
+          }
+
+        );
+
+      }
+
+
+      /* =====================================================
+         REDUCED MOTION
+         ===================================================== */
+
+      const reducedMotion =
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+
+
+      if (reducedMotion.matches) {
+
+        gsap.globalTimeline.clear();
+
+      }
+
+    });
+
+  </script>
+
+<script src="cursor.js"></script>
+</body>
+</html>

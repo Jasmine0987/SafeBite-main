@@ -1,0 +1,3302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE — PROFILE
+   ========================================================= */
+
+.profile-page {
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+.profile-page * {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.profile-hero {
+  min-height: 78vh;
+  background: var(--purple);
+  color: var(--cream);
+  border-bottom: 4px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.profile-hero::before {
+  content: "";
+  position: absolute;
+  width: 390px;
+  height: 390px;
+  right: 8%;
+  top: 10%;
+  background: var(--yellow);
+  border: 4px solid var(--black);
+  box-shadow: 16px 16px 0 var(--black);
+  transform: rotate(7deg);
+}
+
+.profile-hero::after {
+  content: "YOU";
+  position: absolute;
+  right: 9%;
+  top: 22%;
+  font-family: var(--display-heading);
+  font-size: clamp(7rem, 14vw, 14rem);
+  line-height: .75;
+  color: transparent;
+  -webkit-text-stroke: 3px var(--black);
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+.profile-hero-inner {
+  width: min(1380px, 92%);
+  margin: 0 auto;
+  padding: 120px 0 100px;
+  position: relative;
+  z-index: 3;
+}
+
+.profile-kicker {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  color: var(--yellow);
+}
+
+.profile-title {
+  margin: 0;
+  max-width: 1050px;
+  font-family: var(--display-heading);
+  font-weight: 800;
+  font-size: clamp(4.5rem, 10vw, 10rem);
+  line-height: .82;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.profile-title .outline {
+  color: transparent;
+  -webkit-text-stroke: 3px var(--cream);
+}
+
+.profile-sub {
+  max-width: 690px;
+  margin-top: 38px;
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.profile-hero-appy {
+  position: absolute;
+  right: 15%;
+  bottom: 8%;
+  width: 145px;
+  z-index: 5;
+  transform: rotate(5deg);
+  filter: drop-shadow(10px 10px 0 var(--black));
+}
+
+.profile-hero-appy img {
+  width: 100%;
+  display: block;
+}
+
+
+/* =========================================================
+   PROFILE STATUS BAR
+   ========================================================= */
+
+.profile-status-bar {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  border-bottom: 4px solid var(--black);
+  background: var(--cream);
+}
+
+.status-block {
+  min-height: 175px;
+  padding: 32px;
+  border-right: 4px solid var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.status-block:last-child {
+  border-right: none;
+}
+
+.status-block:nth-child(2) {
+  background: var(--green);
+}
+
+.status-block:nth-child(3) {
+  background: var(--slate);
+}
+
+.status-label {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.status-value {
+  font-family: var(--display-heading);
+  font-size: 42px;
+  line-height: .85;
+  text-transform: uppercase;
+}
+
+.status-value.small {
+  font-size: 28px;
+}
+
+.profile-progress {
+  margin-top: 18px;
+  height: 18px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.profile-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--red);
+  transition: width .5s var(--ease-bounce);
+}
+
+
+/* =========================================================
+   COMMON SECTION
+   ========================================================= */
+
+.profile-section {
+  padding: 115px 4%;
+  border-bottom: 4px solid var(--black);
+}
+
+.profile-section-inner {
+  width: min(1380px, 100%);
+  margin: 0 auto;
+}
+
+.profile-section.yellow {
+  background: var(--yellow);
+}
+
+.profile-section.green {
+  background: var(--green);
+}
+
+.profile-section.purple {
+  background: var(--purple);
+  color: var(--cream);
+}
+
+.profile-section.cream {
+  background: var(--cream);
+}
+
+.profile-label {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+
+.profile-heading {
+  max-width: 1050px;
+  margin: 0 0 35px;
+  font-family: var(--display-heading);
+  font-weight: 800;
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: .84;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+
+.profile-copy {
+  max-width: 760px;
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   PROFILE EDITOR
+   ========================================================= */
+
+.profile-editor {
+  margin-top: 65px;
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 35px;
+  align-items: start;
+}
+
+.editor-panel {
+  border: 4px solid var(--black);
+  background: var(--cream);
+  box-shadow: 12px 12px 0 var(--black);
+}
+
+.editor-header {
+  padding: 24px 30px;
+  border-bottom: 4px solid var(--black);
+  background: var(--red);
+  color: var(--cream);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.editor-header h3 {
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: 27px;
+  text-transform: uppercase;
+}
+
+.editor-header span {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.editor-body {
+  padding: 30px;
+}
+
+.field-group {
+  margin-bottom: 25px;
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.profile-input,
+.profile-select {
+  width: 100%;
+  min-height: 56px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  padding: 13px 16px;
+  font-family: var(--body);
+  font-size: 15px;
+  outline: none;
+}
+
+.profile-input:focus,
+.profile-select:focus {
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+.editor-side {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.info-card {
+  border: 4px solid var(--black);
+  background: var(--slate);
+  padding: 30px;
+  box-shadow: 9px 9px 0 var(--black);
+}
+
+.info-card.yellow {
+  background: var(--yellow);
+}
+
+.info-card.green {
+  background: var(--green);
+}
+
+.info-card h3 {
+  margin: 0 0 18px;
+  font-family: var(--display-heading);
+  font-size: 35px;
+  line-height: .88;
+  text-transform: uppercase;
+}
+
+.info-card p {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.info-icon {
+  width: 55px;
+  height: 55px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display-heading);
+  font-size: 27px;
+  margin-bottom: 30px;
+  transform: rotate(-5deg);
+}
+
+
+/* =========================================================
+   ALLERGEN SYSTEM
+   ========================================================= */
+
+.allergen-layout {
+  margin-top: 70px;
+  display: grid;
+  grid-template-columns: .75fr 1.25fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.allergen-statement {
+  font-family: var(--display-heading);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: .84;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+
+.allergen-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.mini-button {
+  border: 3px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  padding: 10px 14px;
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--black);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.mini-button:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--black);
+}
+
+.allergen-panel {
+  border: 4px solid var(--black);
+  background: var(--cream);
+  box-shadow: 12px 12px 0 var(--black);
+}
+
+.allergen-panel-header {
+  padding: 25px 30px;
+  border-bottom: 4px solid var(--black);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.allergen-panel-title {
+  font-family: var(--display-heading);
+  font-size: 27px;
+  text-transform: uppercase;
+}
+
+.allergen-status {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: var(--green);
+  border: 2px solid var(--black);
+  padding: 8px 10px;
+}
+
+.allergen-list {
+  padding: 0;
+}
+
+.allergen-row {
+  min-height: 75px;
+  padding: 16px 30px;
+  border-bottom: 2px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.allergen-row:last-child {
+  border-bottom: none;
+}
+
+.allergen-name {
+  font-family: var(--display-heading);
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.allergen-description {
+  font-family: var(--body);
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: .7;
+  margin-top: 4px;
+}
+
+.allergen-toggle {
+  width: 62px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  position: relative;
+  cursor: pointer;
+}
+
+.allergen-toggle::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 3px;
+  top: 2px;
+  background: var(--black);
+  transition: transform .2s var(--ease-bounce);
+}
+
+.allergen-row.active .allergen-toggle {
+  background: var(--red);
+}
+
+.allergen-row.active .allergen-toggle::after {
+  transform: translateX(26px);
+  background: var(--cream);
+}
+
+.allergen-note {
+  padding: 20px 30px;
+  background: var(--yellow);
+  border-top: 4px solid var(--black);
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   SAFETY MODE
+   ========================================================= */
+
+.mode-grid {
+  margin-top: 65px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.mode-card {
+  border: 4px solid var(--black);
+  background: var(--cream);
+  padding: 30px;
+  min-height: 270px;
+  box-shadow: 9px 9px 0 var(--black);
+  cursor: pointer;
+  position: relative;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.mode-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 13px 13px 0 var(--black);
+}
+
+.mode-card.selected {
+  background: var(--red);
+  color: var(--cream);
+}
+
+.mode-card.selected::after {
+  content: "SELECTED";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: 2px solid var(--black);
+  background: var(--yellow);
+  color: var(--black);
+  padding: 6px 8px;
+  font-family: var(--body);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.mode-number {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mode-title {
+  margin-top: 65px;
+  font-family: var(--display-heading);
+  font-size: 38px;
+  line-height: .85;
+  text-transform: uppercase;
+}
+
+.mode-description {
+  margin-top: 18px;
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PREFERENCES
+   ========================================================= */
+
+.preference-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 65px;
+}
+
+.preference-card {
+  min-height: 310px;
+  border: 4px solid var(--black);
+  background: var(--cream);
+  padding: 32px;
+  box-shadow: 10px 10px 0 var(--black);
+  position: relative;
+}
+
+.preference-card:nth-child(2) {
+  background: var(--slate);
+}
+
+.preference-card:nth-child(3) {
+  background: var(--green);
+}
+
+.preference-card h3 {
+  margin: 55px 0 18px;
+  font-family: var(--display-heading);
+  font-size: 35px;
+  line-height: .87;
+  text-transform: uppercase;
+}
+
+.preference-card p {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.preference-number {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.preference-control {
+  margin-top: 25px;
+}
+
+.preference-control select {
+  width: 100%;
+  min-height: 45px;
+  border: 3px solid var(--black);
+  background: var(--cream);
+  padding: 8px;
+  font-family: var(--body);
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+.activity-section {
+  background: var(--cream);
+}
+
+.activity-grid {
+  margin-top: 65px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.activity-card {
+  border: 4px solid var(--black);
+  background: var(--purple);
+  color: var(--cream);
+  box-shadow: 11px 11px 0 var(--black);
+}
+
+.activity-card-header {
+  padding: 25px 30px;
+  border-bottom: 4px solid var(--black);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-card-header h3 {
+  margin: 0;
+  font-family: var(--display-heading);
+  font-size: 27px;
+  text-transform: uppercase;
+}
+
+.activity-count {
+  font-family: var(--display);
+  font-size: 38px;
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-item {
+  padding: 22px 30px;
+  border-bottom: 2px solid var(--black);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item strong {
+  display: block;
+  font-family: var(--display-heading);
+  font-size: 19px;
+  text-transform: uppercase;
+}
+
+.activity-item span {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--body);
+  font-size: 11px;
+}
+
+.activity-verdict {
+  align-self: center;
+  padding: 7px 9px;
+  border: 2px solid var(--black);
+  background: var(--green);
+  color: var(--black);
+  font-family: var(--body);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   DATA / PRIVACY
+   ========================================================= */
+
+.data-section {
+  background: var(--purple);
+  color: var(--cream);
+}
+
+.data-box {
+  margin-top: 60px;
+  border: 4px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  box-shadow: 14px 14px 0 var(--black);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 45px;
+  align-items: center;
+}
+
+.data-symbol {
+  width: 125px;
+  height: 125px;
+  background: var(--yellow);
+  border: 4px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display-heading);
+  font-size: 65px;
+  transform: rotate(-5deg);
+}
+
+.data-title {
+  margin: 0 0 18px;
+  font-family: var(--display-heading);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: .84;
+  text-transform: uppercase;
+}
+
+.data-copy {
+  max-width: 750px;
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.data-list {
+  margin-top: 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.data-list li {
+  padding: 12px 0;
+  border-top: 2px solid var(--black);
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.data-list li:last-child {
+  border-bottom: 2px solid var(--black);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.profile-actions {
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.profile-button {
+  min-height: 56px;
+  padding: 15px 22px;
+  border: 4px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  box-shadow: 7px 7px 0 var(--black);
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.profile-button:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 3px 3px 0 var(--black);
+}
+
+.profile-button.primary {
+  background: var(--yellow);
+}
+
+.profile-button.red {
+  background: var(--red);
+  color: var(--cream);
+}
+
+
+/* =========================================================
+   SAVE BAR
+   ========================================================= */
+
+.save-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  padding: 15px 4%;
+  background: var(--black);
+  color: var(--cream);
+  border-top: 4px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transform: translateY(100%);
+  transition: transform .3s var(--ease-bounce);
+}
+
+.save-bar.visible {
+  transform: translateY(0);
+}
+
+.save-status {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.save-status::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--yellow);
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+.profile-cta {
+  background: var(--red);
+  color: var(--cream);
+  border-bottom: 4px solid var(--black);
+  padding: 110px 4%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-cta::before {
+  content: "PROFILE";
+  position: absolute;
+  left: -3%;
+  bottom: -5%;
+  font-family: var(--display-heading);
+  font-size: 19vw;
+  line-height: .7;
+  opacity: .08;
+}
+
+.profile-cta-inner {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-cta-title {
+  margin: 0 0 30px;
+  font-family: var(--display-heading);
+  font-size: clamp(4rem, 9vw, 9rem);
+  line-height: .82;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+
+.profile-cta-copy {
+  max-width: 620px;
+  margin: 0 auto 40px;
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.profile-toast {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  z-index: 100;
+  max-width: 350px;
+  padding: 17px 20px;
+  border: 4px solid var(--black);
+  background: var(--yellow);
+  color: var(--black);
+  box-shadow: 8px 8px 0 var(--black);
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  transform: translateY(130%);
+  transition: transform .3s var(--ease-bounce);
+}
+
+.profile-toast.show {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+  .profile-status-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .status-block {
+    border-right: none;
+    border-bottom: 4px solid var(--black);
+  }
+
+  .status-block:last-child {
+    border-bottom: none;
+  }
+
+  .profile-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .allergen-layout {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .mode-grid,
+  .preference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .data-box {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero-appy {
+    right: 8%;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .profile-hero-inner {
+    padding: 90px 0 70px;
+  }
+
+  .profile-hero::before,
+  .profile-hero::after {
+    display: none;
+  }
+
+  .profile-hero-appy {
+    width: 95px;
+    right: 7%;
+    bottom: 30px;
+  }
+
+  .profile-section {
+    padding: 80px 6%;
+  }
+
+  .editor-body {
+    padding: 22px;
+  }
+
+  .allergen-panel-header,
+  .allergen-row,
+  .allergen-note {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .data-box {
+    padding: 28px;
+  }
+
+  .save-bar {
+    padding: 12px 15px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-bar .profile-button {
+    width: 100%;
+    text-align: center;
+  }
+
+}
+
+
+/* =========================================================
+   VISIBILITY
+   ========================================================= */
+
+.profile-page .reveal {
+  opacity: 1;
+  visibility: visible;
+}
+
+</style>
+</head>
+
+
+<body class="profile-page">
+
+
+<!-- =======================================================
+     CURSOR
+     ======================================================= -->
+
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor" aria-hidden="true"></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =======================================================
+     HERO
+     ======================================================= -->
+
+<header class="profile-hero">
+
+  <div class="profile-hero-inner">
+
+    <p class="profile-kicker reveal">
+      YOUR SAFEBITE / YOUR RULES
+    </p>
+
+    <h1 class="profile-title reveal">
+      BUILT<br>
+      AROUND <span class="outline">YOU.</span>
+    </h1>
+
+    <p class="profile-sub reveal">
+      Your profile controls the information SafeBite uses when
+      evaluating food safety and generating personalized
+      recommendations.
+    </p>
+
+  </div>
+
+  <div class="profile-hero-appy">
+    <img src="assets/appy/static/think.png" alt="Appy">
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     PROFILE STATUS
+     ======================================================= -->
+
+<section class="profile-status-bar">
+
+  <div class="status-block">
+
+    <span class="status-label">
+      PROFILE
+    </span>
+
+    <span class="status-value" id="statusName">
+      YOUR PROFILE
+    </span>
+
+  </div>
+
+
+  <div class="status-block">
+
+    <span class="status-label">
+      PROFILE COMPLETENESS
+    </span>
+
+    <span class="status-value" id="completionValue">
+      0%
+    </span>
+
+    <div class="profile-progress">
+      <div
+        class="profile-progress-fill"
+        id="completionBar">
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="status-block">
+
+    <span class="status-label">
+      ACTIVE ALLERGENS
+    </span>
+
+    <span class="status-value" id="activeAllergenCount">
+      0
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     PROFILE DETAILS
+     ======================================================= -->
+
+<section class="profile-section cream">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal">
+      01 / PROFILE DETAILS
+    </p>
+
+    <h2 class="profile-heading reveal">
+      MAKE THE<br>
+      SYSTEM<br>
+      PERSONAL.
+    </h2>
+
+    <p class="profile-copy reveal">
+      These details shape the way SafeBite presents decisions and
+      recommendations. They are stored locally in this prototype
+      until a backend account system is connected.
+    </p>
+
+
+    <div class="profile-editor">
+
+      <div class="editor-panel reveal">
+
+        <div class="editor-header">
+
+          <h3>
+            PROFILE ID
+          </h3>
+
+          <span id="editState">
+            READY
+          </span>
+
+        </div>
+
+
+        <div class="editor-body">
+
+          <div class="field-group">
+
+            <label class="field-label" for="profileName">
+              DISPLAY NAME
+            </label>
+
+            <input
+              id="profileName"
+              class="profile-input"
+              type="text"
+              placeholder="Enter your name"
+              maxlength="40">
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label class="field-label" for="profileGoal">
+              PRIMARY GOAL
+            </label>
+
+            <select
+              id="profileGoal"
+              class="profile-select">
+
+              <option value="">
+                Select your goal
+              </option>
+
+              <option value="safety">
+                Maximum food safety
+              </option>
+
+              <option value="swaps">
+                Find safer food swaps
+              </option>
+
+              <option value="exploration">
+                Explore food with more confidence
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label class="field-label" for="dietPreference">
+              DIETARY PREFERENCE
+            </label>
+
+            <select
+              id="dietPreference"
+              class="profile-select">
+
+              <option value="">
+                No preference
+              </option>
+
+              <option value="vegetarian">
+                Vegetarian
+              </option>
+
+              <option value="vegan">
+                Vegan
+              </option>
+
+              <option value="eggetarian">
+                Eggetarian
+              </option>
+
+              <option value="pescatarian">
+                Pescatarian
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="editor-side">
+
+        <div class="info-card yellow reveal">
+
+          <div class="info-icon">
+            01
+          </div>
+
+          <h3>
+            YOU<br>
+            CONTROL<br>
+            THE INPUT.
+          </h3>
+
+          <p>
+            Change these settings whenever your preferences change.
+            SafeBite should never silently assume them.
+          </p>
+
+        </div>
+
+
+        <div class="info-card green reveal">
+
+          <div class="info-icon">
+            ✓
+          </div>
+
+          <h3>
+            LOCAL<br>
+            BY DEFAULT.
+          </h3>
+
+          <p>
+            This prototype saves profile settings in your browser
+            using localStorage.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     ALLERGENS
+     ======================================================= -->
+
+<section class="profile-section yellow">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal">
+      02 / SAFETY PROFILE
+    </p>
+
+    <div class="allergen-layout">
+
+      <div>
+
+        <div class="allergen-statement reveal">
+          TELL<br>
+          SAFEBITE<br>
+          WHAT TO<br>
+          WATCH.
+        </div>
+
+        <p
+          class="profile-copy reveal"
+          style="margin-top:30px;">
+
+          Turn allergens on or off using the controls. Active
+          allergens are considered by the safety matching stage.
+        </p>
+
+      </div>
+
+
+      <div class="reveal">
+
+        <div class="allergen-controls">
+
+          <button
+            type="button"
+            class="mini-button"
+            id="selectAllAllergens">
+            SELECT ALL
+          </button>
+
+          <button
+            type="button"
+            class="mini-button"
+            id="clearAllAllergens">
+            CLEAR ALL
+          </button>
+
+        </div>
+
+
+        <div class="allergen-panel">
+
+          <div class="allergen-panel-header">
+
+            <div class="allergen-panel-title">
+              MY ALLERGENS
+            </div>
+
+            <div
+              class="allergen-status"
+              id="allergenStatus">
+              0 ACTIVE
+            </div>
+
+          </div>
+
+
+          <div class="allergen-list">
+
+            <div
+              class="allergen-row"
+              data-allergen="peanuts">
+
+              <div>
+
+                <div class="allergen-name">
+                  Peanuts
+                </div>
+
+                <div class="allergen-description">
+                  Peanuts and peanut-derived ingredients
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle peanuts"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+
+            <div
+              class="allergen-row"
+              data-allergen="milk">
+
+              <div>
+
+                <div class="allergen-name">
+                  Milk
+                </div>
+
+                <div class="allergen-description">
+                  Milk and dairy-derived ingredients
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle milk"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+
+            <div
+              class="allergen-row"
+              data-allergen="eggs">
+
+              <div>
+
+                <div class="allergen-name">
+                  Eggs
+                </div>
+
+                <div class="allergen-description">
+                  Egg and egg-derived ingredients
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle eggs"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+
+            <div
+              class="allergen-row"
+              data-allergen="tree-nuts">
+
+              <div>
+
+                <div class="allergen-name">
+                  Tree Nuts
+                </div>
+
+                <div class="allergen-description">
+                  Almonds, cashews, walnuts and similar nuts
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle tree nuts"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+
+            <div
+              class="allergen-row"
+              data-allergen="soy">
+
+              <div>
+
+                <div class="allergen-name">
+                  Soy
+                </div>
+
+                <div class="allergen-description">
+                  Soy and soy-derived ingredients
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle soy"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+
+            <div
+              class="allergen-row"
+              data-allergen="wheat">
+
+              <div>
+
+                <div class="allergen-name">
+                  Wheat
+                </div>
+
+                <div class="allergen-description">
+                  Wheat and wheat-derived ingredients
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                class="allergen-toggle"
+                aria-label="Toggle wheat"
+                aria-pressed="false">
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="allergen-note">
+
+            Active allergens are used as profile inputs. They do not
+            replace the underlying ingredient evidence or a product
+            label.
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     SAFETY SENSITIVITY
+     ======================================================= -->
+
+<section class="profile-section green">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal">
+      03 / DECISION STYLE
+    </p>
+
+    <h2 class="profile-heading reveal">
+      HOW MUCH<br>
+      CONTEXT DO<br>
+      YOU WANT?
+    </h2>
+
+    <p class="profile-copy reveal">
+      Choose how SafeBite should communicate uncertainty around a
+      food decision. This controls presentation preferences in the
+      prototype; it does not change the underlying evidence.
+    </p>
+
+
+    <div class="mode-grid">
+
+      <article
+        class="mode-card selected reveal"
+        data-mode="standard">
+
+        <div class="mode-number">
+          01 / STANDARD
+        </div>
+
+        <h3 class="mode-title">
+          CLEAR<br>
+          ANSWERS
+        </h3>
+
+        <p class="mode-description">
+          Show the verdict first, followed by the evidence and
+          explanation.
+        </p>
+
+      </article>
+
+
+      <article
+        class="mode-card reveal"
+        data-mode="detailed">
+
+        <div class="mode-number">
+          02 / DETAILED
+        </div>
+
+        <h3 class="mode-title">
+          SHOW<br>
+          THE WHY
+        </h3>
+
+        <p class="mode-description">
+          Surface more ingredient context and reasoning alongside
+          each decision.
+        </p>
+
+      </article>
+
+
+      <article
+        class="mode-card reveal"
+        data-mode="cautious">
+
+        <div class="mode-number">
+          03 / CAUTIOUS
+        </div>
+
+        <h3 class="mode-title">
+          FLAG<br>
+          UNCERTAINTY
+        </h3>
+
+        <p class="mode-description">
+          Keep unclear cases highly visible instead of forcing a
+          confident-looking answer.
+        </p>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     PERSONALIZATION
+     ======================================================= -->
+
+<section class="profile-section cream">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal">
+      04 / PERSONALIZATION
+    </p>
+
+    <h2 class="profile-heading reveal">
+      MAKE THE<br>
+      RECOMMENDATIONS<br>
+      FEEL LIKE YOU.
+    </h2>
+
+
+    <div class="preference-grid">
+
+      <article class="preference-card reveal">
+
+        <div class="preference-number">
+          01 / CRAVINGS
+        </div>
+
+        <h3>
+          CRAVING<br>
+          MATCH
+        </h3>
+
+        <p>
+          Decide how strongly the recommendation system should
+          prioritize what you were actually craving.
+        </p>
+
+        <div class="preference-control">
+
+          <select id="cravingWeight">
+
+            <option value="balanced">
+              Balanced
+            </option>
+
+            <option value="high">
+              High priority
+            </option>
+
+            <option value="very-high">
+              Very high priority
+            </option>
+
+          </select>
+
+        </div>
+
+      </article>
+
+
+      <article class="preference-card reveal">
+
+        <div class="preference-number">
+          02 / SWAPS
+        </div>
+
+        <h3>
+          SWAP<br>
+          STYLE
+        </h3>
+
+        <p>
+          Choose what matters most when SafeBite suggests an
+          alternative.
+        </p>
+
+        <div class="preference-control">
+
+          <select id="swapPriority">
+
+            <option value="taste">
+              Closest taste
+            </option>
+
+            <option value="texture">
+              Closest texture
+            </option>
+
+            <option value="simple">
+              Simplest alternative
+            </option>
+
+          </select>
+
+        </div>
+
+      </article>
+
+
+      <article class="preference-card reveal">
+
+        <div class="preference-number">
+          03 / EXPLANATIONS
+        </div>
+
+        <h3>
+          EXPLAIN<br>
+          MORE?
+        </h3>
+
+        <p>
+          Choose how much supporting information appears after a
+          verdict.
+        </p>
+
+        <div class="preference-control">
+
+          <select id="explanationLevel">
+
+            <option value="compact">
+              Compact
+            </option>
+
+            <option value="normal">
+              Normal
+            </option>
+
+            <option value="detailed">
+              Detailed
+            </option>
+
+          </select>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     RECENT ACTIVITY
+     ======================================================= -->
+
+<section class="profile-section activity-section">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal" style="color:var(--red)">
+      05 / YOUR ACTIVITY
+    </p>
+
+    <h2 class="profile-heading reveal">
+      YOUR<br>
+      RECENT<br>
+      SIGNALS.
+    </h2>
+
+    <p class="profile-copy reveal">
+      Quick access to the information SafeBite can use to make
+      future sessions more useful.
+    </p>
+
+
+    <div class="activity-grid">
+
+      <div class="activity-card reveal">
+
+        <div class="activity-card-header">
+
+          <h3>
+            RECENT SCANS
+          </h3>
+
+          <span class="activity-count">
+            03
+          </span>
+
+        </div>
+
+
+        <ul class="activity-list">
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                Chocolate Bar
+              </strong>
+
+              <span>
+                Recently scanned
+              </span>
+            </div>
+
+            <span class="activity-verdict">
+              CHECKED
+            </span>
+
+          </li>
+
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                Breakfast Cereal
+              </strong>
+
+              <span>
+                Recently scanned
+              </span>
+            </div>
+
+            <span class="activity-verdict">
+              CHECKED
+            </span>
+
+          </li>
+
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                Snack Pack
+              </strong>
+
+              <span>
+                Recently scanned
+              </span>
+            </div>
+
+            <span class="activity-verdict">
+              CHECKED
+            </span>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <div class="activity-card reveal" style="background:var(--red);">
+
+        <div class="activity-card-header">
+
+          <h3>
+            CRAVINGS
+          </h3>
+
+          <span class="activity-count">
+            02
+          </span>
+
+        </div>
+
+
+        <ul class="activity-list">
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                Something Crunchy
+              </strong>
+
+              <span>
+                Recent craving
+              </span>
+            </div>
+
+            <span class="activity-verdict">
+              MATCHED
+            </span>
+
+          </li>
+
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                Something Sweet
+              </strong>
+
+              <span>
+                Recent craving
+              </span>
+            </div>
+
+            <span class="activity-verdict">
+              MATCHED
+            </span>
+
+          </li>
+
+
+          <li class="activity-item">
+
+            <div>
+              <strong>
+                VIEW FULL HISTORY
+              </strong>
+
+              <span>
+                Open your complete activity
+              </span>
+            </div>
+
+            <a
+              href="history.html"
+              class="activity-verdict"
+              style="text-decoration:none;">
+              OPEN →
+            </a>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     DATA + PRIVACY
+     ======================================================= -->
+
+<section class="profile-section data-section">
+
+  <div class="profile-section-inner">
+
+    <p class="profile-label reveal" style="color:var(--yellow)">
+      06 / YOUR DATA
+    </p>
+
+    <h2 class="profile-heading reveal">
+      KNOW<br>
+      WHAT'S<br>
+      BEING USED.
+    </h2>
+
+    <p class="profile-copy reveal">
+      SafeBite's personalization depends on explicit profile inputs.
+      The prototype keeps those settings in your browser so you can
+      inspect and reset them.
+    </p>
+
+
+    <div class="data-box reveal">
+
+      <div class="data-symbol">
+        +
+      </div>
+
+      <div>
+
+        <h3 class="data-title">
+          PROFILE<br>
+          INPUTS.
+        </h3>
+
+        <p class="data-copy">
+          The profile currently stores your display name, goal,
+          dietary preference, active allergens, decision style and
+          recommendation preferences.
+        </p>
+
+        <ul class="data-list">
+
+          <li>
+            Profile information
+          </li>
+
+          <li>
+            Allergen configuration
+          </li>
+
+          <li>
+            Recommendation preferences
+          </li>
+
+          <li>
+            Decision presentation preference
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+
+    <div class="profile-actions">
+
+      <button
+        type="button"
+        class="profile-button primary"
+        id="exportProfile">
+        EXPORT PROFILE
+      </button>
+
+      <button
+        type="button"
+        class="profile-button"
+        id="importProfileButton">
+        IMPORT PROFILE
+      </button>
+
+      <input
+        type="file"
+        id="importProfile"
+        accept=".json,application/json"
+        hidden>
+
+      <button
+        type="button"
+        class="profile-button red"
+        id="resetProfile">
+        RESET PROFILE
+      </button>
+
+      <a
+        href="settings.html"
+        class="profile-button">
+        SETTINGS →
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     CTA
+     ======================================================= -->
+
+<section class="profile-cta">
+
+  <div class="profile-cta-inner">
+
+    <h2 class="profile-cta-title reveal">
+      PROFILE<br>
+      READY?
+    </h2>
+
+    <p class="profile-cta-copy reveal">
+      Keep your safety inputs current, then use them where they
+      matter most — when you're looking at an actual food label.
+    </p>
+
+    <a
+      href="scan.html"
+      class="brutal-btn reveal">
+      SCAN A LABEL →
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     SAVE BAR
+     ======================================================= -->
+
+<div
+  class="save-bar"
+  id="saveBar">
+
+  <span class="save-status">
+    You have unsaved profile changes
+  </span>
+
+  <button
+    type="button"
+    class="profile-button primary"
+    id="saveProfile">
+    SAVE PROFILE
+  </button>
+
+</div>
+
+
+<!-- =======================================================
+     TOAST
+     ======================================================= -->
+
+<div
+  class="profile-toast"
+  id="profileToast"
+  role="status"
+  aria-live="polite">
+</div>
+
+
+<!-- =======================================================
+     FOOTER
+     ======================================================= -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram">
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5">
+        </rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4">
+        </circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link">
+      HOW IT WORKS
+    </a>
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link">
+      HOW IT THINKS
+    </a>
+
+    <a
+      href="results.html"
+      class="footer-topbar-link">
+      RESULTS
+    </a>
+
+    <a
+      href="about.html"
+      class="footer-topbar-link">
+      ABOUT
+    </a>
+
+    <span
+      class="footer-topbar-link footer-topbar-credit">
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay">
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10">
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8">
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05">
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09">
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07">
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11">
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08">
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05">
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09">
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07">
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04">
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6">
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06">
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03">
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4">
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =======================================================
+     LIBRARIES
+     ======================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+<!-- =======================================================
+     PROFILE FUNCTIONALITY
+     ======================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const STORAGE_KEY = "safebite-profile-" + (((window.SBAuth && SBAuth.user()) || {}).id || "guest");
+
+  const defaultProfile = {
+
+    name: "",
+    goal: "",
+    diet: "",
+
+    allergens: {
+      peanuts: false,
+      milk: false,
+      eggs: false,
+      "tree-nuts": false,
+      soy: false,
+      wheat: false
+    },
+
+    decisionMode: "standard",
+
+    cravingWeight: "balanced",
+    swapPriority: "taste",
+    explanationLevel: "normal"
+
+  };
+
+
+  /* =======================================================
+     HELPERS
+     ======================================================= */
+
+  const cloneDefault = () => (
+    JSON.parse(JSON.stringify(defaultProfile))
+  );
+
+
+  const getProfile = () => {
+
+    try {
+
+      const saved =
+        localStorage.getItem(STORAGE_KEY);
+
+      if (!saved) {
+        return cloneDefault();
+      }
+
+      return {
+        ...cloneDefault(),
+        ...JSON.parse(saved)
+      };
+
+    } catch (error) {
+
+      return cloneDefault();
+
+    }
+
+  };
+
+    // profile page toggles <-> backend allergen names
+  const A_MAP = { peanuts:'peanut', milk:'dairy', eggs:'egg', 'tree-nuts':'tree-nut', soy:'soy', wheat:'gluten' };
+  let serverOnlyAllergens = [];   // e.g. shellfish, which this page has no toggle for
+  const toServerAllergens = (a) => [
+    ...Object.keys(A_MAP).filter(k => a[k]).map(k => A_MAP[k]),
+    ...serverOnlyAllergens
+  ];
+  const fromServerAllergens = (list) => {
+    const out = {};
+    Object.keys(A_MAP).forEach(k => out[k] = list.includes(A_MAP[k]));
+    serverOnlyAllergens = list.filter(v => !Object.values(A_MAP).includes(v));
+    return out;
+  };
+  const syncProfileToServer = (p) => {
+    const { allergens, ...prefs } = p;
+    fetch(`${SB_API}/api/profile/prefs`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefs }) });
+    fetch(`${SB_API}/api/profile`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ allergens: toServerAllergens(allergens) }) });
+  };
+
+  let profile = getProfile();
+
+  let dirty = false;
+
+
+  const $ = (selector) =>
+    document.querySelector(selector);
+
+
+  const $$ = (selector) =>
+    document.querySelectorAll(selector);
+
+
+  /* =======================================================
+     TOAST
+     ======================================================= */
+
+  const toast = (message) => {
+
+    const element = $("#profileToast");
+
+    element.textContent = message;
+    element.classList.add("show");
+
+    clearTimeout(window.profileToastTimer);
+
+    window.profileToastTimer =
+      setTimeout(() => {
+        element.classList.remove("show");
+      }, 2600);
+
+  };
+
+
+  /* =======================================================
+     DIRTY STATE
+     ======================================================= */
+
+  const setDirty = () => {
+
+    dirty = true;
+
+    $("#saveBar").classList.add("visible");
+
+    $("#editState").textContent =
+      "UNSAVED";
+
+  };
+
+
+  /* =======================================================
+     PROFILE COMPLETENESS
+     ======================================================= */
+
+  const updateCompleteness = () => {
+
+    let score = 0;
+
+    if (profile.name.trim()) score += 20;
+    if (profile.goal) score += 20;
+    if (profile.diet) score += 15;
+
+    const activeAllergens =
+      Object.values(profile.allergens)
+        .filter(Boolean)
+        .length;
+
+    if (activeAllergens > 0) score += 25;
+
+    if (profile.decisionMode) score += 10;
+
+    if (profile.cravingWeight) score += 5;
+    if (profile.explanationLevel) score += 5;
+
+    $("#completionValue").textContent =
+      score + "%";
+
+    $("#completionBar").style.width =
+      score + "%";
+
+  };
+
+
+  /* =======================================================
+     ALLERGEN COUNT
+     ======================================================= */
+
+  const updateAllergenUI = () => {
+
+    const rows =
+      $$(".allergen-row");
+
+    let count = 0;
+
+    rows.forEach((row) => {
+
+      const key =
+        row.dataset.allergen;
+
+      const active =
+        !!profile.allergens[key];
+
+      const toggle =
+        row.querySelector(".allergen-toggle");
+
+      row.classList.toggle(
+        "active",
+        active
+      );
+
+      toggle.setAttribute(
+        "aria-pressed",
+        String(active)
+      );
+
+      if (active) count++;
+
+    });
+
+
+    $("#activeAllergenCount").textContent =
+      count;
+
+    $("#allergenStatus").textContent =
+      count + " ACTIVE";
+
+  };
+
+
+  /* =======================================================
+     LOAD UI
+     ======================================================= */
+
+  const loadUI = () => {
+
+    $("#profileName").value =
+      profile.name || "";
+
+    $("#profileGoal").value =
+      profile.goal || "";
+
+    $("#dietPreference").value =
+      profile.diet || "";
+
+    $("#cravingWeight").value =
+      profile.cravingWeight || "balanced";
+
+    $("#swapPriority").value =
+      profile.swapPriority || "taste";
+
+    $("#explanationLevel").value =
+      profile.explanationLevel || "normal";
+
+
+    $$(".mode-card").forEach((card) => {
+
+      card.classList.toggle(
+        "selected",
+        card.dataset.mode ===
+        profile.decisionMode
+      );
+
+    });
+
+
+    updateAllergenUI();
+    updateCompleteness();
+
+
+    $("#statusName").textContent =
+      profile.name
+        ? profile.name.toUpperCase()
+        : "YOUR PROFILE";
+
+
+    $("#saveBar").classList.remove(
+      "visible"
+    );
+
+    $("#editState").textContent =
+      "READY";
+
+    dirty = false;
+
+  };
+
+
+  /* =======================================================
+     TEXT / SELECT INPUTS
+     ======================================================= */
+
+  $("#profileName")
+    .addEventListener("input", (event) => {
+
+      profile.name =
+        event.target.value;
+
+      $("#statusName").textContent =
+        profile.name
+          ? profile.name.toUpperCase()
+          : "YOUR PROFILE";
+
+      updateCompleteness();
+      setDirty();
+
+    });
+
+
+  $("#profileGoal")
+    .addEventListener("change", (event) => {
+
+      profile.goal =
+        event.target.value;
+
+      updateCompleteness();
+      setDirty();
+
+    });
+
+
+  $("#dietPreference")
+    .addEventListener("change", (event) => {
+
+      profile.diet =
+        event.target.value;
+
+      updateCompleteness();
+      setDirty();
+
+    });
+
+
+  $("#cravingWeight")
+    .addEventListener("change", (event) => {
+
+      profile.cravingWeight =
+        event.target.value;
+
+      setDirty();
+
+    });
+
+
+  $("#swapPriority")
+    .addEventListener("change", (event) => {
+
+      profile.swapPriority =
+        event.target.value;
+
+      setDirty();
+
+    });
+
+
+  $("#explanationLevel")
+    .addEventListener("change", (event) => {
+
+      profile.explanationLevel =
+        event.target.value;
+
+      setDirty();
+
+    });
+
+
+  /* =======================================================
+     ALLERGEN TOGGLES
+     ======================================================= */
+
+  $$(".allergen-row").forEach((row) => {
+
+    const button =
+      row.querySelector(".allergen-toggle");
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const key =
+          row.dataset.allergen;
+
+        profile.allergens[key] =
+          !profile.allergens[key];
+
+        updateAllergenUI();
+        updateCompleteness();
+        setDirty();
+
+      }
+    );
+
+  });
+
+
+  $("#selectAllAllergens")
+    .addEventListener("click", () => {
+
+      Object.keys(profile.allergens)
+        .forEach((key) => {
+          profile.allergens[key] = true;
+        });
+
+      updateAllergenUI();
+      updateCompleteness();
+      setDirty();
+
+      toast("All allergens selected.");
+
+    });
+
+
+  $("#clearAllAllergens")
+    .addEventListener("click", () => {
+
+      Object.keys(profile.allergens)
+        .forEach((key) => {
+          profile.allergens[key] = false;
+        });
+
+      updateAllergenUI();
+      updateCompleteness();
+      setDirty();
+
+      toast("All allergens cleared.");
+
+    });
+
+
+  /* =======================================================
+     DECISION MODE
+     ======================================================= */
+
+  $$(".mode-card").forEach((card) => {
+
+    card.addEventListener("click", () => {
+
+      profile.decisionMode =
+        card.dataset.mode;
+
+      $$(".mode-card").forEach((item) => {
+
+        item.classList.toggle(
+          "selected",
+          item === card
+        );
+
+      });
+
+      updateCompleteness();
+      setDirty();
+
+    });
+
+  });
+
+
+  /* =======================================================
+     SAVE
+     ======================================================= */
+
+  $("#saveProfile")
+    .addEventListener("click", () => {
+
+      try {
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(profile)
+        ); syncProfileToServer(profile);
+
+        dirty = false;
+
+        $("#saveBar")
+          .classList.remove("visible");
+
+        $("#editState").textContent =
+          "SAVED";
+
+        toast(
+          "Profile saved."
+        );
+
+      } catch (error) {
+
+        toast(
+          "Could not save profile."
+        );
+
+      }
+
+    });
+
+
+  /* =======================================================
+     RESET
+     ======================================================= */
+
+  $("#resetProfile")
+    .addEventListener("click", () => {
+
+      const confirmed =
+        window.confirm(
+          "Reset your SafeBite profile?"
+        );
+
+      if (!confirmed) return;
+
+      profile =
+        cloneDefault();
+
+      syncProfileToServer(profile);
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
+      loadUI();
+
+      toast(
+        "Profile reset."
+      );
+
+    });
+
+
+  /* =======================================================
+     EXPORT
+     ======================================================= */
+
+  $("#exportProfile")
+    .addEventListener("click", () => {
+
+      const payload = {
+        app: "SafeBite",
+        version: 1,
+        exportedAt:
+          new Date().toISOString(),
+        profile
+      };
+
+
+      const blob =
+        new Blob(
+          [JSON.stringify(
+            payload,
+            null,
+            2
+          )],
+          {
+            type:
+              "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        "safebite-profile.json";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      URL.revokeObjectURL(url);
+
+      toast(
+        "Profile exported."
+      );
+
+    });
+
+
+  /* =======================================================
+     IMPORT
+     ======================================================= */
+
+  $("#importProfileButton")
+    .addEventListener("click", () => {
+
+      $("#importProfile").click();
+
+    });
+
+
+  $("#importProfile")
+    .addEventListener("change", async (event) => {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) return;
+
+
+      try {
+
+        const text =
+          await file.text();
+
+        const imported =
+          JSON.parse(text);
+
+
+        const incoming =
+          imported.profile ||
+          imported;
+
+
+        profile = {
+          ...cloneDefault(),
+          ...incoming,
+          allergens: {
+            ...cloneDefault().allergens,
+            ...(incoming.allergens || {})
+          }
+        };
+
+
+        loadUI();
+
+        setDirty();
+
+        toast(
+          "Profile imported. Save to keep it."
+        );
+
+      } catch (error) {
+
+        toast(
+          "Invalid SafeBite profile file."
+        );
+
+      }
+
+      event.target.value = "";
+
+    });
+
+
+  /* =======================================================
+     GSAP
+     ======================================================= */
+
+  if (
+    typeof gsap !== "undefined"
+  ) {
+
+    if (
+      typeof ScrollTrigger !==
+      "undefined"
+    ) {
+
+      gsap.registerPlugin(
+        ScrollTrigger
+      );
+
+    }
+
+
+    gsap.from(
+      ".profile-title",
+      {
+        y: 90,
+        opacity: 0,
+        duration: 1.1,
+        ease: "power4.out"
+      }
+    );
+
+
+    gsap.from(
+      ".profile-kicker",
+      {
+        y: 25,
+        opacity: 0,
+        duration: .7,
+        delay: .2,
+        ease: "power3.out"
+      }
+    );
+
+
+    gsap.from(
+      ".profile-sub",
+      {
+        y: 30,
+        opacity: 0,
+        duration: .8,
+        delay: .45,
+        ease: "power3.out"
+      }
+    );
+
+
+    gsap.to(
+      ".profile-hero-appy",
+      {
+        y: -14,
+        rotation: 9,
+        duration: 2.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      }
+    );
+
+
+    if (
+      typeof ScrollTrigger !==
+      "undefined"
+    ) {
+
+      gsap.utils
+        .toArray(".reveal")
+        .forEach((element) => {
+
+          if (
+            element.closest(
+              ".profile-hero"
+            )
+          ) return;
+
+          gsap.from(
+            element,
+            {
+              y: 55,
+              opacity: 0,
+              duration: .8,
+              ease: "power3.out",
+
+              scrollTrigger: {
+                trigger: element,
+                start: "top 86%",
+                once: true
+              }
+
+            }
+          );
+
+        });
+
+
+      gsap.utils
+        .toArray(".profile-heading")
+        .forEach((heading) => {
+
+          gsap.from(
+            heading,
+            {
+              y: 70,
+              opacity: 0,
+              duration: 1,
+              ease: "power4.out",
+
+              scrollTrigger: {
+                trigger: heading,
+                start: "top 85%",
+                once: true
+              }
+
+            }
+          );
+
+        });
+
+
+      const footerItems =
+        document.querySelectorAll(
+          ".footer-flatlay .fl-item"
+        );
+
+
+      footerItems.forEach((item) => {
+
+        const depth =
+          parseFloat(
+            item.dataset.depth ||
+            "0.05"
+          );
+
+        gsap.to(
+          item,
+          {
+            y: -100 * depth,
+            ease: "none",
+
+            scrollTrigger: {
+              trigger:
+                "#footer-flatlay",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+
+      });
+
+    }
+
+  }
+
+
+  /* =======================================================
+     INITIALIZE
+     ======================================================= */
+
+  loadUI();
+    (async () => {
+    try {
+      const [prefsRes, allergenRes] = await Promise.all([
+        fetch(`${SB_API}/api/profile/prefs`),
+        fetch(`${SB_API}/api/profile`)
+      ]);
+      const prefs = prefsRes.ok ? (await prefsRes.json()).prefs : {};
+      const server = allergenRes.ok ? (await allergenRes.json()).allergens : [];
+      profile = { ...cloneDefault(), ...prefs, allergens: fromServerAllergens(server) };
+    } catch (e) { /* offline: fall back to the cached copy */ }
+    loadUI();
+  })();
+
+});
+
+</script>
+
+</body>
+</html>

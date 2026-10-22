@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — How It Thinks</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE — HOW IT THINKS
+========================================================= */
+
+.thinks-page{
+  background:#BD3647;
+  overflow-x:hidden;
+  transition:none !important;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.thinks-hero{
+  min-height:88vh;
+  color:var(--cream);
+
+  position:relative;
+
+  display:flex;
+  align-items:flex-end;
+
+  overflow:hidden;
+
+  padding:110px 5vw 90px;
+}
+
+
+.thinks-hero-inner {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  align-items: center;
+  gap: 25px;
+  position: relative;
+  z-index: 2;
+}
+.thinks-hero-appy {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  justify-self: center;
+  object-fit: contain;
+  filter: drop-shadow(12px 14px 0 rgba(20, 20, 20, 0.18));
+  animation: appyFloat 3s ease-in-out infinite;
+}
+
+
+.thinks-kicker{
+  font-family:var(--body);
+
+  font-size:11px;
+  font-weight:800;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  color:var(--yellow);
+
+  margin-bottom:25px;
+}
+
+
+.thinks-hero-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(65px, 8.5vw, 135px);
+  line-height: 0.82;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+
+
+.thinks-hero-title span{
+  display:block;
+}
+
+
+.thinks-hero-title .outline {
+  display: inline;
+  color: transparent;
+  -webkit-text-stroke: 3px var(--cream);
+}
+
+
+.thinks-hero-description {
+  max-width: 520px;
+  margin: 35px 0 0;
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* floating objects */
+
+.thinks-prop{
+  position:absolute;
+
+  z-index:1;
+
+  pointer-events:none;
+}
+
+
+.thinks-prop--glass{
+  width:120px;
+
+  top:13%;
+  right:7%;
+
+  transform:rotate(12deg);
+}
+
+
+.thinks-prop--salt{
+  width:110px;
+
+  bottom:8%;
+  left:5%;
+
+  transform:rotate(-8deg);
+}
+
+
+/* =========================================================
+   BIG STATEMENT
+========================================================= */
+
+.thinks-statement{
+  padding:130px 5vw;
+
+  color:var(--cream);
+}
+
+
+.thinks-statement-inner{
+  width:min(1150px,100%);
+  margin:0 auto;
+}
+
+
+.thinks-statement-label{
+  font-family:var(--body);
+
+  font-size:11px;
+  font-weight:800;
+
+  letter-spacing:.15em;
+
+  color:var(--yellow);
+
+  text-transform:uppercase;
+}
+
+
+.thinks-statement-title{
+  max-width:1050px;
+
+  margin:35px 0 0;
+
+  font-family:var(--display);
+
+  font-size:clamp(55px,8vw,115px);
+
+  line-height:.82;
+
+  letter-spacing:-.06em;
+
+  text-transform:uppercase;
+}
+
+
+.thinks-statement-title em{
+  color:var(--yellow);
+
+  font-style:normal;
+}
+
+
+/* =========================================================
+   SCAN PIPELINE
+========================================================= */
+
+.thinks-section{
+  padding:120px 5vw;
+}
+
+
+.thinks-section-inner{
+  width:min(1200px,100%);
+  margin:0 auto;
+}
+
+
+.thinks-section-header{
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:space-between;
+
+  gap:40px;
+
+  padding-bottom:25px;
+
+  border-bottom:3px solid var(--black);
+
+  margin-bottom:60px;
+}
+
+
+.thinks-section-kicker{
+  font-family:var(--body);
+
+  font-size:11px;
+  font-weight:800;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+.thinks-section-title{
+  margin:8px 0 0;
+
+  font-family:var(--display);
+
+  font-size:clamp(48px,7vw,95px);
+
+  line-height:.8;
+
+  letter-spacing:-.06em;
+
+  text-transform:uppercase;
+}
+
+
+.thinks-section-intro{
+  max-width:350px;
+
+  font-family:var(--body);
+
+  font-size:13px;
+
+  line-height:1.65;
+}
+
+
+/* pipeline */
+
+.pipeline{
+  position:relative;
+
+  border-left:3px solid var(--black);
+}
+
+
+.pipeline-item{
+  min-height:230px;
+
+  padding:32px 35px;
+
+  border-top:3px solid var(--black);
+  border-right:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .25s ease,
+    padding .25s ease;
+}
+
+
+.pipeline-item + .pipeline-item{
+  border-top:0;
+}
+
+
+.pipeline-item:hover{
+  padding-left:50px;
+}
+
+
+.pipeline-item:nth-child(1){
+  background:var(--yellow);
+}
+
+
+.pipeline-item:nth-child(2){
+  background:#8FA3C4;
+}
+
+
+.pipeline-item:nth-child(3){
+  background:var(--green);
+}
+
+
+.pipeline-item:nth-child(4){
+  background:var(--cream);
+}
+
+
+.pipeline-number{
+  font-family:var(--body);
+
+  font-size:11px;
+  font-weight:800;
+}
+
+
+.pipeline-label{
+  margin-top:55px;
+
+  font-family:var(--display);
+
+  font-size:42px;
+
+  line-height:.85;
+
+  text-transform:uppercase;
+}
+
+
+.pipeline-description{
+  max-width:520px;
+
+  margin-top:15px;
+
+  font-family:var(--body);
+
+  font-size:13px;
+
+  line-height:1.6;
+}
+
+
+.pipeline-arrow{
+  position:absolute;
+
+  right:35px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  font-family:var(--display);
+
+  font-size:65px;
+
+  opacity:.25;
+}
+
+
+.pipeline-appy{
+  position:absolute;
+
+  right:100px;
+  bottom:-20px;
+
+  width:200px;
+  height:200px;
+
+  object-fit:contain;
+
+  opacity:.9;
+
+  transition:
+    transform .35s ease;
+}
+
+
+.pipeline-item:hover .pipeline-appy{
+  transform:
+    translateY(-12px)
+    rotate(5deg);
+}
+
+
+/* =========================================================
+   PERSONALIZATION
+========================================================= */
+
+.personal-section{
+
+  color:var(--cream);
+
+  padding:130px 5vw;
+}
+
+
+.personal-inner{
+  width:min(1200px,100%);
+  margin:0 auto;
+}
+
+
+.personal-heading{
+  max-width:950px;
+
+  font-family:var(--display);
+
+  font-size:clamp(55px,8vw,110px);
+
+  line-height:.8;
+
+  letter-spacing:-.06em;
+
+  text-transform:uppercase;
+
+  margin:0;
+}
+
+
+.personal-heading span{
+  color:var(--yellow);
+}
+
+
+.personal-copy{
+  max-width:600px;
+
+  margin:45px 0 80px auto;
+
+  font-family:var(--body);
+
+  font-size:14px;
+
+  line-height:1.7;
+}
+
+
+.personal-flow{
+  display:flex;
+
+  flex-direction:column;
+
+  border-top:3px solid var(--cream);
+}
+
+
+.personal-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:35px;
+
+  padding:28px 10px;
+
+  border-bottom:2px solid rgba(252,246,232,.4);
+
+  transition:.2s ease;
+}
+
+
+.personal-row:hover{
+  background:var(--yellow);
+
+  color:var(--black);
+
+  padding-left:30px;
+}
+
+
+.personal-row-number{
+  width:45px;
+
+  font-family:var(--body);
+
+  font-size:11px;
+
+  font-weight:800;
+}
+
+
+.personal-row-title{
+  flex:1;
+
+  font-family:var(--display);
+
+  font-size:30px;
+
+  text-transform:uppercase;
+}
+
+
+.personal-row-arrow{
+  font-family:var(--display);
+
+  font-size:30px;
+}
+
+
+/* =========================================================
+   CONNECTIONS
+========================================================= */
+
+.connection-section{
+  padding:130px 5vw;
+}
+
+
+.connection-inner{
+  width:min(1200px,100%);
+  margin:0 auto;
+}
+
+
+.connection-map{
+  margin-top:65px;
+
+  position:relative;
+}
+
+
+.connection-node{
+  min-height:150px;
+
+  padding:28px;
+
+  background:var(--cream);
+
+  border:3px solid var(--black);
+
+  box-shadow:9px 9px 0 var(--black);
+
+  position:relative;
+
+  margin-bottom:35px;
+
+  transition:.25s ease;
+}
+
+
+.connection-node:hover{
+  transform:
+    translate(-4px,-4px);
+}
+
+
+.connection-node:nth-child(2){
+  background:var(--yellow);
+
+  margin-left:10%;
+}
+
+
+.connection-node:nth-child(3){
+  background:var(--green);
+
+  margin-left:20%;
+}
+
+
+.connection-node:nth-child(4){
+  background:var(--red);
+
+  color:var(--cream);
+
+  margin-left:30%;
+}
+
+
+.connection-node-label{
+  font-family:var(--body);
+
+  font-size:10px;
+
+  font-weight:800;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+}
+
+
+.connection-node-title{
+  margin-top:20px;
+
+  font-family:var(--display);
+
+  font-size:35px;
+
+  line-height:.85;
+
+  text-transform:uppercase;
+}
+
+
+.connection-node-arrow{
+  position:absolute;
+
+  right:25px;
+  top:50%;
+
+  font-family:var(--display);
+
+  font-size:35px;
+}
+
+
+/* =========================================================
+   FLIP QUESTIONS
+========================================================= */
+
+.questions-section{
+  padding:130px 5vw;
+}
+
+
+.questions-inner{
+  width:min(1200px,100%);
+  margin:0 auto;
+}
+
+
+.questions-list{
+  margin-top:65px;
+
+  border-top:3px solid var(--black);
+}
+
+
+.question{
+  border-bottom:3px solid var(--black);
+}
+
+
+.question-button{
+  width:100%;
+
+  border:0;
+
+  background:none;
+
+  padding:28px 10px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:20px;
+
+  text-align:left;
+
+  cursor:pointer;
+
+  color:var(--black);
+}
+
+
+.question-button span:first-child{
+  font-family:var(--display);
+
+  font-size:clamp(25px,4vw,50px);
+
+  line-height:.9;
+
+  text-transform:uppercase;
+}
+
+
+.question-symbol{
+  font-family:var(--display);
+
+  font-size:35px;
+
+  transition:.25s ease;
+}
+
+
+.question.open .question-symbol{
+  transform:rotate(45deg);
+}
+
+
+.question-answer{
+  max-height:0;
+
+  overflow:hidden;
+
+  transition:
+    max-height .4s ease,
+    padding .4s ease;
+}
+
+
+.question.open .question-answer{
+  max-height:250px;
+
+  padding:0 10px 30px;
+}
+
+
+.question-answer p{
+  max-width:650px;
+
+  margin:0;
+
+  font-family:var(--body);
+
+  font-size:14px;
+
+  line-height:1.7;
+}
+
+
+/* =========================================================
+   MACHINE → HUMAN
+========================================================= */
+
+.human-section{
+  padding:120px 5vw;
+}
+
+
+.human-inner{
+  width:min(1150px,100%);
+  margin:0 auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:70px;
+}
+
+
+.human-copy{
+  max-width:700px;
+}
+
+
+.human-title{
+  margin:0;
+
+  font-family:var(--display);
+
+  font-size:clamp(55px,8vw,110px);
+
+  line-height:.8;
+
+  letter-spacing:-.06em;
+
+  text-transform:uppercase;
+}
+
+
+.human-title span{
+  color:var(--red);
+}
+
+
+.human-text{
+  margin-top:35px;
+
+  font-family:var(--body);
+
+  font-size:14px;
+
+  line-height:1.7;
+}
+
+
+.human-appy{
+  width:220px;
+
+  height:220px;
+
+  object-fit:contain;
+
+  filter:drop-shadow(10px 10px 0 var(--black));
+
+  animation:appyFloat 3s ease-in-out infinite;
+}
+
+
+@keyframes appyFloat{
+
+  0%,100%{
+    transform:translateY(0) rotate(-2deg);
+  }
+
+  50%{
+    transform:translateY(-12px) rotate(2deg);
+  }
+
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.thinks-cta{
+  padding:80px 5vw;
+
+  text-align:center;
+}
+
+
+.thinks-cta p{
+  margin:0 0 25px;
+
+  font-family:var(--display);
+
+  font-size:clamp(30px,5vw,65px);
+
+  line-height:.85;
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px){
+
+  .thinks-hero {
+  min-height: 88vh;
+  color: var(--cream);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 110px 5vw 90px;
+}
+.thinks-hero-copy {
+  min-width: 0;
+}
+
+
+  .thinks-hero-description{
+    margin-left:0;
+
+    margin-top:35px;
+  }
+
+
+  .thinks-prop{
+    opacity:.55;
+  }
+
+
+  .thinks-section-header{
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+
+  .pipeline-item{
+    min-height:250px;
+  }
+
+
+  .pipeline-arrow{
+    display:none;
+  }
+
+
+  .pipeline-appy{
+    right:20px;
+  }
+
+
+  .personal-row-title{
+    font-size:23px;
+  }
+
+
+  .connection-node:nth-child(n){
+    margin-left:0;
+  }
+
+
+  .human-inner{
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+
+  .human-appy{
+    align-self:center;
+  }
+
+}
+
+
+@media(max-width:560px){
+
+  .thinks-hero-title{
+    font-size:70px;
+  }
+
+
+  .thinks-statement,
+  .thinks-section,
+  .personal-section,
+  .connection-section,
+  .questions-section,
+  .human-section{
+    padding-top:85px;
+    padding-bottom:85px;
+  }
+
+
+  .pipeline-label{
+    font-size:32px;
+  }
+
+
+  .pipeline-appy{
+    width:90px;
+    height:90px;
+  }
+
+
+  .personal-row{
+    gap:15px;
+  }
+
+
+  .personal-row-number{
+    width:25px;
+  }
+
+
+  .personal-row-arrow{
+    font-size:22px;
+  }
+
+
+  .connection-node-title{
+    font-size:28px;
+  }
+
+}
+
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+
+<body class="thinks-page">
+
+<!-- =========================================================
+     CURSOR
+========================================================= -->
+
+<canvas id="trail-canvas"></canvas>
+
+<div
+  class="custom-appy-cursor"
+  id="appy-cursor">
+</div>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar" id="navbar">
+
+  <div class="nav-inner">
+
+    <a
+      href="index.html"
+      class="nav-logo">
+      SAFEBITE<span class="nav-logo-dot">.</span>
+    </a>
+
+
+    <ul class="nav-links">
+
+      <li class="nav-item">
+
+        <a href="index.html">
+
+          <span class="nav-frame">
+            <img
+              src="assets/appy/static/eat.png"
+              alt="">
+          </span>
+
+          Home
+
+        </a>
+
+      </li>
+
+
+      <li class="nav-item">
+
+        <a href="how-it-works.html">
+
+          <span class="nav-frame">
+            <img
+              src="assets/appy/static/read.png"
+              alt="">
+          </span>
+
+          How It Works
+
+        </a>
+
+      </li>
+
+
+      <li class="nav-item">
+
+        <a href="architecture.html">
+
+          <span class="nav-frame">
+            <img
+              src="assets/appy/static/think.png"
+              alt="">
+          </span>
+
+          How It Thinks
+
+        </a>
+
+      </li>
+
+
+      <li class="nav-item">
+
+        <a href="results.html">
+
+          <span class="nav-frame">
+            <img
+              src="assets/appy/static/sit.png"
+              alt="">
+          </span>
+
+          Results
+
+        </a>
+
+      </li>
+
+
+      <li class="nav-item">
+
+        <a href="about.html">
+
+          <span class="nav-frame">
+            <img
+              src="assets/appy/static/meditate.png"
+              alt="">
+          </span>
+
+          About
+
+        </a>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</nav>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+
+<header class="thinks-hero" data-bg="#BD3647">
+
+  <div class="thinks-hero-inner">
+
+    <div class="thinks-hero-copy">
+      <div class="thinks-kicker">
+        A LOT HAPPENS BEHIND IT
+      </div>
+
+      <h1 class="thinks-hero-title">
+        <span>HOW SAFE</span>
+        <span><span class="outline">BITE</span> THINKS.</span>
+      </h1>
+
+      <p class="thinks-hero-description">
+        You see a scan.
+        SafeBite sees a chain of decisions —
+        from food label to ingredient understanding,
+        from your profile to what might work instead.
+      </p>
+    </div>
+
+    <img
+      class="thinks-hero-appy"
+      src="assets/appy/static/think.png"
+      alt="Appy thinking"
+    />
+
+  </div>
+</header>
+
+
+
+<!-- =========================================================
+     STATEMENT
+========================================================= -->
+
+<section class="thinks-statement" data-bg="#6B66A6">
+
+  <div class="thinks-statement-inner">
+
+    <div class="thinks-statement-label">
+      THE IDEA
+    </div>
+
+
+    <h2 class="thinks-statement-title">
+
+      TURN
+      <em>MESSY</em>
+      FOOD INFORMATION
+      INTO ONE
+      CLEAR
+      DECISION.
+
+    </h2>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PIPELINE
+========================================================= -->
+
+<section class="thinks-section" data-bg="#FCF6E8">
+
+  <div class="thinks-section-inner">
+
+
+    <div class="thinks-section-header">
+
+      <div>
+
+        <div class="thinks-section-kicker">
+          01 / THE PIPELINE
+        </div>
+
+        <h2 class="thinks-section-title">
+          WHAT HAPPENS<br>
+          AFTER THE SCAN
+        </h2>
+
+      </div>
+
+
+      <p class="thinks-section-intro">
+
+        A single interaction hides several
+        smaller decisions. SafeBite moves through
+        them before showing you the result.
+
+      </p>
+
+    </div>
+
+
+    <div class="pipeline">
+
+
+      <article class="pipeline-item">
+
+        <div class="pipeline-number">
+          01
+        </div>
+
+        <div class="pipeline-label">
+          SEE
+        </div>
+
+        <p class="pipeline-description">
+          SafeBite starts with the input you provide:
+          a packaged food label, product information,
+          or another food-related signal.
+        </p>
+
+        <img
+          class="pipeline-appy"
+          src="assets/appy/static/read.png"
+          alt=""
+        >
+
+        <div class="pipeline-arrow">
+          ↓
+        </div>
+
+      </article>
+
+
+      <article class="pipeline-item">
+
+        <div class="pipeline-number">
+          02
+        </div>
+
+        <div class="pipeline-label">
+          READ
+        </div>
+
+        <p class="pipeline-description">
+          The label becomes structured information.
+          Ingredients and relevant text are extracted
+          so the system can work with the actual contents.
+        </p>
+
+        <img
+          class="pipeline-appy"
+          src="assets/appy/static/think.png"
+          alt=""
+        >
+
+        <div class="pipeline-arrow">
+          ↓
+        </div>
+
+      </article>
+
+
+      <article class="pipeline-item">
+
+        <div class="pipeline-number">
+          03
+        </div>
+
+        <div class="pipeline-label">
+          UNDERSTAND
+        </div>
+
+        <p class="pipeline-description">
+          Those ingredients are considered against
+          the person's safety profile rather than
+          being treated as an isolated list.
+        </p>
+
+        <img
+          class="pipeline-appy"
+          src="assets/appy/static/sit.png"
+          alt=""
+        >
+
+        <div class="pipeline-arrow">
+          ↓
+        </div>
+
+      </article>
+
+
+      <article class="pipeline-item">
+
+        <div class="pipeline-number">
+          04
+        </div>
+
+        <div class="pipeline-label">
+          DECIDE
+        </div>
+
+        <p class="pipeline-description">
+          The connected signals become a simpler
+          result — helping the user understand what
+          the food means for them.
+        </p>
+
+        <img
+          class="pipeline-appy"
+          src="assets/appy/static/eat.png"
+          alt=""
+        >
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PERSONALIZATION
+========================================================= -->
+
+<section class="personal-section" data-bg="#141414">
+
+  <div class="personal-inner">
+
+
+    <div class="thinks-section-kicker">
+      02 / PERSONALIZATION
+    </div>
+
+
+    <h2 class="personal-heading">
+
+      THE SAME
+      FOOD
+      CAN MEAN
+      <span>DIFFERENT</span>
+      THINGS.
+
+    </h2>
+
+
+    <p class="personal-copy">
+
+      SafeBite doesn't stop at identifying ingredients.
+      The important question is what those ingredients
+      mean in the context of the person using the system.
+
+    </p>
+
+
+    <div class="personal-flow">
+
+
+      <div class="personal-row">
+
+        <div class="personal-row-number">
+          01
+        </div>
+
+        <div class="personal-row-title">
+          Your profile
+        </div>
+
+        <div class="personal-row-arrow">
+          →
+        </div>
+
+      </div>
+
+
+      <div class="personal-row">
+
+        <div class="personal-row-number">
+          02
+        </div>
+
+        <div class="personal-row-title">
+          Ingredient signals
+        </div>
+
+        <div class="personal-row-arrow">
+          →
+        </div>
+
+      </div>
+
+
+      <div class="personal-row">
+
+        <div class="personal-row-number">
+          03
+        </div>
+
+        <div class="personal-row-title">
+          Context
+        </div>
+
+        <div class="personal-row-arrow">
+          →
+        </div>
+
+      </div>
+
+
+      <div class="personal-row">
+
+        <div class="personal-row-number">
+          04
+        </div>
+
+        <div class="personal-row-title">
+          Your answer
+        </div>
+
+        <div class="personal-row-arrow">
+          ✓
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONNECTIONS
+========================================================= -->
+
+<section class="connection-section" data-bg="#8FA3C4">
+
+  <div class="connection-inner">
+
+
+    <div class="thinks-section-kicker">
+      03 / THE CONNECTIONS
+    </div>
+
+
+    <h2 class="thinks-section-title">
+      NOT JUST<br>
+      A SCANNER.
+    </h2>
+
+
+    <div class="connection-map">
+
+
+      <div class="connection-node">
+
+        <div class="connection-node-label">
+          INPUT
+        </div>
+
+        <div class="connection-node-title">
+          WHAT YOU SEE
+        </div>
+
+        <div class="connection-node-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="connection-node">
+
+        <div class="connection-node-label">
+          EXTRACTION
+        </div>
+
+        <div class="connection-node-title">
+          WHAT THE LABEL SAYS
+        </div>
+
+        <div class="connection-node-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="connection-node">
+
+        <div class="connection-node-label">
+          PERSONALIZATION
+        </div>
+
+        <div class="connection-node-title">
+          WHAT MATTERS TO YOU
+        </div>
+
+        <div class="connection-node-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="connection-node">
+
+        <div class="connection-node-label">
+          RECOMMENDATION
+        </div>
+
+        <div class="connection-node-title">
+          WHAT YOU CAN TRY INSTEAD
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTIONS
+========================================================= -->
+
+<section class="questions-section" data-bg="#FCF6E8">
+
+  <div class="questions-inner">
+
+
+    <div class="thinks-section-kicker">
+      04 / THE SIMPLE VERSION
+    </div>
+
+
+    <h2 class="thinks-section-title">
+      COMPLEX<br>
+      UNDERNEATH.<br>
+      SIMPLE ON TOP.
+    </h2>
+
+
+    <div class="questions-list">
+
+
+      <div class="question open">
+
+        <button
+          class="question-button"
+          type="button">
+
+          <span>
+            Can I eat this?
+          </span>
+
+          <span class="question-symbol">
+            +
+          </span>
+
+        </button>
+
+
+        <div class="question-answer">
+
+          <p>
+            That's the scan flow. SafeBite reads
+            the food information and compares it
+            against the safety context available
+            for the user.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="question">
+
+        <button
+          class="question-button"
+          type="button">
+
+          <span>
+            What can I have instead?
+          </span>
+
+          <span class="question-symbol">
+            +
+          </span>
+
+        </button>
+
+
+        <div class="question-answer">
+
+          <p>
+            That's where the craving flow comes in.
+            Instead of simply finding another food,
+            SafeBite can work from the taste,
+            texture or experience you're actually
+            looking for.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="question">
+
+        <button
+          class="question-button"
+          type="button">
+
+          <span>
+            What happens over time?
+          </span>
+
+          <span class="question-symbol">
+            +
+          </span>
+
+        </button>
+
+
+        <div class="question-answer">
+
+          <p>
+            Scan history creates another layer of
+            context. Patterns can become useful signals
+            for future interactions and proactive
+            recommendations.
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     HUMAN RESULT
+========================================================= -->
+
+<section class="human-section" data-bg="#F2DB66">
+
+  <div class="human-inner">
+
+
+    <div class="human-copy">
+
+      <h2 class="human-title">
+
+        ALL THAT
+        <span>THINKING.</span>
+
+        ONE SIMPLE
+        ANSWER.
+
+      </h2>
+
+
+      <p class="human-text">
+
+        The technology should disappear when the
+        decision appears. That's the point:
+        SafeBite handles the complexity so the user
+        can focus on the food in front of them.
+
+      </p>
+
+    </div>
+
+
+    <img
+      class="human-appy"
+      src="assets/appy/static/meditate.png"
+      alt="Appy"
+    >
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="thinks-cta" data-bg="#FFF8E0">
+
+  <p>
+    That's what SafeBite is built to answer.
+  </p>
+
+
+  <a
+    href="results.html"
+    class="brutal-btn brutal-btn--yellow">
+
+    SEE THE RESULTS →
+
+  </a>
+
+</section>
+
+
+<!-- =========================================================
+     SHARED FOOTER
+========================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-bg="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram">
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5">
+        </rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4">
+        </circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link">
+      HOW IT WORKS
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link">
+      HOW IT THINKS
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link">
+      RESULTS
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link">
+      ABOUT
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit">
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay">
+
+    <img src="assets/footer/vase-flowers.png" class="fl-item" id="fl-vase" alt="" data-depth="0.10">
+
+    <img src="assets/footer/wine-glass-1.png" class="fl-item" id="fl-wineglass1" alt="" data-depth="0.06">
+
+    <img src="assets/footer/fork.png" class="fl-item" id="fl-fork" alt="" data-depth="0.08" data-rotate="-8">
+
+    <img src="assets/footer/sausage-plate.png" class="fl-item" id="fl-sausage" alt="" data-depth="0.05">
+
+    <img src="assets/footer/wine-bottle.png" class="fl-item" id="fl-bottle" alt="" data-depth="0.09">
+
+    <img src="assets/footer/candle-2.png" class="fl-item" id="fl-candle2" alt="" data-depth="0.07">
+
+    <img src="assets/footer/salt-pepper.png" class="fl-item" id="fl-saltpepper" alt="" data-depth="0.11">
+
+    <img src="assets/footer/cheese-block.png" class="fl-item" id="fl-cheese" alt="" data-depth="0.06">
+
+    <img src="assets/footer/candle-1.png" class="fl-item" id="fl-candle1" alt="" data-depth="0.08">
+
+    <img src="assets/footer/olives-bowl.png" class="fl-item" id="fl-olivesbowl" alt="" data-depth="0.05">
+
+    <img src="assets/footer/olives-loose.png" class="fl-item" id="fl-olivesloose" alt="" data-depth="0.09">
+
+    <img src="assets/footer/jar.png" class="fl-item" id="fl-jar" alt="" data-depth="0.07">
+
+    <img src="assets/footer/bread-board.png" class="fl-item" id="fl-bread" alt="" data-depth="0.04">
+
+    <img src="assets/footer/spoon.png" class="fl-item" id="fl-spoon" alt="" data-depth="0.10" data-rotate="6">
+
+    <img src="assets/footer/wine-glass-2.png" class="fl-item" id="fl-wineglass2" alt="" data-depth="0.06">
+
+    <img src="assets/footer/charcuterie-board.png" class="fl-item" id="fl-charcuterie" alt="" data-depth="0.03">
+
+    <img src="assets/footer/knife.png" class="fl-item" id="fl-knife" alt="" data-depth="0.08" data-rotate="-4">
+
+    <img src="assets/footer/hat-plate.png" class="fl-item" id="fl-hat" alt="" data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+
+<script src="base-script.js"></script>
+<script src="appy-sprites.js"></script>
+
+
+<script>
+
+/* =========================================================
+   FAQ ACCORDION
+========================================================= */
+
+document
+  .querySelectorAll('.question-button')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        const question =
+          button.closest('.question');
+
+
+        document
+          .querySelectorAll('.question.open')
+          .forEach(openQuestion => {
+
+            if(openQuestion !== question){
+
+              openQuestion.classList.remove(
+                'open'
+              );
+
+            }
+
+          });
+
+
+        question.classList.toggle(
+          'open'
+        );
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   GSAP REVEALS
+========================================================= */
+
+if(window.gsap){
+
+  gsap.from(
+    '.thinks-hero-inner > *',
+    {
+      y:45,
+      opacity:0,
+      duration:.85,
+      stagger:.12,
+      ease:'power3.out'
+    }
+  );
+
+
+  gsap.utils
+    .toArray(
+      '.thinks-statement, .thinks-section, .personal-section, .connection-section, .questions-section, .human-section'
+    )
+    .forEach(section => {
+
+      gsap.from(
+        section.querySelectorAll(
+          '.thinks-section-title, .thinks-statement-title, .personal-heading, .thinks-section-kicker'
+        ),
+        {
+          y:35,
+          opacity:0,
+          duration:.7,
+
+          scrollTrigger:{
+            trigger:section,
+            start:'top 82%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+  gsap.utils
+    .toArray('.pipeline-item')
+    .forEach((item,index) => {
+
+      gsap.from(
+        item,
+        {
+          x:45,
+          opacity:0,
+          duration:.6,
+          delay:index * .08,
+
+          scrollTrigger:{
+            trigger:item,
+            start:'top 88%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+
+  gsap.utils
+    .toArray('.connection-node')
+    .forEach((node,index) => {
+
+      gsap.from(
+        node,
+        {
+          x:-35,
+          opacity:0,
+          duration:.55,
+          delay:index * .08,
+
+          scrollTrigger:{
+            trigger:node,
+            start:'top 88%',
+            once:true
+          }
+        }
+      );
+
+    });
+
+}
+
+</script>
+
+
+<script>
+/* SCROLL-LINKED BACKGROUND BLEND — body colour glides from one
+   section's data-bg to the next as you scroll (no hard jumps). */
+(function(){
+  const secs=[...document.querySelectorAll('[data-bg]')];
+  if(secs.length<2) return;
+  const rgb=h=>{h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.substr(i,2),16));};
+  const cols=secs.map(s=>rgb(s.dataset.bg));
+  function paint(){
+    const ref=innerHeight*0.5;      // blend happens around the middle of the screen
+    const zone=innerHeight*0.8;     // bigger = longer, softer gradient
+    let c=cols[0];
+    for(let i=1;i<secs.length;i++){
+      const top=secs[i].getBoundingClientRect().top;
+      const t=Math.min(1,Math.max(0,(ref-(top-zone/2))/zone));
+      if(t>=1){c=cols[i];continue;}
+      if(t>0){c=cols[i-1].map((v,k)=>v+(cols[i][k]-v)*t);}
+      break;
+    }
+    document.body.style.backgroundColor='rgb('+c.map(Math.round).join(',')+')';
+  }
+  addEventListener('scroll',paint,{passive:true});
+  addEventListener('resize',paint);
+  paint();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js">
+  
+</script>
+<script>
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('#signout-link');
+    if (!link) return;
+    e.preventDefault();
+    try { localStorage.clear(); sessionStorage.clear(); } catch (err) {}
+    window.location.href = 'login.html';
+  });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeBite — Dashboard</title>
+<script>if(!localStorage.getItem('safebite_token')) location.replace('login.html');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+/* =========================================================
+   SAFEBITE DASHBOARD — PAGE LAYER
+   Keeps the existing SafeBite global theme untouched.
+========================================================= */
+
+.dashboard-page{
+  background:var(--cream);
+  overflow-x:hidden;
+overflow-y:auto;
+}
+
+.dashboard-main{
+  width:100%;
+  padding:70px 0 120px;
+}
+
+.dashboard-shell{
+  width:min(1240px,92vw);
+  margin:0 auto;
+}
+
+/* ---------- HERO ---------- */
+
+.dashboard-hero{
+  min-height:430px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:60px;
+  padding:55px 0 80px;
+  position:relative;
+}
+
+.dashboard-hero-copy{
+  max-width:720px;
+  position:relative;
+  z-index:2;
+}
+
+.dashboard-eyebrow{
+  font-family:var(--body);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  margin-bottom:18px;
+  text-transform:uppercase;
+}
+
+.dashboard-title{
+  margin:0;
+  font-family:var(--display);
+  font-size:clamp(65px,9vw,145px);
+  line-height:.78;
+  letter-spacing:-.065em;
+  text-transform:uppercase;
+}
+
+.dashboard-title span{
+  display:block;
+}
+
+.dashboard-title .accent{
+  color:var(--red);
+}
+
+.dashboard-intro{
+  max-width:570px;
+  margin:35px 0 0;
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+}
+
+.dashboard-appy-wrap{
+  width:320px;
+  height:320px;
+  flex:none;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.dashboard-appy-paper{
+  width:275px;
+  height:275px;
+  background:var(--yellow);
+  border:var(--border-thick);
+  box-shadow:var(--shadow-lg);
+  transform:rotate(5deg);
+  position:absolute;
+}
+
+.dashboard-appy{
+  width:245px;
+  max-height:290px;
+  object-fit:contain;
+  position:relative;
+  z-index:2;
+  filter:drop-shadow(8px 8px 0 var(--black));
+}
+
+.dashboard-appy-label{
+  position:absolute;
+  right:-8px;
+  bottom:5px;
+  z-index:4;
+  background:var(--cream);
+  border:3px solid var(--black);
+  padding:11px 16px;
+  font-family:var(--display);
+  font-size:15px;
+  transform:rotate(-4deg);
+  box-shadow:6px 6px 0 var(--black);
+}
+
+/* ---------- STATUS STRIP ---------- */
+
+.dashboard-status{
+  background:var(--purple);
+  color:var(--cream);
+  border:var(--border-thick);
+  box-shadow:var(--shadow-md);
+  padding:28px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30px;
+  margin-bottom:70px;
+}
+
+.dashboard-status-copy{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.status-dot{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:var(--green);
+  border:3px solid var(--black);
+  flex:none;
+  animation:statusPulse 1.8s infinite;
+}
+
+@keyframes statusPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.25)}
+}
+
+.dashboard-status strong{
+  font-family:var(--display);
+  font-size:24px;
+  text-transform:uppercase;
+}
+
+.dashboard-status p{
+  margin:4px 0 0;
+  font-family:var(--body);
+  font-size:13px;
+}
+
+.status-link{
+  color:var(--black);
+  background:var(--yellow);
+  border:3px solid var(--black);
+  box-shadow:5px 5px 0 var(--black);
+  padding:13px 18px;
+  text-decoration:none;
+  font-family:var(--display);
+  font-size:13px;
+  transition:.2s ease;
+}
+
+.status-link:hover{
+  transform:translate(3px,3px);
+  box-shadow:2px 2px 0 var(--black);
+}
+
+/* ---------- SECTION ---------- */
+
+.dashboard-section{
+  margin-top:90px;
+}
+
+.dashboard-section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+  margin-bottom:30px;
+  border-bottom:3px solid var(--black);
+  padding-bottom:18px;
+}
+
+.dashboard-section-kicker{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.dashboard-section-title{
+  margin:5px 0 0;
+  font-family:var(--display);
+  font-size:clamp(42px,6vw,82px);
+  line-height:.85;
+  text-transform:uppercase;
+  letter-spacing:-.05em;
+}
+
+/* ---------- PROFILE SNAPSHOT ---------- */
+
+.profile-snapshot{
+  display:flex;
+  align-items:stretch;
+  border:var(--border-thick);
+  box-shadow:var(--shadow-md);
+  background:var(--cream);
+}
+
+.profile-main{
+  flex:1;
+  padding:35px;
+}
+
+.profile-main h3{
+  font-family:var(--display);
+  font-size:32px;
+  margin:0 0 8px;
+  text-transform:uppercase;
+}
+
+.profile-main p{
+  font-family:var(--body);
+  line-height:1.6;
+  margin:0;
+}
+
+.profile-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:25px;
+}
+
+.profile-tag{
+  padding:9px 13px;
+  border:2px solid var(--black);
+  background:var(--white);
+  font-family:var(--body);
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.profile-side{
+  width:300px;
+  background:var(--slate);
+  border-left:3px solid var(--black);
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.profile-side-label{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.profile-side-number{
+  font-family:var(--display);
+  font-size:70px;
+  line-height:.85;
+  margin:12px 0;
+}
+
+.profile-progress{
+  height:12px;
+  border:2px solid var(--black);
+  background:var(--cream);
+  overflow:hidden;
+}
+
+.profile-progress span{
+  display:block;
+  width:80%;
+  height:100%;
+  background:var(--green);
+}
+
+/* ---------- STATS ---------- */
+
+.dashboard-stats{
+  display:flex;
+  border-top:3px solid var(--black);
+  border-left:3px solid var(--black);
+}
+
+.dashboard-stat{
+  flex:1;
+  min-height:170px;
+  padding:25px;
+  border-right:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+}
+
+.dashboard-stat:nth-child(1){background:var(--yellow)}
+.dashboard-stat:nth-child(2){background:var(--green)}
+.dashboard-stat:nth-child(3){background:var(--red);color:var(--cream)}
+.dashboard-stat:nth-child(4){background:var(--slate)}
+
+.dashboard-stat-number{
+  font-family:var(--display);
+  font-size:64px;
+  line-height:.8;
+}
+
+.dashboard-stat-label{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  margin-top:24px;
+  text-transform:uppercase;
+}
+
+/* ---------- NUDGE ---------- */
+
+.nudge-card{
+  margin-top:70px;
+  background:var(--yellow);
+  border:var(--border-thick);
+  box-shadow:var(--shadow-md);
+  min-height:170px;
+  padding:30px;
+  display:flex;
+  align-items:center;
+  gap:30px;
+  position:relative;
+  overflow:hidden;
+}
+
+.nudge-sprite{
+  width:110px;
+  height:110px;
+  flex:none;
+  background-image:url("assets/appy/static/think.png");
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  filter:drop-shadow(5px 5px 0 var(--black));
+}
+
+.nudge-kicker{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  margin-bottom:10px;
+}
+
+.nudge-text{
+  max-width:650px;
+  font-family:var(--display);
+  font-size:25px;
+  line-height:1.15;
+  text-transform:uppercase;
+}
+
+.nudge-dismiss{
+  position:absolute;
+  top:14px;
+  right:15px;
+  width:35px;
+  height:35px;
+  border:2px solid var(--black);
+  background:var(--cream);
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* ---------- ACTIONS ---------- */
+
+.action-panel{
+  display:flex;
+  align-items:stretch;
+  border:var(--border-thick);
+  box-shadow:var(--shadow-md);
+}
+
+.primary-action{
+  flex:1;
+  background:var(--purple);
+  color:var(--cream);
+  text-decoration:none;
+  padding:38px;
+  min-height:250px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:.25s ease;
+}
+
+.primary-action:hover{
+  background:var(--red);
+}
+
+.action-appy{
+  width:110px;
+  height:110px;
+  object-fit:contain;
+  filter:drop-shadow(5px 5px 0 var(--black));
+}
+
+.action-title{
+  font-family:var(--display);
+  font-size:48px;
+  line-height:.85;
+  text-transform:uppercase;
+}
+
+.action-arrow{
+  font-family:var(--display);
+  font-size:28px;
+  align-self:flex-end;
+}
+
+.craving-panel{
+  flex:1;
+  padding:38px;
+  background:var(--cream);
+  border-left:3px solid var(--black);
+}
+
+.craving-panel label{
+  display:block;
+  font-family:var(--display);
+  font-size:27px;
+  line-height:1;
+  text-transform:uppercase;
+  margin-bottom:25px;
+}
+
+.craving-input-row{
+  display:flex;
+}
+
+.craving-input{
+  flex:1;
+  min-width:0;
+  border:3px solid var(--black);
+  border-right:0;
+  padding:18px;
+  background:var(--white);
+  font-family:var(--body);
+  font-size:14px;
+  outline:none;
+}
+
+.craving-input:focus{
+  background:var(--yellow);
+}
+
+.craving-submit{
+  width:75px;
+  border:3px solid var(--black);
+  background:var(--red);
+  color:var(--cream);
+  font-family:var(--display);
+  cursor:pointer;
+  font-size:16px;
+}
+
+.craving-note{
+  font-family:var(--body);
+  font-size:12px;
+  line-height:1.5;
+  margin-top:18px;
+}
+
+/* ---------- RECENT SCANS ---------- */
+
+.scan-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-bottom:20px;
+}
+
+.scan-count{
+  font-family:var(--body);
+  font-size:13px;
+}
+
+.history-link{
+  color:var(--black);
+  font-family:var(--display);
+  font-size:13px;
+  text-decoration:underline;
+}
+
+.recent-scans-strip{
+  display:flex;
+  flex-direction:column;
+  border-top:3px solid var(--black);
+}
+
+.dashboard-scan{
+  min-height:100px;
+  border-bottom:3px solid var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  padding:22px 15px;
+  transition:.2s ease;
+}
+
+.dashboard-scan:hover{
+  padding-left:25px;
+  background:var(--yellow);
+}
+
+.scan-left{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.scan-icon{
+  width:55px;
+  height:55px;
+  background:var(--purple);
+  border:3px solid var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--cream);
+  font-family:var(--display);
+  font-size:20px;
+}
+
+.scan-product{
+  font-family:var(--display);
+  font-size:22px;
+  text-transform:uppercase;
+}
+
+.scan-date{
+  font-family:var(--body);
+  font-size:11px;
+  margin-top:5px;
+}
+
+.scan-verdict{
+  padding:9px 13px;
+  border:2px solid var(--black);
+  font-family:var(--body);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.scan-verdict.safe{background:var(--green)}
+.scan-verdict.flagged{background:var(--red);color:var(--cream)}
+.scan-verdict.unclear{background:var(--slate)}
+
+/* ---------- WEEKLY ACTIVITY ---------- */
+
+.activity-panel{
+  background:var(--black);
+  color:var(--cream);
+  border:3px solid var(--black);
+  box-shadow:var(--shadow-md);
+  padding:35px;
+}
+
+.activity-copy{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+  margin-bottom:35px;
+}
+
+.activity-copy h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:45px;
+  text-transform:uppercase;
+  line-height:.85;
+}
+
+.activity-total{
+  font-family:var(--display);
+  font-size:55px;
+  color:var(--yellow);
+}
+
+.activity-chart{
+  height:230px;
+  display:flex;
+  align-items:flex-end;
+  gap:14px;
+  border-bottom:2px solid var(--cream);
+  padding:0 5px;
+}
+
+.activity-day{
+  flex:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  gap:9px;
+}
+
+.activity-bar{
+  width:100%;
+  max-width:60px;
+  min-height:8px;
+  background:var(--yellow);
+  border:2px solid var(--cream);
+  transform-origin:bottom;
+}
+
+.activity-day span{
+  font-family:var(--body);
+  font-size:10px;
+}
+
+/* ---------- INSIGHT ---------- */
+
+.insight-card{
+  display:flex;
+  align-items:center;
+  gap:40px;
+  background:var(--green);
+  border:var(--border-thick);
+  box-shadow:var(--shadow-md);
+  padding:40px;
+}
+
+.insight-appy{
+  width:180px;
+  height:180px;
+  object-fit:contain;
+  flex:none;
+  filter:drop-shadow(7px 7px 0 var(--black));
+}
+
+.insight-kicker{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.insight-title{
+  font-family:var(--display);
+  font-size:clamp(35px,5vw,65px);
+  line-height:.9;
+  text-transform:uppercase;
+  margin:12px 0;
+}
+
+.insight-copy{
+  font-family:var(--body);
+  max-width:600px;
+  line-height:1.6;
+  margin:0;
+}
+
+/* ---------- QUICK ACTIONS ---------- */
+
+.quick-actions{
+  display:flex;
+  border-top:3px solid var(--black);
+  border-left:3px solid var(--black);
+}
+
+.quick-action{
+  flex:1;
+  min-height:150px;
+  padding:25px;
+  border-right:3px solid var(--black);
+  border-bottom:3px solid var(--black);
+  text-decoration:none;
+  color:var(--black);
+  transition:.2s ease;
+}
+
+.quick-action:nth-child(1){background:var(--slate)}
+.quick-action:nth-child(2){background:var(--yellow)}
+.quick-action:nth-child(3){background:var(--purple);color:var(--cream)}
+.quick-action:nth-child(4){background:var(--cream)}
+
+.quick-action:hover{
+  transform:translateY(-6px);
+  box-shadow:0 8px 0 var(--black);
+}
+
+.quick-number{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:800;
+}
+
+.quick-title{
+  margin-top:35px;
+  font-family:var(--display);
+  font-size:25px;
+  line-height:.9;
+  text-transform:uppercase;
+}
+
+/* ---------- FOOTER CTA ---------- */
+
+.dashboard-end{
+  margin-top:110px;
+  background:var(--red);
+  color:var(--cream);
+  border:var(--border-thick);
+  box-shadow:var(--shadow-lg);
+  padding:55px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:40px;
+}
+
+.dashboard-end h2{
+  margin:0;
+  font-family:var(--display);
+  font-size:clamp(42px,6vw,80px);
+  line-height:.82;
+  text-transform:uppercase;
+}
+
+.dashboard-end-appy{
+  width:180px;
+  height:180px;
+  object-fit:contain;
+  filter:drop-shadow(7px 7px 0 var(--black));
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:900px){
+  .dashboard-hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .dashboard-appy-wrap{
+    align-self:center;
+  }
+
+  .dashboard-stats{
+    flex-wrap:wrap;
+  }
+
+  .dashboard-stat{
+    flex:1 1 50%;
+  }
+
+  .profile-snapshot{
+    flex-direction:column;
+  }
+
+  .profile-side{
+    width:auto;
+    border-left:0;
+    border-top:3px solid var(--black);
+  }
+
+  .action-panel{
+    flex-direction:column;
+  }
+
+  .craving-panel{
+    border-left:0;
+    border-top:3px solid var(--black);
+  }
+
+  .quick-actions{
+    flex-wrap:wrap;
+  }
+
+  .quick-action{
+    flex:1 1 50%;
+  }
+}
+
+@media(max-width:600px){
+  .dashboard-main{
+    padding-top:40px;
+  }
+
+  .dashboard-title{
+    font-size:65px;
+  }
+
+  .dashboard-appy-wrap{
+    width:250px;
+    height:250px;
+  }
+
+  .dashboard-appy-paper{
+    width:210px;
+    height:210px;
+  }
+
+  .dashboard-appy{
+    width:190px;
+  }
+
+  .dashboard-status{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .dashboard-stats{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .dashboard-stat{
+    flex:1;
+  }
+
+  .nudge-card{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .activity-chart{
+    gap:5px;
+  }
+
+  .activity-bar{
+    max-width:35px;
+  }
+
+  .insight-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .dashboard-end{
+    flex-direction:column;
+    align-items:flex-start;
+    padding:35px;
+  }
+
+  .dashboard-end-appy{
+    align-self:center;
+  }
+}
+</style>
+</head>
+
+<body class="dashboard-page">
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+      <li class="nav-item"><a href="settings.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>Settings</a></li>
+      <li class="nav-item"><a href="#" id="signout-link"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Sign out</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<main class="dashboard-main">
+
+<div class="dashboard-shell">
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="dashboard-hero" data-color="#6B66A6">
+
+  <div class="dashboard-hero-copy">
+
+    <div class="dashboard-eyebrow">
+      SAFEBITE / PERSONAL FOOD SAFETY
+    </div>
+
+    <h1 class="dashboard-title">
+      <span>HEY</span>
+      <span>THERE<span class="accent">.</span></span>
+    </h1>
+
+    <p class="dashboard-intro">
+      Your personal food-safety space. Scan something,
+      tell Appy what you're craving, or check what you've
+      already learned about your food.
+    </p>
+
+  </div>
+
+  <div class="dashboard-appy-wrap">
+
+    <div class="dashboard-appy-paper"></div>
+
+    <img
+      class="dashboard-appy"
+      src="assets/appy/static/sit.png"
+      alt="Appy sitting"
+    >
+
+    <div class="dashboard-appy-label">
+      APPY IS READY.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PROFILE STATUS
+========================================================= -->
+
+<section class="dashboard-status" data-color="#A2BF8A">
+
+  <div class="dashboard-status-copy">
+
+    <span class="status-dot"></span>
+
+    <div>
+      <strong>Your safety profile is active</strong>
+      <p>
+        SafeBite is using your preferences when evaluating food.
+      </p>
+    </div>
+
+  </div>
+
+  <a href="profile.html" class="status-link">
+    VIEW PROFILE →
+  </a>
+
+</section>
+
+
+<!-- =========================================================
+     PROFILE SNAPSHOT
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        01 / YOUR PROFILE
+      </div>
+
+      <h2 class="dashboard-section-title">
+        What Appy<br>knows.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="profile-snapshot">
+
+    <div class="profile-main">
+
+      <h3 id="dashboard-profile-name">
+        Your food profile
+      </h3>
+
+      <p>
+        These preferences help SafeBite understand what
+        matters when a product is scanned.
+      </p>
+
+      <div class="profile-tags" id="profile-tags">
+
+        <span class="profile-tag">Loading profile...</span>
+
+      </div>
+
+    </div>
+
+
+    <div class="profile-side">
+
+      <div class="profile-side-label">
+        PROFILE COVERAGE
+      </div>
+
+      <div class="profile-side-number" id="profile-coverage">
+        —
+      </div>
+
+      <div class="profile-progress">
+        <span id="profile-progress-bar"></span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     STATS
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        02 / YOUR ACTIVITY
+      </div>
+
+      <h2 class="dashboard-section-title">
+        At a glance.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="dashboard-stats">
+
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-number" id="stat-total">—</div>
+      <div class="dashboard-stat-label">Foods Checked</div>
+    </div>
+
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-number" id="stat-safe">—</div>
+      <div class="dashboard-stat-label">Safe Choices</div>
+    </div>
+
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-number" id="stat-flagged">—</div>
+      <div class="dashboard-stat-label">Flagged</div>
+    </div>
+
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-number" id="stat-unclear">—</div>
+      <div class="dashboard-stat-label">Needs Review</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PROACTIVE NUDGE
+========================================================= -->
+
+<section class="nudge-card" id="nudge-card">
+
+  <div class="nudge-sprite"></div>
+
+  <div class="nudge-text">
+
+    <div class="nudge-kicker">
+      BEFORE YOU EVEN SCAN
+    </div>
+
+    <span id="nudge-message">
+      Appy is checking your recent activity for patterns.
+    </span>
+
+  </div>
+
+  <button
+    class="nudge-dismiss"
+    id="nudge-dismiss"
+    aria-label="Dismiss"
+  >
+    ×
+  </button>
+
+</section>
+
+
+<!-- =========================================================
+     PRIMARY ACTIONS
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        03 / WHAT NOW?
+      </div>
+
+      <h2 class="dashboard-section-title">
+        Make a<br>move.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="action-panel">
+
+    <a href="scan.html" class="primary-action">
+
+      <img
+        class="action-appy"
+        src="assets/appy/static/read.png"
+        alt="Appy reading a food label"
+      >
+
+      <div class="action-title">
+        Scan<br>A Label
+      </div>
+
+      <div class="action-arrow">
+        →
+      </div>
+
+    </a>
+
+
+    <div class="craving-panel">
+
+      <form id="dash-craving-form">
+
+        <label for="dash-craving-input">
+          Or tell Appy what you're craving.
+        </label>
+
+        <div class="craving-input-row">
+
+          <input
+            type="text"
+            id="dash-craving-input"
+            class="craving-input"
+            placeholder="something crunchy + sweet"
+            autocomplete="off"
+          >
+
+          <button
+            type="submit"
+            class="craving-submit"
+          >
+            GO
+          </button>
+
+        </div>
+
+        <p class="craving-note">
+          Appy will carry your craving into the recommendation
+          flow and help you find a better match.
+        </p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     RECENT SCANS
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        04 / YOUR HISTORY
+      </div>
+
+      <h2 class="dashboard-section-title">
+        Recent<br>bites.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="scan-toolbar">
+
+    <div class="scan-count" id="scan-count">
+      Loading your latest scans...
+    </div>
+
+    <a href="history.html" class="history-link">
+      VIEW ALL HISTORY →
+    </a>
+
+  </div>
+
+
+  <div
+    class="recent-scans-strip"
+    id="recent-scans-strip"
+  >
+
+    <div class="dashboard-scan">
+      <div class="scan-left">
+
+        <div class="scan-icon">...</div>
+
+        <div>
+          <div class="scan-product">
+            Loading scans
+          </div>
+
+          <div class="scan-date">
+            Please wait
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     WEEKLY ACTIVITY
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        05 / YOUR RHYTHM
+      </div>
+
+      <h2 class="dashboard-section-title">
+        This<br>week.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="activity-panel">
+
+    <div class="activity-copy">
+
+      <h3>
+        How often<br>you checked.
+      </h3>
+
+      <div
+        class="activity-total"
+        id="activity-total"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div
+      class="activity-chart"
+      id="activity-chart"
+    >
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:20%"></div>
+        <span>MON</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:35%"></div>
+        <span>TUE</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:55%"></div>
+        <span>WED</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:30%"></div>
+        <span>THU</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:75%"></div>
+        <span>FRI</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:50%"></div>
+        <span>SAT</span>
+      </div>
+
+      <div class="activity-day">
+        <div class="activity-bar" style="height:25%"></div>
+        <span>SUN</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     INSIGHT
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        06 / APPY NOTICED
+      </div>
+
+      <h2 class="dashboard-section-title">
+        One little<br>pattern.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="insight-card">
+
+    <img
+      class="insight-appy"
+      src="assets/appy/static/think.png"
+      alt="Appy thinking"
+    >
+
+    <div>
+
+      <div class="insight-kicker">
+        PERSONALIZED SIGNAL
+      </div>
+
+      <h3
+        class="insight-title"
+        id="dashboard-insight-title"
+      >
+        Your scans<br>tell a story.
+      </h3>
+
+      <p
+        class="insight-copy"
+        id="dashboard-insight-copy"
+      >
+        As you scan more foods, SafeBite can surface
+        recurring ingredients, verdicts and craving patterns
+        that may be useful when making your next choice.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUICK ACTIONS
+========================================================= -->
+
+<section class="dashboard-section">
+
+  <div class="dashboard-section-head">
+
+    <div>
+      <div class="dashboard-section-kicker">
+        07 / KEEP EXPLORING
+      </div>
+
+      <h2 class="dashboard-section-title">
+        Around<br>SafeBite.
+      </h2>
+    </div>
+
+  </div>
+
+
+  <div class="quick-actions">
+
+    <a href="history.html" class="quick-action">
+
+      <div class="quick-number">01</div>
+
+      <div class="quick-title">
+        Scan<br>History
+      </div>
+
+    </a>
+
+
+    <a href="profile.html" class="quick-action">
+
+      <div class="quick-number">02</div>
+
+      <div class="quick-title">
+        Edit<br>Profile
+      </div>
+
+    </a>
+
+
+    <a href="craving-search.html" class="quick-action">
+
+      <div class="quick-number">03</div>
+
+      <div class="quick-title">
+        Find A<br>Swap
+      </div>
+
+    </a>
+
+
+    <a href="how-it-works.html" class="quick-action">
+
+      <div class="quick-number">04</div>
+
+      <div class="quick-title">
+        How It<br>Works
+      </div>
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL APPY CTA
+========================================================= -->
+
+<section class="dashboard-end">
+
+  <h2>
+    One scan<br>at a time.
+  </h2>
+
+  <img
+    class="dashboard-end-appy"
+    src="assets/appy/static/eat.png"
+    alt="Appy eating"
+  >
+
+</section>
+
+</div>
+</main>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+<script>
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
+
+const dashboardProfileURL = (location.hostname.endsWith('.app.github.dev') ? location.origin.replace(/-[0-9]+[.]/, '-8000.') : 'http://localhost:8000') + '/api/profile';
+const dashboardScansURL = (location.hostname.endsWith('.app.github.dev') ? location.origin.replace(/-[0-9]+[.]/, '-8000.') : 'http://localhost:8000') + '/api/scans';
+
+let dashboardScans = [];
+
+
+/* ---------- HELPERS ---------- */
+
+function escapeDashboardHTML(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+
+function normaliseDashboardVerdict(value){
+
+  const v = String(value || '')
+    .toLowerCase()
+    .trim();
+
+  if(['yes','safe','pass','approved'].includes(v)){
+    return 'safe';
+  }
+
+  if(['no','unsafe','flagged','reject','rejected'].includes(v)){
+    return 'flagged';
+  }
+
+  return 'unclear';
+}
+
+
+function getScanName(scan){
+
+  return (
+    scan.productName ||
+    scan.product_name ||
+    scan.name ||
+    scan.product ||
+    scan.foodName ||
+    'Unnamed food'
+  );
+
+}
+
+
+function getScanDate(scan){
+
+  const value =
+    scan.createdAt ||
+    scan.created_at ||
+    scan.scannedAt ||
+    scan.scanned_at ||
+    scan.timestamp ||
+    scan.date;
+
+  if(!value){
+    return 'Date unavailable';
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return String(value);
+  }
+
+  return date.toLocaleDateString(undefined,{
+    day:'numeric',
+    month:'short',
+    year:'numeric'
+  });
+
+}
+
+
+/* =========================================================
+   LOAD PROFILE
+========================================================= */
+
+async function loadDashboardProfile(){
+
+  const tags = document.getElementById('profile-tags');
+
+  try{
+
+    const response = await fetch(dashboardProfileURL);
+
+    if(!response.ok){
+      throw new Error('Profile request failed');
+    }
+
+    const profile = await response.json();
+
+    const allergens =
+      Array.isArray(profile.allergens)
+        ? profile.allergens
+        : [];
+
+    const name =
+      profile.name ||
+      profile.full_name ||
+      profile.username ||
+      'Your food profile';
+
+    document.getElementById(
+      'dashboard-profile-name'
+    ).textContent = name;
+
+
+    if(allergens.length === 0){
+
+      tags.innerHTML =
+        '<span class="profile-tag">No allergens selected</span>';
+
+    }else{
+
+      tags.innerHTML = allergens
+        .slice(0,8)
+        .map(item =>
+          `<span class="profile-tag">${escapeDashboardHTML(item)}</span>`
+        )
+        .join('');
+
+    }
+
+
+    const coverage =
+      Math.min(
+        100,
+        Math.max(
+          10,
+          allergens.length * 12
+        )
+      );
+
+    document.getElementById(
+      'profile-coverage'
+    ).textContent = coverage + '%';
+
+    document.getElementById(
+      'profile-progress-bar'
+    ).style.width = coverage + '%';
+
+
+    if(allergens.length === 0){
+
+      window.location.href =
+        'onboarding-allergens.html';
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      'Could not load profile:',
+      error
+    );
+
+    tags.innerHTML =
+      '<span class="profile-tag">Profile unavailable</span>';
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD SCANS
+========================================================= */
+
+async function loadDashboardScans(){
+
+  const strip =
+    document.getElementById(
+      'recent-scans-strip'
+    );
+
+  try{
+
+    const response =
+      await fetch(dashboardScansURL);
+
+    if(!response.ok){
+      throw new Error('Scans request failed');
+    }
+
+    const data =
+      await response.json();
+
+    dashboardScans =
+      Array.isArray(data)
+        ? data
+        : Array.isArray(data.scans)
+          ? data.scans
+          : Array.isArray(data.results)
+            ? data.results
+            : [];
+
+
+    renderDashboardScans();
+
+    updateDashboardStats();
+
+    updateDashboardActivity();
+
+    updateDashboardInsight();
+
+  }catch(error){
+
+    console.warn(
+      'Could not load scans:',
+      error
+    );
+
+    strip.innerHTML = `
+      <div class="dashboard-scan">
+        <div class="scan-left">
+          <div class="scan-icon">!</div>
+          <div>
+            <div class="scan-product">
+              SCANS UNAVAILABLE
+            </div>
+            <div class="scan-date">
+              Make sure the SafeBite API is running.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById(
+      'scan-count'
+    ).textContent =
+      'Unable to load scan history.';
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER RECENT SCANS
+========================================================= */
+
+function renderDashboardScans(){
+
+  const strip =
+    document.getElementById(
+      'recent-scans-strip'
+    );
+
+  const recent =
+    [...dashboardScans]
+      .sort((a,b) => {
+
+        const da = new Date(
+          a.createdAt ||
+          a.created_at ||
+          a.scannedAt ||
+          a.scanned_at ||
+          0
+        );
+
+        const db = new Date(
+          b.createdAt ||
+          b.created_at ||
+          b.scannedAt ||
+          b.scanned_at ||
+          0
+        );
+
+        return db - da;
+
+      })
+      .slice(0,5);
+
+
+  document.getElementById(
+    'scan-count'
+  ).textContent =
+    dashboardScans.length +
+    (
+      dashboardScans.length === 1
+        ? ' scan recorded'
+        : ' scans recorded'
+    );
+
+
+  if(recent.length === 0){
+
+    strip.innerHTML = `
+      <div class="dashboard-scan">
+        <div class="scan-left">
+          <div class="scan-icon">+</div>
+          <div>
+            <div class="scan-product">
+              NO SCANS YET
+            </div>
+            <div class="scan-date">
+              Your next scan will appear here.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  strip.innerHTML =
+    recent.map(scan => {
+
+      const name =
+        escapeDashboardHTML(
+          getScanName(scan)
+        );
+
+      const verdict =
+        normaliseDashboardVerdict(
+          scan.verdict ||
+          scan.result ||
+          scan.status ||
+          scan.decision
+        );
+
+      const label =
+        verdict === 'safe'
+          ? 'SAFE'
+          : verdict === 'flagged'
+            ? 'FLAGGED'
+            : 'UNCLEAR';
+
+
+      const id =
+        scan.scanId ||
+        scan.scan_id ||
+        scan.id ||
+        '';
+
+
+      return `
+        <a
+          href="verdict.html${id ? '?scanId=' + encodeURIComponent(id) : ''}"
+          class="dashboard-scan"
+          style="text-decoration:none;color:inherit;"
+        >
+
+          <div class="scan-left">
+
+            <div class="scan-icon">
+              ${verdict === 'safe'
+                ? '✓'
+                : verdict === 'flagged'
+                  ? '!'
+                  : '?'}
+            </div>
+
+            <div>
+
+              <div class="scan-product">
+                ${name}
+              </div>
+
+              <div class="scan-date">
+                ${escapeDashboardHTML(
+                  getScanDate(scan)
+                )}
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="scan-verdict ${verdict}">
+            ${label}
+          </div>
+
+        </a>
+      `;
+
+    }).join('');
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateDashboardStats(){
+
+  let safe = 0;
+  let flagged = 0;
+  let unclear = 0;
+
+  dashboardScans.forEach(scan => {
+
+    const verdict =
+      normaliseDashboardVerdict(
+        scan.verdict ||
+        scan.result ||
+        scan.status ||
+        scan.decision
+      );
+
+    if(verdict === 'safe') safe++;
+    else if(verdict === 'flagged') flagged++;
+    else unclear++;
+
+  });
+
+
+  document.getElementById(
+    'stat-total'
+  ).textContent =
+    dashboardScans.length;
+
+  document.getElementById(
+    'stat-safe'
+  ).textContent =
+    safe;
+
+  document.getElementById(
+    'stat-flagged'
+  ).textContent =
+    flagged;
+
+  document.getElementById(
+    'stat-unclear'
+  ).textContent =
+    unclear;
+
+}
+
+
+/* =========================================================
+   WEEKLY ACTIVITY
+========================================================= */
+
+function updateDashboardActivity(){
+
+  const now = new Date();
+
+  const counts = [
+    0,0,0,0,0,0,0
+  ];
+
+  dashboardScans.forEach(scan => {
+
+    const raw =
+      scan.createdAt ||
+      scan.created_at ||
+      scan.scannedAt ||
+      scan.scanned_at ||
+      scan.timestamp;
+
+    if(!raw) return;
+
+    const date =
+      new Date(raw);
+
+    if(Number.isNaN(date.getTime())){
+      return;
+    }
+
+    const diff =
+      Math.floor(
+        (
+          new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          ) -
+          new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+          )
+        ) /
+        86400000
+      );
+
+    if(diff >= 0 && diff < 7){
+
+      counts[6 - diff]++;
+
+    }
+
+  });
+
+
+  const max =
+    Math.max(...counts,1);
+
+  const bars =
+    document.querySelectorAll(
+      '.activity-bar'
+    );
+
+
+  bars.forEach((bar,index) => {
+
+    const height =
+      Math.max(
+        8,
+        (counts[index] / max) * 100
+      );
+
+    bar.style.height =
+      height + '%';
+
+  });
+
+
+  document.getElementById(
+    'activity-total'
+  ).textContent =
+    counts.reduce(
+      (sum,value) => sum + value,
+      0
+    );
+
+}
+
+
+/* =========================================================
+   PERSONALIZED INSIGHT
+========================================================= */
+
+function updateDashboardInsight(){
+
+  const title =
+    document.getElementById(
+      'dashboard-insight-title'
+    );
+
+  const copy =
+    document.getElementById(
+      'dashboard-insight-copy'
+    );
+
+
+  if(dashboardScans.length === 0){
+
+    title.innerHTML =
+      'Start your<br>story.';
+
+    copy.textContent =
+      'Your scan history is empty right now. Scan a food and SafeBite will start building a useful picture of your choices.';
+
+    return;
+
+  }
+
+
+  const flagged =
+    dashboardScans.filter(scan =>
+      normaliseDashboardVerdict(
+        scan.verdict ||
+        scan.result ||
+        scan.status ||
+        scan.decision
+      ) === 'flagged'
+    ).length;
+
+
+  if(flagged >= 3){
+
+    title.innerHTML =
+      'A few<br>flags appeared.';
+
+    copy.textContent =
+      'You have several flagged scans in your history. Open your history to inspect the ingredients and understand what SafeBite noticed.';
+
+  }else{
+
+    title.innerHTML =
+      'You are<br>checking in.';
+
+    copy.textContent =
+      'You have already checked ' +
+      dashboardScans.length +
+      ' food' +
+      (
+        dashboardScans.length === 1
+          ? ''
+          : 's'
+      ) +
+      '. Keep scanning and SafeBite can make your history more useful over time.';
+
+  }
+
+}
+
+
+/* =========================================================
+   CRAVING HANDOFF
+========================================================= */
+
+document
+  .getElementById('dash-craving-form')
+  .addEventListener('submit',function(event){
+
+    event.preventDefault();
+
+    const input =
+      document.getElementById(
+        'dash-craving-input'
+      );
+
+    const craving =
+      input.value.trim();
+
+    if(!craving){
+
+      input.focus();
+
+      return;
+
+    }
+
+    window.location.href =
+      'craving-search.html?query=' +
+      encodeURIComponent(craving);
+
+  });
+
+
+/* =========================================================
+   NUDGE DISMISS
+========================================================= */
+
+document
+  .getElementById('nudge-dismiss')
+  .addEventListener('click',function(){
+
+    const card =
+      document.getElementById(
+        'nudge-card'
+      );
+
+    if(window.gsap){
+
+      gsap.to(card,{
+        height:0,
+        opacity:0,
+        paddingTop:0,
+        paddingBottom:0,
+        marginTop:0,
+        duration:.45,
+        ease:'power3.inOut',
+        onComplete:() => {
+          card.style.display='none';
+        }
+      });
+
+    }else{
+
+      card.style.display='none';
+
+    }
+
+  });
+
+
+/* =========================================================
+   GSAP PAGE ANIMATION
+========================================================= */
+
+function animateDashboard(){
+
+  if(!window.gsap){
+    return;
+  }
+
+  gsap.from(
+    '.dashboard-hero-copy > *',
+    {
+      y:45,
+      opacity:0,
+      duration:.8,
+      stagger:.1,
+      ease:'power3.out'
+    }
+  );
+
+
+  gsap.from(
+    '.dashboard-appy-wrap',
+    {
+      scale:.75,
+      rotation:8,
+      opacity:0,
+      duration:1,
+      ease:'back.out(1.5)',
+      delay:.15
+    }
+  );
+
+
+  gsap.utils.toArray(
+    '.dashboard-section, .nudge-card, .dashboard-status'
+  ).forEach(section => {
+
+    gsap.from(section,{
+      y:35,
+      opacity:0,
+      duration:.7,
+      ease:'power3.out',
+      scrollTrigger:{
+        trigger:section,
+        start:'top 85%',
+        once:true
+      }
+    });
+
+  });
+
+
+  gsap.utils.toArray(
+    '.dashboard-stat'
+  ).forEach(stat => {
+
+    gsap.from(stat,{
+      y:25,
+      opacity:0,
+      duration:.55,
+      scrollTrigger:{
+        trigger:stat,
+        start:'top 90%',
+        once:true
+      }
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+
+    loadDashboardProfile();
+    loadDashboardScans();
+
+    setTimeout(
+      animateDashboard,
+      100
+    );
+
+  }
+);
+
+</script>
+
+<script src="app.js"></script>
+
+</body>
+</html>

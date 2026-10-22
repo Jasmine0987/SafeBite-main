@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Swap Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+
+<style>
+
+/* =========================================================
+   SWAP DETAIL — ART DIRECTED PAGE
+   ========================================================= */
+
+.swap-detail-page{
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* keep original global cursor / trail from script.js */
+.swap-detail-page #trail-canvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:9998;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.swap-detail-hero{
+  min-height:88vh;
+  position:relative;
+  overflow:hidden;
+  background:var(--slate);
+  border-bottom:4px solid var(--black);
+  display:flex;
+  align-items:center;
+}
+
+.swap-detail-hero-inner{
+  width:min(1380px,92%);
+  margin:auto;
+  padding:150px 0 100px;
+  position:relative;
+  z-index:5;
+}
+
+.swap-detail-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  font-family:var(--body);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:0 0 28px;
+}
+
+.swap-detail-kicker::before{
+  content:"";
+  width:55px;
+  height:4px;
+  background:var(--red);
+  display:block;
+}
+
+.swap-detail-title{
+  max-width:900px;
+  margin:0;
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:clamp(5rem,11vw,11rem);
+  line-height:.76;
+  letter-spacing:-.055em;
+  text-transform:uppercase;
+  position:relative;
+  z-index:4;
+}
+
+.swap-detail-title .yellow{
+  color:var(--yellow);
+  -webkit-text-stroke:2px var(--black);
+  paint-order:stroke fill;
+}
+
+.swap-detail-title .outline{
+  color:transparent;
+  -webkit-text-stroke:3px var(--black);
+}
+
+.swap-detail-intro{
+  max-width:560px;
+  margin:45px 0 0;
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.6;
+  position:relative;
+  z-index:5;
+}
+
+
+/* =========================================================
+   HERO ART
+   ========================================================= */
+
+.swap-hero-art{
+  position:absolute;
+  right:4%;
+  top:50%;
+  width:min(510px,40vw);
+  aspect-ratio:1;
+  transform:translateY(-50%) rotate(7deg);
+  z-index:2;
+}
+
+.swap-hero-paper{
+  position:absolute;
+  inset:0;
+  background:var(--cream);
+  border:4px solid var(--black);
+  box-shadow:18px 18px 0 var(--black);
+}
+
+.swap-hero-paper::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:2px dashed var(--black);
+}
+
+.swap-hero-food{
+  position:absolute;
+  inset:55px;
+  width:calc(100% - 110px);
+  height:calc(100% - 110px);
+  object-fit:contain;
+  z-index:3;
+  filter:drop-shadow(8px 10px 0 rgba(20,20,20,.16));
+  animation:heroFoodFloat 4s ease-in-out infinite;
+}
+
+@keyframes heroFoodFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-15px) rotate(2deg)}
+}
+
+.swap-hero-sticker{
+  position:absolute;
+  left:-55px;
+  bottom:-40px;
+  width:145px;
+  height:145px;
+  background:var(--yellow);
+  border:4px solid var(--black);
+  box-shadow:10px 10px 0 var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(-9deg);
+  z-index:7;
+}
+
+.swap-hero-sticker img{
+  width:105px;
+  height:105px;
+  object-fit:contain;
+  animation:appyBounce 2.8s ease-in-out infinite;
+}
+
+@keyframes appyBounce{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-9px) rotate(4deg)}
+}
+
+.swap-hero-note{
+  position:absolute;
+  right:-30px;
+  top:-35px;
+  background:var(--red);
+  color:var(--cream);
+  border:4px solid var(--black);
+  padding:15px 20px;
+  font-family:var(--display-heading);
+  font-size:18px;
+  line-height:.9;
+  text-transform:uppercase;
+  transform:rotate(6deg);
+  box-shadow:7px 7px 0 var(--black);
+}
+
+
+/* =========================================================
+   SCROLL MARQUEE
+   ========================================================= */
+
+.swap-marquee{
+  background:var(--black);
+  color:var(--cream);
+  border-bottom:4px solid var(--black);
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+.swap-marquee-track{
+  display:inline-flex;
+  align-items:center;
+  gap:35px;
+  padding:18px 0;
+  min-width:max-content;
+  animation:marqueeMove 22s linear infinite;
+}
+
+.swap-marquee span{
+  font-family:var(--display-heading);
+  font-size:28px;
+  text-transform:uppercase;
+}
+
+.swap-marquee .dot{
+  color:var(--yellow);
+  font-size:35px;
+}
+
+@keyframes marqueeMove{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+
+/* =========================================================
+   SWAP COMPARISON
+   ========================================================= */
+
+.swap-bar{
+  display:grid;
+  grid-template-columns:1fr 130px 1fr;
+  background:var(--black);
+  gap:4px;
+  border-bottom:4px solid var(--black);
+}
+
+.swap-food{
+  min-height:300px;
+  padding:50px;
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+}
+
+.swap-food:last-child{
+  background:var(--green);
+}
+
+.swap-food-label{
+  font-family:var(--body);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:25px;
+}
+
+.swap-food-name{
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:clamp(2.8rem,5vw,5.3rem);
+  line-height:.8;
+  text-transform:uppercase;
+  position:relative;
+  z-index:2;
+}
+
+.swap-food-visual{
+  position:absolute;
+  right:40px;
+  bottom:-20px;
+  width:210px;
+  height:210px;
+  object-fit:contain;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+
+.swap-food:hover .swap-food-visual{
+  transform:translateY(-15px) rotate(6deg) scale(1.06);
+}
+
+.swap-food-badge{
+  position:absolute;
+  top:28px;
+  right:30px;
+  padding:10px 14px;
+  border:3px solid var(--black);
+  background:var(--yellow);
+  font-family:var(--display-heading);
+  font-size:12px;
+  text-transform:uppercase;
+  box-shadow:5px 5px 0 var(--black);
+  transform:rotate(4deg);
+}
+
+.swap-arrow{
+  background:var(--yellow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--display-heading);
+  font-size:52px;
+  font-weight:800;
+  position:relative;
+}
+
+.swap-arrow::after{
+  content:"";
+  position:absolute;
+  width:48px;
+  height:48px;
+  border:3px solid var(--black);
+  border-radius:50%;
+  animation:pulseRing 1.8s ease-out infinite;
+}
+
+@keyframes pulseRing{
+  0%{transform:scale(.6);opacity:1}
+  100%{transform:scale(1.7);opacity:0}
+}
+
+
+/* =========================================================
+   SECTION BASE
+   ========================================================= */
+
+.swap-section{
+  padding:110px 4%;
+  border-bottom:4px solid var(--black);
+}
+
+.swap-section-inner{
+  width:min(1380px,100%);
+  margin:auto;
+}
+
+.swap-section.yellow{background:var(--yellow)}
+.swap-section.green{background:var(--green)}
+.swap-section.purple{
+  background:var(--purple);
+  color:var(--cream);
+}
+.swap-section.cream{background:var(--cream)}
+
+.swap-label{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-family:var(--body);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:0 0 22px;
+}
+
+.swap-label::before{
+  content:"";
+  width:50px;
+  height:4px;
+  background:var(--red);
+}
+
+.swap-heading{
+  max-width:1000px;
+  margin:0;
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:clamp(4rem,8vw,8rem);
+  line-height:.8;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+
+.swap-copy{
+  max-width:720px;
+  margin:32px 0 0;
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+}
+
+
+/* =========================================================
+   APPY COMMENT
+   ========================================================= */
+
+.appy-comment{
+  margin:70px 0 0;
+  display:flex;
+  align-items:center;
+  gap:30px;
+  max-width:700px;
+}
+
+.appy-comment-character{
+  flex:0 0 145px;
+  width:145px;
+  height:145px;
+  background:var(--cream);
+  border:4px solid var(--black);
+  box-shadow:9px 9px 0 var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(-5deg);
+}
+
+.appy-comment-character img{
+  width:115px;
+  height:115px;
+  object-fit:contain;
+}
+
+.appy-comment-bubble{
+  position:relative;
+  background:var(--cream);
+  color:var(--black);
+  border:4px solid var(--black);
+  padding:25px 30px;
+  box-shadow:9px 9px 0 var(--black);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.55;
+}
+
+.appy-comment-bubble::before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  top:45px;
+  width:30px;
+  height:30px;
+  background:var(--cream);
+  border-left:4px solid var(--black);
+  border-bottom:4px solid var(--black);
+  transform:rotate(45deg);
+}
+
+
+/* =========================================================
+   REASON CARDS
+   ========================================================= */
+
+.reason-grid{
+  margin-top:75px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.reason-card{
+  min-height:330px;
+  padding:32px;
+  border:4px solid var(--black);
+  background:var(--cream);
+  color:var(--black);
+  box-shadow:10px 10px 0 var(--black);
+  position:relative;
+  overflow:hidden;
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    box-shadow .35s ease;
+}
+
+.reason-card:hover{
+  transform:translate(-5px,-8px) rotate(-1deg);
+  box-shadow:15px 16px 0 var(--black);
+}
+
+.reason-card:nth-child(2){
+  background:var(--slate);
+}
+
+.reason-card:nth-child(3){
+  background:var(--red);
+  color:var(--cream);
+}
+
+.reason-card::after{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  right:-40px;
+  bottom:-40px;
+  border:3px solid currentColor;
+  border-radius:50%;
+  opacity:.18;
+}
+
+.reason-number{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.12em;
+}
+
+.reason-icon{
+  width:60px;
+  height:60px;
+  margin-top:25px;
+  border:3px solid currentColor;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+}
+
+.reason-title{
+  margin:25px 0 18px;
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:35px;
+  line-height:.86;
+  text-transform:uppercase;
+}
+
+.reason-text{
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   SAFETY CHECK
+   ========================================================= */
+
+.safety-layout{
+  margin-top:70px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:30px;
+  align-items:stretch;
+}
+
+.safety-card{
+  border:4px solid var(--black);
+  background:var(--cream);
+  color:var(--black);
+  box-shadow:12px 12px 0 var(--black);
+  padding:42px;
+}
+
+.safety-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:3px solid var(--black);
+  padding-bottom:20px;
+}
+
+.safety-card-title{
+  font-family:var(--display-heading);
+  font-size:30px;
+  text-transform:uppercase;
+}
+
+.safety-status{
+  padding:8px 13px;
+  background:var(--green);
+  border:3px solid var(--black);
+  font-family:var(--display-heading);
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.safety-meter{
+  margin-top:45px;
+}
+
+.safety-meter-top{
+  display:flex;
+  justify-content:space-between;
+  font-family:var(--body);
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.safety-meter-track{
+  height:24px;
+  margin-top:12px;
+  background:var(--cream);
+  border:3px solid var(--black);
+  overflow:hidden;
+}
+
+.safety-meter-fill{
+  height:100%;
+  width:0;
+  background:var(--green);
+  border-right:3px solid var(--black);
+  transition:width 1.5s cubic-bezier(.2,.8,.2,1);
+}
+
+.safety-points{
+  margin-top:35px;
+  display:grid;
+  gap:12px;
+}
+
+.safety-point{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family:var(--body);
+  font-size:14px;
+}
+
+.safety-point span{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:2px solid var(--black);
+  background:var(--green);
+  font-weight:800;
+}
+
+.safety-stamp{
+  min-height:100%;
+  background:var(--black);
+  color:var(--cream);
+  border:4px solid var(--black);
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.safety-stamp::before{
+  content:"SAFE";
+  position:absolute;
+  font-family:var(--display-heading);
+  font-size:12rem;
+  line-height:.7;
+  opacity:.05;
+  transform:rotate(-12deg);
+}
+
+.safety-stamp img{
+  width:140px;
+  height:140px;
+  object-fit:contain;
+  position:relative;
+  z-index:2;
+  animation:appyBounce 3s ease-in-out infinite;
+}
+
+.safety-stamp strong{
+  margin-top:20px;
+  font-family:var(--display-heading);
+  font-size:70px;
+  line-height:.8;
+  color:var(--green);
+  position:relative;
+  z-index:2;
+}
+
+.safety-stamp p{
+  max-width:330px;
+  margin-top:20px;
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.5;
+  position:relative;
+  z-index:2;
+}
+
+
+/* =========================================================
+   EXPLANATION
+   ========================================================= */
+
+.explanation-layout{
+  margin-top:75px;
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:70px;
+  align-items:start;
+}
+
+.explanation-big{
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:clamp(4rem,7vw,7rem);
+  line-height:.8;
+  letter-spacing:-.04em;
+  text-transform:uppercase;
+}
+
+.explanation-box{
+  border:4px solid var(--black);
+  background:var(--cream);
+  color:var(--black);
+  box-shadow:12px 12px 0 var(--black);
+}
+
+.explanation-box-head{
+  padding:25px 30px;
+  border-bottom:4px solid var(--black);
+  background:var(--yellow);
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:25px;
+  text-transform:uppercase;
+}
+
+.explanation-box-body{
+  padding:35px;
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.65;
+}
+
+.explanation-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:28px;
+}
+
+.explanation-tag{
+  padding:10px 13px;
+  border:3px solid var(--black);
+  background:var(--slate);
+  font-family:var(--display-heading);
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+
+/* =========================================================
+   MACRO SECTION
+   ========================================================= */
+
+.macro-layout{
+  margin-top:70px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:45px;
+}
+
+.macro-card{
+  border:4px solid var(--black);
+  background:var(--black);
+  box-shadow:12px 12px 0 var(--black);
+}
+
+.macro-card-head{
+  padding:25px 30px;
+  color:var(--cream);
+  font-family:var(--display-heading);
+  font-size:25px;
+  text-transform:uppercase;
+}
+
+.macro-item{
+  background:var(--cream);
+  border-top:3px solid var(--black);
+  padding:23px 28px;
+}
+
+.macro-item-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--body);
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.macro-value{
+  font-family:var(--display-heading);
+  font-size:19px;
+}
+
+.macro-bar{
+  height:13px;
+  margin-top:10px;
+  background:var(--slate);
+  border:2px solid var(--black);
+  overflow:hidden;
+}
+
+.macro-bar span{
+  display:block;
+  width:0;
+  height:100%;
+  background:var(--red);
+  transition:width 1.2s ease;
+}
+
+.macro-card.swap .macro-bar span{
+  background:var(--green);
+}
+
+
+/* =========================================================
+   PROCESS
+   ========================================================= */
+
+.process-grid{
+  margin-top:70px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:3px;
+  background:var(--black);
+  border:4px solid var(--black);
+}
+
+.process-step{
+  min-height:300px;
+  padding:30px;
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+  transition:transform .35s ease;
+}
+
+.process-step:hover{
+  transform:translateY(-10px);
+}
+
+.process-step:nth-child(2){background:var(--yellow)}
+.process-step:nth-child(3){background:var(--slate)}
+.process-step:nth-child(4){background:var(--green)}
+
+.process-step-number{
+  font-family:var(--display);
+  font-size:14px;
+  font-weight:800;
+}
+
+.process-step-symbol{
+  width:55px;
+  height:55px;
+  margin-top:22px;
+  border:3px solid var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--display-heading);
+  font-size:24px;
+}
+
+.process-step-title{
+  margin-top:25px;
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:31px;
+  line-height:.87;
+  text-transform:uppercase;
+}
+
+.process-step-text{
+  margin-top:18px;
+  font-family:var(--body);
+  font-size:13px;
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   VISUAL STRIP
+   ========================================================= */
+
+.swap-visual-strip{
+  padding:90px 4%;
+  background:var(--cream);
+  border-bottom:4px solid var(--black);
+  overflow:hidden;
+}
+
+.visual-strip-inner{
+  width:min(1380px,100%);
+  margin:auto;
+}
+
+.visual-strip-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+}
+
+.visual-strip-title{
+  margin:0;
+  font-family:var(--display-heading);
+  font-size:clamp(3rem,6vw,6rem);
+  line-height:.8;
+  text-transform:uppercase;
+}
+
+.visual-strip-copy{
+  max-width:400px;
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.visual-gallery{
+  margin-top:55px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr .9fr;
+  gap:20px;
+}
+
+.visual-card{
+  height:330px;
+  border:4px solid var(--black);
+  background:var(--yellow);
+  box-shadow:10px 10px 0 var(--black);
+  overflow:hidden;
+  position:relative;
+}
+
+.visual-card:nth-child(2){background:var(--slate)}
+.visual-card:nth-child(3){background:var(--green)}
+
+.visual-card img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+.visual-card:hover img{
+  transform:scale(1.08) rotate(3deg);
+}
+
+.visual-card-label{
+  position:absolute;
+  left:18px;
+  bottom:18px;
+  padding:9px 12px;
+  background:var(--cream);
+  border:3px solid var(--black);
+  font-family:var(--display-heading);
+  font-size:11px;
+  text-transform:uppercase;
+  box-shadow:4px 4px 0 var(--black);
+}
+
+
+/* =========================================================
+   NOTE
+   ========================================================= */
+
+.note-box{
+  margin-top:70px;
+  padding:35px;
+  border:4px solid var(--black);
+  background:var(--cream);
+  color:var(--black);
+  box-shadow:10px 10px 0 var(--black);
+  position:relative;
+}
+
+.note-title{
+  font-family:var(--display-heading);
+  font-size:30px;
+  text-transform:uppercase;
+  margin-bottom:15px;
+}
+
+.note-text{
+  max-width:800px;
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.swap-cta{
+  padding:130px 4%;
+  background:var(--red);
+  color:var(--cream);
+  border-bottom:4px solid var(--black);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.swap-cta::before{
+  content:"SWAP";
+  position:absolute;
+  left:-4%;
+  bottom:-5%;
+  font-family:var(--display-heading);
+  font-size:25vw;
+  line-height:.65;
+  opacity:.08;
+}
+
+.swap-cta-inner{
+  width:min(1000px,100%);
+  margin:auto;
+  position:relative;
+  z-index:2;
+}
+
+.swap-cta-appy{
+  width:150px;
+  height:150px;
+  margin:0 auto 30px;
+  background:var(--yellow);
+  border:4px solid var(--black);
+  box-shadow:10px 10px 0 var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(4deg);
+}
+
+.swap-cta-appy img{
+  width:120px;
+  height:120px;
+  object-fit:contain;
+}
+
+.swap-cta-title{
+  margin:0;
+  font-family:var(--display-heading);
+  font-weight:800;
+  font-size:clamp(4rem,9vw,9rem);
+  line-height:.78;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+
+.swap-cta-copy{
+  max-width:620px;
+  margin:35px auto 40px;
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.6;
+}
+
+.swap-cta .brutal-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--cream);
+  color:var(--black);
+}
+
+
+/* =========================================================
+   REVEALS
+   ========================================================= */
+
+.swap-detail-page .reveal{
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+.swap-detail-page .motion-ready .reveal{
+  opacity:0 !important;
+  transform:translateY(35px);
+}
+
+.swap-detail-page .motion-ready .reveal.is-visible{
+  opacity:1 !important;
+  transform:none;
+  transition:
+    opacity .7s ease,
+    transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1050px){
+
+  .swap-hero-art{
+    opacity:.28;
+    right:-10%;
+    width:55vw;
+  }
+
+  .reason-grid{
+    grid-template-columns:1fr;
+  }
+
+  .safety-layout{
+    grid-template-columns:1fr;
+  }
+
+  .macro-layout{
+    grid-template-columns:1fr;
+  }
+
+  .process-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .visual-gallery{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .visual-card:first-child{
+    grid-column:span 2;
+  }
+}
+
+@media(max-width:700px){
+
+  .swap-detail-hero{
+    min-height:90vh;
+  }
+
+  .swap-detail-hero-inner{
+    padding:120px 0 70px;
+  }
+
+  .swap-hero-art{
+    width:330px;
+    right:-80px;
+    top:70%;
+    opacity:.35;
+  }
+
+  .swap-detail-title{
+    font-size:clamp(4rem,18vw,7rem);
+  }
+
+  .swap-food{
+    padding:35px 25px;
+    min-height:250px;
+  }
+
+  .swap-food-visual{
+    width:140px;
+    height:140px;
+    right:15px;
+    bottom:0;
+    opacity:.7;
+  }
+
+  .swap-bar{
+    grid-template-columns:1fr;
+  }
+
+  .swap-arrow{
+    min-height:75px;
+  }
+
+  .swap-section{
+    padding:80px 6%;
+  }
+
+  .appy-comment{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .appy-comment-bubble::before{
+    display:none;
+  }
+
+  .explanation-layout{
+    grid-template-columns:1fr;
+    gap:45px;
+  }
+
+  .process-grid{
+    grid-template-columns:1fr;
+  }
+
+  .visual-strip{
+    padding:75px 6%;
+  }
+
+  .visual-strip-head{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .visual-gallery{
+    grid-template-columns:1fr;
+  }
+
+  .visual-card:first-child{
+    grid-column:auto;
+  }
+
+  .swap-cta{
+    padding:90px 6%;
+  }
+}
+
+</style>
+<link rel="stylesheet" href="cursor.css">
+</head>
+
+
+<body class="swap-detail-page">
+
+<!-- =======================================================
+     ORIGINAL SAFEBITE CURSOR / TRAIL
+     ======================================================= -->
+
+<canvas id="trail-canvas"></canvas>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =======================================================
+     HERO
+     ======================================================= -->
+
+<header class="swap-detail-hero">
+
+  <div class="swap-detail-hero-inner">
+
+    <p class="swap-detail-kicker reveal">
+      SAFE SWAP / RECOMMENDED FOR YOU
+    </p>
+
+    <h1 class="swap-detail-title reveal">
+      SAME<br>
+      CRAVING.<br>
+      <span class="yellow">BETTER</span><br>
+      <span class="outline">CHOICE.</span>
+    </h1>
+
+    <p class="swap-detail-intro reveal">
+      SafeBite found an alternative that stays close to what you were
+      looking for while fitting your configured safety profile.
+    </p>
+
+  </div>
+
+
+  <div class="swap-hero-art">
+
+    <div class="swap-hero-paper"></div>
+
+    <img
+      class="swap-hero-food"
+      src="assets/illustrations/Hand-drawn_Italian_Dinner_Clipart__Wedding_Table_Setting__digital_Download__-_Etsy-removebg-preview.png"
+      alt="Food illustration"
+    >
+
+    <div class="swap-hero-note">
+      SAFE<br>
+      SWAP
+    </div>
+
+    <div class="swap-hero-sticker">
+      <img
+        src="assets/appy/static/read.png"
+        alt="Appy"
+      >
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     MARQUEE
+     ======================================================= -->
+
+<div class="swap-marquee">
+
+  <div class="swap-marquee-track">
+
+    <span>CRAVING FIRST</span>
+    <span class="dot">✦</span>
+    <span>SAFETY ALWAYS</span>
+    <span class="dot">✦</span>
+    <span>USEFUL ALTERNATIVES</span>
+    <span class="dot">✦</span>
+    <span>CRAVING FIRST</span>
+    <span class="dot">✦</span>
+    <span>SAFETY ALWAYS</span>
+    <span class="dot">✦</span>
+    <span>USEFUL ALTERNATIVES</span>
+    <span class="dot">✦</span>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     SWAP COMPARISON
+     ======================================================= -->
+
+<section class="swap-bar">
+
+  <div class="swap-food reveal">
+
+    <div class="swap-food-label">
+      YOU WERE LOOKING AT
+    </div>
+
+    <div class="swap-food-name">
+      PEANUT<br>
+      BUTTER<br>
+      TOAST
+    </div>
+
+    <div class="swap-food-badge">
+      FLAGGED
+    </div>
+
+    <img
+      class="swap-food-visual"
+      src="assets/illustrations/Buongiorno Espresso - Poster _ 50 x 70 cm-Photoroom.png"
+      alt=""
+    >
+
+  </div>
+
+
+  <div class="swap-arrow">
+    →
+  </div>
+
+
+  <div class="swap-food reveal">
+
+    <div class="swap-food-label">
+      SAFE SWAP
+    </div>
+
+    <div class="swap-food-name">
+      SUNFLOWER<br>
+      BUTTER<br>
+      TOAST
+    </div>
+
+    <div class="swap-food-badge">
+      SAFE
+    </div>
+
+    <img
+      class="swap-food-visual"
+      src="assets/illustrations/Hand-drawn Italian Dinner Clipart_ Wedding Table Setting (digital Download) - Etsy-Photoroom.png"
+      alt=""
+    >
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     WHY THIS SWAP
+     ======================================================= -->
+
+<section class="swap-section yellow">
+
+  <div class="swap-section-inner">
+
+    <p class="swap-label reveal">
+      01 / WHY THIS SWAP
+    </p>
+
+    <h2 class="swap-heading reveal">
+      NOT JUST<br>
+      ANOTHER<br>
+      OPTION.
+    </h2>
+
+    <p class="swap-copy reveal">
+      A useful swap should preserve the intent behind the original
+      choice. SafeBite considers the craving representation first,
+      then applies the safety constraint before presenting an
+      alternative.
+    </p>
+
+
+    <div class="appy-comment reveal">
+
+      <div class="appy-comment-character">
+
+        <img
+          src="assets/appy/static/think.png"
+          alt="Appy"
+        >
+
+      </div>
+
+      <div class="appy-comment-bubble">
+
+        <strong>APPY'S TAKE</strong><br><br>
+
+        I didn't just look for something that looked similar.
+        I checked the safety constraint first, then looked for
+        something that still made sense for your craving.
+
+      </div>
+
+    </div>
+
+
+    <div class="reason-grid">
+
+      <article class="reason-card reveal">
+
+        <div class="reason-number">
+          01 / CRAVING
+        </div>
+
+        <div class="reason-icon">
+          ◉
+        </div>
+
+        <h3 class="reason-title">
+          SAME<br>
+          TEXTURE
+        </h3>
+
+        <p class="reason-text">
+          The alternative stays close to the original craving rather
+          than becoming an unrelated recommendation.
+        </p>
+
+      </article>
+
+
+      <article class="reason-card reveal">
+
+        <div class="reason-number">
+          02 / SAFETY
+        </div>
+
+        <div class="reason-icon">
+          ✓
+        </div>
+
+        <h3 class="reason-title">
+          FITS<br>
+          YOUR PROFILE
+        </h3>
+
+        <p class="reason-text">
+          Candidate foods are considered against the active allergen
+          profile before being surfaced.
+        </p>
+
+      </article>
+
+
+      <article class="reason-card reveal">
+
+        <div class="reason-number">
+          03 / CHOICE
+        </div>
+
+        <div class="reason-icon">
+          →
+        </div>
+
+        <h3 class="reason-title">
+          STILL<br>
+          FEELS RIGHT
+        </h3>
+
+        <p class="reason-text">
+          The goal is not to remove the craving. It is to find a
+          different route toward it.
+        </p>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     SAFETY
+     ======================================================= -->
+
+<section class="swap-section green">
+
+  <div class="swap-section-inner">
+
+    <p class="swap-label reveal">
+      02 / SAFETY CHECK
+    </p>
+
+    <h2 class="swap-heading reveal">
+      BEFORE<br>
+      THE SWAP,<br>
+      COMES THE CHECK.
+    </h2>
+
+    <p class="swap-copy reveal">
+      SafeBite does not treat similarity as proof of safety. The
+      candidate still passes through the safety layer before it can
+      become a recommendation.
+    </p>
+
+
+    <div class="safety-layout">
+
+      <div class="safety-card reveal">
+
+        <div class="safety-card-head">
+
+          <div class="safety-card-title">
+            Candidate Check
+          </div>
+
+          <div class="safety-status">
+            Passed
+          </div>
+
+        </div>
+
+
+        <div class="safety-meter">
+
+          <div class="safety-meter-top">
+            <span>Safety screening</span>
+            <span>100%</span>
+          </div>
+
+          <div class="safety-meter-track">
+            <div class="safety-meter-fill"></div>
+          </div>
+
+        </div>
+
+
+        <div class="safety-points">
+
+          <div class="safety-point">
+            <span>✓</span>
+            Allergen profile checked
+          </div>
+
+          <div class="safety-point">
+            <span>✓</span>
+            Candidate filtered
+          </div>
+
+          <div class="safety-point">
+            <span>✓</span>
+            Recommendation constraint applied
+          </div>
+
+          <div class="safety-point">
+            <span>✓</span>
+            Safe result surfaced
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="safety-stamp reveal">
+
+        <img
+          src="assets/appy/static/meditate.png"
+          alt="Appy"
+        >
+
+        <strong>SAFE</strong>
+
+        <p>
+          The alternative passes the configured deterministic
+          allergen-matching stage.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     EXPLANATION
+     ======================================================= -->
+
+<section class="swap-section purple">
+
+  <div class="swap-section-inner">
+
+    <p class="swap-label reveal">
+      03 / THE EXPLANATION
+    </p>
+
+    <div class="explanation-layout">
+
+      <div class="explanation-big reveal">
+        WHY<br>
+        THIS<br>
+        ONE?
+      </div>
+
+
+      <div class="explanation-box reveal">
+
+        <div class="explanation-box-head">
+          SAFEBITE'S READ
+        </div>
+
+        <div class="explanation-box-body">
+
+          You were looking for something rich, spreadable and
+          satisfying on toast. The recommended alternative stays
+          close to that craving while avoiding the ingredient
+          conflict found in the original choice.
+
+          <div class="explanation-tags">
+
+            <span class="explanation-tag">
+              TEXTURE
+            </span>
+
+            <span class="explanation-tag">
+              SPREADABLE
+            </span>
+
+            <span class="explanation-tag">
+              CRAVING MATCH
+            </span>
+
+            <span class="explanation-tag">
+              SAFETY FILTERED
+            </span>
+
+          </div>
+
+          <br>
+
+          The explanation is generated from the recommendation
+          context; the underlying safety verdict remains separate
+          and deterministic.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     MACROS
+     ======================================================= -->
+
+<section class="swap-section cream">
+
+  <div class="swap-section-inner">
+
+    <p class="swap-label reveal">
+      04 / SIDE BY SIDE
+    </p>
+
+    <h2 class="swap-heading reveal">
+      WHAT<br>
+      CHANGES?
+    </h2>
+
+    <p class="swap-copy reveal">
+      The swap is about more than the allergen constraint. Comparing
+      basic nutritional information gives you context for the choice.
+    </p>
+
+
+    <div class="macro-layout">
+
+      <!-- ORIGINAL -->
+
+      <div class="macro-card reveal">
+
+        <div class="macro-card-head">
+          ORIGINAL
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Calories</span>
+            <span class="macro-value">190 kcal</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:76%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Protein</span>
+            <span class="macro-value">8 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:80%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Carbs</span>
+            <span class="macro-value">7 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:35%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Fat</span>
+            <span class="macro-value">16 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:80%"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SWAP -->
+
+      <div class="macro-card swap reveal">
+
+        <div class="macro-card-head">
+          SAFE SWAP
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Calories</span>
+            <span class="macro-value">170 kcal</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:68%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Protein</span>
+            <span class="macro-value">6 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:60%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Carbs</span>
+            <span class="macro-value">9 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:45%"></span>
+          </div>
+
+        </div>
+
+        <div class="macro-item">
+
+          <div class="macro-item-top">
+            <span>Fat</span>
+            <span class="macro-value">13 g</span>
+          </div>
+
+          <div class="macro-bar">
+            <span style="width:65%"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     VISUAL FOOD STRIP
+     ======================================================= -->
+
+<section class="swap-visual-strip">
+
+  <div class="visual-strip-inner">
+
+    <div class="visual-strip-head">
+
+      <h2 class="visual-strip-title">
+        FOOD<br>
+        SHOULD<br>
+        STILL<br>
+        FEEL FUN.
+      </h2>
+
+      <p class="visual-strip-copy">
+        SafeBite's recommendation layer is about finding useful
+        alternatives — not turning food choices into a boring
+        checklist.
+      </p>
+
+    </div>
+
+
+    <div class="visual-gallery">
+
+      <div class="visual-card">
+
+        <img
+          src="assets/illustrations/Hand-drawn_Italian_Dinner_Clipart__Wedding_Table_Setting__digital_Download__-_Etsy-removebg-preview.png"
+          alt=""
+        >
+
+        <div class="visual-card-label">
+          CRAVING SPACE
+        </div>
+
+      </div>
+
+
+      <div class="visual-card">
+
+        <img
+          src="assets/illustrations/Chez Marianne Paris-Photoroom.png"
+          alt=""
+        >
+
+        <div class="visual-card-label">
+          SIMILARITY
+        </div>
+
+      </div>
+
+
+      <div class="visual-card">
+
+        <img
+          src="assets/illustrations/Buongiorno Espresso - Poster _ 50 x 70 cm-Photoroom.png"
+          alt=""
+        >
+
+        <div class="visual-card-label">
+          USEFULNESS
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     UNDER THE HOOD
+     ======================================================= -->
+
+<section class="swap-section yellow">
+
+  <div class="swap-section-inner">
+
+    <p class="swap-label reveal">
+      05 / UNDER THE HOOD
+    </p>
+
+    <h2 class="swap-heading reveal">
+      FROM<br>
+      CRAVING<br>
+      TO CHOICE.
+    </h2>
+
+    <p class="swap-copy reveal">
+      The recommendation combines learned similarity with a safety
+      constraint. This lets SafeBite search for something that feels
+      close without treating the closest item as automatically safe.
+    </p>
+
+
+    <div class="process-grid">
+
+      <article class="process-step reveal">
+
+        <div class="process-step-number">
+          01
+        </div>
+
+        <div class="process-step-symbol">
+          ?
+        </div>
+
+        <h3 class="process-step-title">
+          READ
+        </h3>
+
+        <p class="process-step-text">
+          Understand what the user is craving.
+        </p>
+
+      </article>
+
+
+      <article class="process-step reveal">
+
+        <div class="process-step-number">
+          02
+        </div>
+
+        <div class="process-step-symbol">
+          ◌
+        </div>
+
+        <h3 class="process-step-title">
+          EMBED
+        </h3>
+
+        <p class="process-step-text">
+          Represent the craving in a learned latent space.
+        </p>
+
+      </article>
+
+
+      <article class="process-step reveal">
+
+        <div class="process-step-number">
+          03
+        </div>
+
+        <div class="process-step-symbol">
+          ✓
+        </div>
+
+        <h3 class="process-step-title">
+          FILTER
+        </h3>
+
+        <p class="process-step-text">
+          Remove candidates that conflict with the active safety
+          profile.
+        </p>
+
+      </article>
+
+
+      <article class="process-step reveal">
+
+        <div class="process-step-number">
+          04
+        </div>
+
+        <div class="process-step-symbol">
+          →
+        </div>
+
+        <h3 class="process-step-title">
+          RANK
+        </h3>
+
+        <p class="process-step-text">
+          Surface the closest remaining alternatives.
+        </p>
+
+      </article>
+
+    </div>
+
+
+    <div class="note-box reveal">
+
+      <div class="note-title">
+        IMPORTANT
+      </div>
+
+      <p class="note-text">
+        A recommendation is not a medical guarantee. Product
+        formulations, cross-contact information and ingredient
+        disclosures can change. Always verify the current product label
+        when making a real-world food decision.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     CTA
+     ======================================================= -->
+
+<section class="swap-cta">
+
+  <div class="swap-cta-inner">
+
+    <div class="swap-cta-appy reveal">
+
+      <img
+        src="assets/appy/static/eat.png"
+        alt="Appy"
+      >
+
+    </div>
+
+    <h2 class="swap-cta-title reveal">
+      KEEP<br>
+      THE<br>
+      CRAVING.
+    </h2>
+
+    <p class="swap-cta-copy reveal">
+      Go back to your alternatives, search for something else, or
+      scan another label.
+    </p>
+
+    <a
+      href="swaps.html"
+      class="brutal-btn reveal"
+    >
+      SEE MORE SWAPS →
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     FOOTER — SAME SAFEBITE FOOTER
+     ======================================================= -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a href="#" class="footer-social-icon" aria-label="Instagram">
+
+      <svg viewBox="0 0 24 24"
+           width="20"
+           height="20"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+
+        <rect x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5">
+        </rect>
+
+        <circle cx="12"
+                cy="12"
+                r="4">
+        </circle>
+
+        <circle cx="17.5"
+                cy="6.5"
+                r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+    <a href="how-it-works.html" class="footer-topbar-link">
+      HOW IT WORKS
+    </a>
+
+    <a href="architecture.html" class="footer-topbar-link">
+      HOW IT THINKS
+    </a>
+
+    <a href="results.html" class="footer-topbar-link">
+      RESULTS
+    </a>
+
+    <a href="about.html" class="footer-topbar-link">
+      ABOUT
+    </a>
+
+    <span class="footer-topbar-link footer-topbar-credit">
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div class="footer-flatlay" id="footer-flatlay">
+
+    <img src="assets/footer/vase-flowers.png"
+         class="fl-item"
+         id="fl-vase"
+         alt=""
+         data-depth="0.10">
+
+    <img src="assets/footer/wine-glass-1.png"
+         class="fl-item"
+         id="fl-wineglass1"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/fork.png"
+         class="fl-item"
+         id="fl-fork"
+         alt=""
+         data-depth="0.08"
+         data-rotate="-8">
+
+    <img src="assets/footer/sausage-plate.png"
+         class="fl-item"
+         id="fl-sausage"
+         alt=""
+         data-depth="0.05">
+
+    <img src="assets/footer/wine-bottle.png"
+         class="fl-item"
+         id="fl-bottle"
+         alt=""
+         data-depth="0.09">
+
+    <img src="assets/footer/candle-2.png"
+         class="fl-item"
+         id="fl-candle2"
+         alt=""
+         data-depth="0.07">
+
+    <img src="assets/footer/salt-pepper.png"
+         class="fl-item"
+         id="fl-saltpepper"
+         alt=""
+         data-depth="0.11">
+
+    <img src="assets/footer/cheese-block.png"
+         class="fl-item"
+         id="fl-cheese"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/candle-1.png"
+         class="fl-item"
+         id="fl-candle1"
+         alt=""
+         data-depth="0.08">
+
+    <img src="assets/footer/olives-bowl.png"
+         class="fl-item"
+         id="fl-olivesbowl"
+         alt=""
+         data-depth="0.05">
+
+    <img src="assets/footer/olives-loose.png"
+         class="fl-item"
+         id="fl-olivesloose"
+         alt=""
+         data-depth="0.09">
+
+    <img src="assets/footer/jar.png"
+         class="fl-item"
+         id="fl-jar"
+         alt=""
+         data-depth="0.07">
+
+    <img src="assets/footer/bread-board.png"
+         class="fl-item"
+         id="fl-bread"
+         alt=""
+         data-depth="0.04">
+
+    <img src="assets/footer/spoon.png"
+         class="fl-item"
+         id="fl-spoon"
+         alt=""
+         data-depth="0.10"
+         data-rotate="6">
+
+    <img src="assets/footer/wine-glass-2.png"
+         class="fl-item"
+         id="fl-wineglass2"
+         alt=""
+         data-depth="0.06">
+
+    <img src="assets/footer/charcuterie-board.png"
+         class="fl-item"
+         id="fl-charcuterie"
+         alt=""
+         data-depth="0.03">
+
+    <img src="assets/footer/knife.png"
+         class="fl-item"
+         id="fl-knife"
+         alt=""
+         data-depth="0.08"
+         data-rotate="-4">
+
+    <img src="assets/footer/hat-plate.png"
+         class="fl-item"
+         id="fl-hat"
+         alt=""
+         data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =======================================================
+     SCRIPTS
+     ======================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+<script src="base-script.js"></script>
+
+
+<!-- =======================================================
+     PAGE MOTION
+     ======================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const page = document.querySelector(".swap-detail-page");
+
+  /*
+   * Do not create another cursor here.
+   * script.js owns the original SafeBite bee cursor + dashed trail.
+   */
+
+  /* -----------------------------------------
+     Reveal animation
+     ----------------------------------------- */
+
+  if ("IntersectionObserver" in window) {
+
+    page.classList.add("motion-ready");
+
+    const observer = new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if(entry.isIntersecting){
+
+            entry.target.classList.add("is-visible");
+
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      },
+      {
+        threshold:.12,
+        rootMargin:"0px 0px -50px 0px"
+      }
+    );
+
+    document
+      .querySelectorAll(".reveal")
+      .forEach(el => observer.observe(el));
+
+  }
+
+
+  /* -----------------------------------------
+     Hero entrance
+     ----------------------------------------- */
+
+  if(window.gsap){
+
+    gsap.from(".swap-detail-title",{
+      y:70,
+      opacity:0,
+      duration:1.1,
+      ease:"power4.out",
+      delay:.15
+    });
+
+    gsap.from(".swap-detail-kicker",{
+      x:-50,
+      opacity:0,
+      duration:.7,
+      ease:"power3.out"
+    });
+
+    gsap.from(".swap-detail-intro",{
+      y:25,
+      opacity:0,
+      duration:.8,
+      ease:"power3.out",
+      delay:.35
+    });
+
+    gsap.from(".swap-hero-paper",{
+      scale:.75,
+      rotation:18,
+      opacity:0,
+      duration:1.2,
+      ease:"back.out(1.5)",
+      delay:.2
+    });
+
+    gsap.from(".swap-hero-food",{
+      scale:.4,
+      rotation:-20,
+      opacity:0,
+      duration:1,
+      ease:"back.out(1.7)",
+      delay:.45
+    });
+
+    gsap.from(".swap-hero-sticker",{
+      scale:0,
+      rotation:-30,
+      duration:.8,
+      ease:"back.out(2)",
+      delay:.7
+    });
+
+
+    /* -----------------------------------------
+       Hero parallax
+       ----------------------------------------- */
+
+    if(window.ScrollTrigger){
+
+      gsap.to(".swap-hero-art",{
+        y:130,
+        rotation:12,
+        ease:"none",
+        scrollTrigger:{
+          trigger:".swap-detail-hero",
+          start:"top top",
+          end:"bottom top",
+          scrub:1
+        }
+      });
+
+      gsap.to(".swap-hero-food",{
+        y:-70,
+        rotation:8,
+        ease:"none",
+        scrollTrigger:{
+          trigger:".swap-detail-hero",
+          start:"top top",
+          end:"bottom top",
+          scrub:1
+        }
+      });
+
+
+      /* -----------------------------------------
+         Macro bars
+         ----------------------------------------- */
+
+      document
+        .querySelectorAll(".macro-card")
+        .forEach(card => {
+
+          ScrollTrigger.create({
+
+            trigger:card,
+
+            start:"top 80%",
+
+            once:true,
+
+            onEnter:() => {
+
+              card
+                .querySelectorAll(".macro-bar span")
+                .forEach(bar => {
+
+                  const width = bar.getAttribute("style");
+
+                  bar.style.width = width
+                    .replace("width:","")
+                    .replace(";","")
+                    .trim();
+
+                });
+
+            }
+
+          });
+
+        });
+
+
+      /* -----------------------------------------
+         Safety meter
+         ----------------------------------------- */
+
+      ScrollTrigger.create({
+
+        trigger:".safety-meter",
+
+        start:"top 80%",
+
+        once:true,
+
+        onEnter:() => {
+
+          const meter =
+            document.querySelector(".safety-meter-fill");
+
+          if(meter){
+            meter.style.width = "100%";
+          }
+
+        }
+
+      });
+
+
+      /* -----------------------------------------
+         Floating process animation
+         ----------------------------------------- */
+
+      gsap.utils.toArray(".process-step").forEach((step,index)=>{
+
+        gsap.from(step,{
+
+          y:50,
+          opacity:0,
+
+          scrollTrigger:{
+            trigger:step,
+            start:"top 85%",
+            once:true
+          },
+
+          duration:.7,
+          delay:index * .08,
+          ease:"power3.out"
+
+        });
+
+      });
+
+    }
+
+  }
+
+
+  /* -----------------------------------------
+     Small interactive Appy reactions
+     ----------------------------------------- */
+
+  document
+    .querySelectorAll(".reason-card")
+    .forEach(card => {
+
+      card.addEventListener("mouseenter",()=>{
+
+        const icon =
+          card.querySelector(".reason-icon");
+
+        if(icon){
+
+          icon.style.transform =
+            "rotate(-8deg) scale(1.1)";
+
+          icon.style.transition =
+            "transform .25s ease";
+
+        }
+
+      });
+
+      card.addEventListener("mouseleave",()=>{
+
+        const icon =
+          card.querySelector(".reason-icon");
+
+        if(icon){
+
+          icon.style.transform =
+            "rotate(0deg) scale(1)";
+
+        }
+
+      });
+
+    });
+
+
+  /* -----------------------------------------
+     Refresh ScrollTrigger
+     ----------------------------------------- */
+
+  setTimeout(()=>{
+
+    if(window.ScrollTrigger){
+      ScrollTrigger.refresh();
+    }
+
+  },500);
+
+});
+
+</script>
+
+<script src="cursor.js"></script>
+</body>
+</html>

@@ -1,0 +1,4362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js">
+  
+</script>
+<script>
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('#signout-link');
+    if (!link) return;
+    e.preventDefault();
+    try { localStorage.clear(); sessionStorage.clear(); } catch (err) {}
+    window.location.href = 'login.html';
+  });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Scan the Label</title>
+<script>if(!localStorage.getItem('safebite_token')) location.replace('login.html');</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE — SCAN
+   Keep the existing SafeBite visual language.
+   No random illustration placement.
+   Appy is used to demonstrate the actual scan scenarios.
+   ========================================================= */
+
+
+/* =========================================================
+   CURSOR RESTORE
+   style.css contains a legacy display:none !important rule.
+   These page-level rules intentionally restore the original
+   SafeBite bee cursor and trail.
+   ========================================================= */
+
+#trail-canvas {
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 9998 !important;
+}
+
+.custom-appy-cursor {
+  display: block !important;
+  position: fixed !important;
+  width: 340px !important;
+  height: 340px !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+@media (hover:hover) and (pointer:fine) {
+
+  html,
+  body,
+  body * {
+    cursor: none !important;
+  }
+
+}
+
+@media (hover:none) and (pointer:coarse) {
+
+  html,
+  body,
+  body * {
+    cursor: auto !important;
+  }
+
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.scan-page {
+  --scan-purple: #6B66A6;
+  --scan-slate: #8FA3C4;
+  --scan-red: #BD3647;
+  --scan-yellow: #F2DB66;
+  --scan-green: #A2BF8A;
+  --scan-cream: #FCF6E8;
+  --scan-black: #141414;
+
+  min-height: 100vh;
+  background: var(--scan-cream);
+  color: var(--scan-black);
+  overflow-x: hidden;
+}
+
+
+/* subtle paper texture */
+
+.scan-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .035;
+
+  background-image:
+    radial-gradient(
+      circle at 20% 20%,
+      #141414 0 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      #141414 0 1px,
+      transparent 1px
+    );
+
+  background-size:
+    19px 19px,
+    23px 23px;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.scan-main {
+  position: relative;
+  z-index: 2;
+
+  width: min(1440px, calc(100% - 64px));
+  margin: 0 auto;
+
+  padding-top: 145px;
+  padding-bottom: 100px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.scan-hero {
+  position: relative;
+
+  min-height: 560px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+
+  gap: 60px;
+
+  align-items: end;
+
+  padding-bottom: 70px;
+}
+
+
+.scan-kicker {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  margin-bottom: 20px;
+
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+
+.scan-kicker::before {
+  content: "";
+
+  width: 44px;
+  height: 3px;
+
+  background: var(--scan-red);
+}
+
+
+.scan-title {
+  margin: 0;
+
+  font-family: var(--display);
+  font-weight: 800;
+
+  font-size: clamp(82px, 10.2vw, 158px);
+
+  line-height: .77;
+  letter-spacing: -.065em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-title span {
+  display: block;
+  color: var(--scan-red);
+}
+
+
+/* ---------------------------------------------------------
+   HERO SCENE
+   Appy is not floating in empty space.
+   He is physically interacting with a label card.
+   --------------------------------------------------------- */
+
+.scan-hero-scene {
+  position: relative;
+
+  height: 350px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  padding-bottom: 35px;
+}
+
+
+/* actual label */
+
+.scan-label-object {
+  position: relative;
+
+  width: 230px;
+  height: 290px;
+
+  background: #fff;
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 9px 9px 0 var(--scan-black);
+
+  transform:
+    rotate(5deg)
+    translateY(8px);
+
+  transition:
+    transform .35s cubic-bezier(.5,1.8,.5,1);
+}
+
+
+.scan-label-object:hover {
+  transform:
+    rotate(2deg)
+    translateY(-5px);
+}
+
+
+.scan-label-top {
+  padding: 15px 14px 10px;
+
+  border-bottom: 3px solid var(--scan-black);
+
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: .9;
+  text-transform: uppercase;
+}
+
+
+.scan-label-product {
+  padding: 16px 14px;
+
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+
+.scan-label-lines {
+  padding: 0 14px;
+}
+
+
+.scan-label-lines span {
+  display: block;
+
+  height: 5px;
+
+  background: var(--scan-black);
+
+  margin-bottom: 7px;
+
+  opacity: .22;
+}
+
+
+.scan-label-lines span:nth-child(1) {
+  width: 92%;
+}
+
+
+.scan-label-lines span:nth-child(2) {
+  width: 74%;
+}
+
+
+.scan-label-lines span:nth-child(3) {
+  width: 88%;
+}
+
+
+.scan-label-lines span:nth-child(4) {
+  width: 65%;
+}
+
+
+.scan-label-lines span:nth-child(5) {
+  width: 82%;
+}
+
+
+/* ingredient panel */
+
+.scan-label-ingredients {
+  position: absolute;
+
+  left: 13px;
+  right: 13px;
+  bottom: 15px;
+
+  border: 2px solid var(--scan-black);
+
+  padding: 8px;
+
+  background: var(--scan-cream);
+
+  font-family: var(--body);
+  font-size: 8px;
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+
+.scan-label-ingredients strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-family: var(--display);
+  font-size: 12px;
+}
+
+
+/* scan target around the useful panel */
+
+.scan-label-target {
+  position: absolute;
+
+  left: -13px;
+  right: -13px;
+
+  bottom: 9px;
+
+  height: 64px;
+
+  border: 2px solid var(--scan-red);
+
+  pointer-events: none;
+
+  animation: targetPulse 2.2s ease-in-out infinite;
+}
+
+
+@keyframes targetPulse {
+
+  0%,
+  100% {
+    opacity: .45;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.035);
+  }
+
+}
+
+
+/* Appy actually reads the label */
+
+.scan-hero-appy {
+  position: absolute;
+
+  width: 150px;
+
+  left: 50%;
+  bottom: 2px;
+
+  transform:
+    translateX(-50%)
+    translateX(110px)
+    rotate(-5deg);
+
+  z-index: 5;
+
+  transition:
+    transform .4s cubic-bezier(.5,1.8,.5,1);
+}
+
+
+.scan-hero-scene:hover .scan-hero-appy {
+  transform:
+    translateX(-50%)
+    translateX(92px)
+    translateY(-12px)
+    rotate(2deg);
+}
+
+
+.scan-hero-appy img {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  filter:
+    drop-shadow(6px 7px 0 rgba(20,20,20,.2));
+}
+
+
+/* speech / explanation */
+
+.scan-hero-speech {
+  position: absolute;
+
+  right: 0;
+  top: 12px;
+
+  width: 245px;
+
+  background: var(--scan-yellow);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 6px 6px 0 var(--scan-black);
+
+  padding: 16px;
+
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.4;
+
+  transform: rotate(-2deg);
+}
+
+
+.scan-hero-speech strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-family: var(--display);
+  font-size: 19px;
+  line-height: .9;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
+
+.scan-hero-description {
+  position: absolute;
+
+  right: 0;
+  bottom: 18px;
+
+  width: 350px;
+
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   MAIN SCANNER
+   ========================================================= */
+
+.scan-workspace {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.65fr)
+    minmax(340px, .72fr);
+
+  gap: 30px;
+
+  align-items: stretch;
+
+  margin-top: 15px;
+}
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+.scan-camera-card {
+  position: relative;
+
+  min-height: 680px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.08) 1px,
+      transparent 1px
+    ),
+    var(--scan-purple);
+
+  background-size: 42px 42px;
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 14px 14px 0 var(--scan-black);
+
+  color: white;
+
+  transition:
+    transform .25s ease;
+}
+
+
+.scan-camera-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 520px;
+  height: 520px;
+
+  right: -160px;
+  top: -170px;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,.08);
+}
+
+
+.scan-camera-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 260px;
+  height: 260px;
+
+  left: -100px;
+  bottom: -110px;
+
+  border-radius: 50%;
+
+  background: rgba(242,219,102,.08);
+}
+
+
+.scan-card-label {
+  position: absolute;
+
+  top: 22px;
+  left: 22px;
+
+  z-index: 5;
+
+  background: var(--scan-yellow);
+  color: var(--scan-black);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 5px 5px 0 var(--scan-black);
+
+  padding: 10px 14px;
+
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CAMERA FRAME
+   ========================================================= */
+
+.scan-frame {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: min(70%, 600px);
+  aspect-ratio: 1.45;
+
+  transform:
+    translate(-50%, -50%);
+
+  border: 2px solid rgba(255,255,255,.72);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.06),
+      transparent 50%
+    );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform .35s cubic-bezier(.5,1.8,.5,1),
+    border-color .25s ease,
+    background .25s ease;
+
+  z-index: 3;
+}
+
+
+.scan-frame:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.015);
+
+  border-color: var(--scan-yellow);
+}
+
+
+.scan-frame.is-dragging {
+  border-color: var(--scan-yellow);
+
+  background:
+    rgba(242,219,102,.12);
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.025);
+}
+
+
+/* corner brackets */
+
+.scan-frame-corner {
+  position: absolute;
+
+  width: 45px;
+  height: 45px;
+
+  z-index: 5;
+}
+
+
+.scan-frame-corner::before,
+.scan-frame-corner::after {
+  content: "";
+
+  position: absolute;
+
+  background: var(--scan-yellow);
+}
+
+
+.scan-frame-corner::before {
+  width: 100%;
+  height: 5px;
+}
+
+
+.scan-frame-corner::after {
+  width: 5px;
+  height: 100%;
+}
+
+
+.scan-frame-corner--tl {
+  top: -2px;
+  left: -2px;
+}
+
+
+.scan-frame-corner--tr {
+  top: -2px;
+  right: -2px;
+
+  transform: rotate(90deg);
+}
+
+
+.scan-frame-corner--br {
+  bottom: -2px;
+  right: -2px;
+
+  transform: rotate(180deg);
+}
+
+
+.scan-frame-corner--bl {
+  bottom: -2px;
+  left: -2px;
+
+  transform: rotate(270deg);
+}
+
+
+/* scan line */
+
+.scan-line {
+  position: absolute;
+
+  left: 8%;
+  right: 8%;
+
+  height: 2px;
+
+  top: 20%;
+
+  background: var(--scan-yellow);
+
+  box-shadow:
+    0 0 14px rgba(242,219,102,.8);
+
+  z-index: 4;
+
+  animation:
+    scanLine 2.8s ease-in-out infinite;
+}
+
+
+@keyframes scanLine {
+
+  0%,
+  100% {
+    top: 18%;
+    opacity: .3;
+  }
+
+  50% {
+    top: 82%;
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   SCAN TARGET
+   ========================================================= */
+
+.scan-target {
+  position: relative;
+
+  width: 300px;
+
+  text-align: center;
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+
+.scan-target-icon {
+  width: 68px;
+  height: 68px;
+
+  margin: 0 auto 18px;
+
+  border: 3px solid white;
+
+  border-radius: 50%;
+
+  position: relative;
+}
+
+
+.scan-target-icon::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 14px;
+
+  border: 2px solid var(--scan-yellow);
+
+  border-radius: 50%;
+}
+
+
+.scan-target-icon::after {
+  content: "";
+
+  position: absolute;
+
+  width: 9px;
+  height: 9px;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  background: var(--scan-yellow);
+
+  border-radius: 50%;
+}
+
+
+.scan-target strong {
+  display: block;
+
+  font-family: var(--display);
+  font-size: 32px;
+  line-height: .9;
+
+  text-transform: uppercase;
+}
+
+
+.scan-target small {
+  display: block;
+
+  margin-top: 13px;
+
+  font-family: var(--body);
+  font-size: 12px;
+
+  opacity: .72;
+}
+
+
+/* uploaded preview */
+
+.scan-preview {
+  position: absolute;
+
+  inset: 8px;
+
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+
+  object-fit: cover;
+
+  z-index: 2;
+
+  display: none;
+}
+
+
+.scan-preview.is-visible {
+  display: block;
+}
+
+
+.scan-preview.is-visible ~ .scan-target {
+  opacity: .1;
+}
+
+
+/* =========================================================
+   APPY INSIDE CAMERA
+   ========================================================= */
+
+.scan-camera-appy {
+  position: absolute;
+
+  right: 32px;
+  bottom: 72px;
+
+  width: 125px;
+
+  z-index: 7;
+
+  animation:
+    cameraAppyFloat 3.2s ease-in-out infinite;
+}
+
+
+.scan-camera-appy img {
+  width: 100%;
+  display: block;
+
+  filter:
+    drop-shadow(6px 7px 0 rgba(20,20,20,.25));
+}
+
+
+@keyframes cameraAppyFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(2deg);
+  }
+
+  50% {
+    transform:
+      translateY(-10px)
+      rotate(-2deg);
+  }
+
+}
+
+
+/* camera status */
+
+.scan-camera-status {
+  position: absolute;
+
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 8;
+
+  font-family: var(--body);
+  font-size: 11px;
+
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+
+.scan-status-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+
+.scan-status-dot {
+  width: 9px;
+  height: 9px;
+
+  background: var(--scan-yellow);
+
+  border: 2px solid var(--scan-black);
+
+  border-radius: 50%;
+
+  animation:
+    statusPulse 1.8s ease-in-out infinite;
+}
+
+
+@keyframes statusPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.35);
+  }
+
+}
+
+
+.scan-camera-status-note {
+  opacity: .65;
+}
+
+
+/* =========================================================
+   ACTION PANEL
+   ========================================================= */
+
+.scan-action-card {
+  min-height: 680px;
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 14px 14px 0 var(--scan-black);
+
+  background: var(--scan-red);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+.scan-panel-head {
+  position: relative;
+
+  padding: 30px;
+
+  min-height: 180px;
+
+  overflow: hidden;
+}
+
+
+.scan-panel-head::after {
+  content: "SCAN";
+
+  position: absolute;
+
+  right: -20px;
+  bottom: -35px;
+
+  font-family: var(--display);
+
+  font-size: 115px;
+  line-height: 1;
+
+  color: rgba(255,255,255,.12);
+}
+
+
+.scan-panel-label {
+  margin: 0 0 10px;
+
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+
+.scan-panel-title {
+  position: relative;
+  z-index: 2;
+
+  margin: 0;
+
+  font-family: var(--display);
+
+  font-size: clamp(44px, 4.5vw, 68px);
+
+  line-height: .8;
+
+  letter-spacing: -.045em;
+
+  text-transform: uppercase;
+}
+
+
+/* actions */
+
+.scan-actions {
+  background: var(--scan-cream);
+
+  padding: 30px;
+
+  border-top: 3px solid var(--scan-black);
+
+  border-bottom: 3px solid var(--scan-black);
+}
+
+
+.scan-capture {
+  width: 100%;
+
+  min-height: 84px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: var(--scan-yellow);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 7px 7px 0 var(--scan-black);
+
+  font-family: var(--display);
+  font-size: 24px;
+
+  text-transform: uppercase;
+
+  cursor: none;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.scan-capture:hover {
+  transform:
+    translate(3px, 3px);
+
+  box-shadow:
+    4px 4px 0 var(--scan-black);
+}
+
+
+.scan-capture:active {
+  transform:
+    translate(7px, 7px);
+
+  box-shadow:
+    0 0 0 var(--scan-black);
+}
+
+
+.scan-camera-icon {
+  display: inline-flex;
+
+  width: 27px;
+  height: 27px;
+
+  border: 3px solid var(--scan-black);
+
+  border-radius: 50%;
+
+  align-items: center;
+  justify-content: center;
+}
+
+
+.scan-camera-icon::after {
+  content: "";
+
+  width: 7px;
+  height: 7px;
+
+  background: var(--scan-black);
+
+  border-radius: 50%;
+}
+
+
+/* upload */
+
+.scan-upload-alt {
+  display: block;
+
+  margin-top: 22px;
+
+  text-align: center;
+
+  color: var(--scan-black);
+
+  font-family: var(--body);
+  font-size: 13px;
+
+  text-decoration: underline;
+
+  text-underline-offset: 4px;
+
+  cursor: none;
+}
+
+
+.scan-upload-alt:hover {
+  color: var(--scan-red);
+}
+
+
+#scan-file-input,
+#scan-upload-input {
+  display: none;
+}
+
+
+/* =========================================================
+   MINI PROCESS
+   ========================================================= */
+
+.scan-mini-process {
+  flex: 1;
+
+  background: var(--scan-cream);
+
+  padding: 25px 30px;
+}
+
+
+.scan-mini-process-title {
+  margin: 0 0 16px;
+
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: .13em;
+  text-transform: uppercase;
+
+  opacity: .6;
+}
+
+
+.scan-mini-step {
+  display: grid;
+
+  grid-template-columns: 42px 1fr;
+
+  gap: 12px;
+
+  padding: 15px 0;
+
+  border-top: 1px solid rgba(20,20,20,.22);
+
+  transition:
+    transform .25s ease,
+    padding-left .25s ease;
+}
+
+
+.scan-mini-step:first-of-type {
+  border-top: 0;
+}
+
+
+.scan-mini-step:hover {
+  transform: translateX(5px);
+  padding-left: 5px;
+}
+
+
+.scan-mini-number {
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--scan-purple);
+
+  color: white;
+
+  border: 2px solid var(--scan-black);
+
+  font-family: var(--display);
+  font-size: 17px;
+}
+
+
+.scan-mini-step:nth-of-type(3) .scan-mini-number {
+  background: var(--scan-yellow);
+  color: var(--scan-black);
+}
+
+
+.scan-mini-step:nth-of-type(4) .scan-mini-number {
+  background: var(--scan-green);
+  color: var(--scan-black);
+}
+
+
+.scan-mini-step h3 {
+  margin: 0 0 4px;
+
+  font-family: var(--display);
+  font-size: 21px;
+  line-height: .9;
+
+  text-transform: uppercase;
+}
+
+
+.scan-mini-step p {
+  margin: 0;
+
+  font-family: var(--body);
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   PROCESS INTRO
+   ========================================================= */
+
+.scan-process-intro {
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .65fr);
+
+  gap: 50px;
+
+  align-items: end;
+
+  padding: 125px 0 55px;
+}
+
+
+.scan-process-kicker {
+  margin-bottom: 15px;
+
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+
+.scan-process-title {
+  margin: 0;
+
+  font-family: var(--display);
+
+  font-size: clamp(55px, 7.3vw, 108px);
+
+  line-height: .8;
+
+  letter-spacing: -.06em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-process-title span {
+  color: var(--scan-red);
+}
+
+
+.scan-process-copy {
+  max-width: 390px;
+
+  margin: 0 0 4px auto;
+
+  font-family: var(--body);
+  font-size: 16px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   THREE SCENARIOS
+   IMPORTANT:
+   No external illustrations here.
+   Appy demonstrates each actual stage.
+   ========================================================= */
+
+.scan-scenarios {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 14px 14px 0 var(--scan-black);
+}
+
+
+.scan-scenario {
+  position: relative;
+
+  min-height: 610px;
+
+  overflow: hidden;
+
+  border-right: 3px solid var(--scan-black);
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform .35s cubic-bezier(.5,1.8,.5,1);
+}
+
+
+.scan-scenario:last-child {
+  border-right: 0;
+}
+
+
+.scan-scenario--vision {
+  background: var(--scan-slate);
+}
+
+
+.scan-scenario--ocr {
+  background: var(--scan-yellow);
+}
+
+
+.scan-scenario--safety {
+  background: var(--scan-green);
+}
+
+
+.scan-scenario:hover {
+  transform:
+    translateY(-7px);
+}
+
+
+/* number */
+
+.scan-scenario-number {
+  padding: 25px 28px 0;
+
+  font-family: var(--display);
+
+  font-size: 76px;
+
+  line-height: .8;
+}
+
+
+/* scenario scene */
+
+.scan-scenario-scene {
+  position: relative;
+
+  flex: 1;
+
+  min-height: 315px;
+
+  margin: 0 20px;
+}
+
+
+/* Appy */
+
+.scan-scenario-appy {
+  position: absolute;
+
+  left: 50%;
+  bottom: 45px;
+
+  width: 155px;
+
+  transform:
+    translateX(-50%);
+
+  z-index: 3;
+
+  transition:
+    transform .4s cubic-bezier(.5,1.8,.5,1);
+}
+
+
+.scan-scenario:hover .scan-scenario-appy {
+  transform:
+    translateX(-50%)
+    translateY(-13px)
+    rotate(-3deg);
+}
+
+
+.scan-scenario-appy img {
+  display: block;
+
+  width: 100%;
+
+  filter:
+    drop-shadow(6px 7px 0 rgba(20,20,20,.18));
+}
+
+
+/* ---------------------------------------------------------
+   VISION SCENE
+   --------------------------------------------------------- */
+
+.scan-scene-panel {
+  position: absolute;
+
+  width: 170px;
+  height: 210px;
+
+  left: 50%;
+  top: 40px;
+
+  transform:
+    translateX(-50%)
+    rotate(5deg);
+
+  background: white;
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 7px 7px 0 var(--scan-black);
+}
+
+
+.scan-scene-panel-title {
+  padding: 11px;
+
+  border-bottom: 3px solid var(--scan-black);
+
+  font-family: var(--display);
+  font-size: 16px;
+  line-height: .9;
+
+  text-transform: uppercase;
+}
+
+
+.scan-scene-panel-lines {
+  padding: 12px;
+}
+
+
+.scan-scene-panel-lines span {
+  display: block;
+
+  height: 4px;
+
+  background: var(--scan-black);
+
+  margin-bottom: 6px;
+
+  opacity: .2;
+}
+
+
+.scan-scene-panel-lines span:nth-child(1) {
+  width: 88%;
+}
+
+
+.scan-scene-panel-lines span:nth-child(2) {
+  width: 66%;
+}
+
+
+.scan-scene-panel-lines span:nth-child(3) {
+  width: 82%;
+}
+
+
+.scan-scene-panel-lines span:nth-child(4) {
+  width: 70%;
+}
+
+
+.scan-scene-panel-lines span:nth-child(5) {
+  width: 90%;
+}
+
+
+/* target */
+
+.scan-scene-target {
+  position: absolute;
+
+  left: 15px;
+  right: 15px;
+
+  bottom: 32px;
+
+  height: 65px;
+
+  border: 2px solid var(--scan-red);
+
+  background: rgba(189,54,71,.08);
+
+  z-index: 2;
+
+  animation:
+    sceneTarget 2s ease-in-out infinite;
+}
+
+
+@keyframes sceneTarget {
+
+  0%,
+  100% {
+    opacity: .4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   OCR SCENE
+   --------------------------------------------------------- */
+
+.scan-ocr-paper {
+  position: absolute;
+
+  width: 175px;
+  height: 220px;
+
+  left: 50%;
+  top: 35px;
+
+  transform:
+    translateX(-50%)
+    rotate(-4deg);
+
+  background: var(--scan-cream);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 7px 7px 0 var(--scan-black);
+
+  padding: 16px;
+}
+
+
+.scan-ocr-heading {
+  font-family: var(--display);
+
+  font-size: 19px;
+  line-height: .9;
+
+  text-transform: uppercase;
+
+  margin-bottom: 13px;
+}
+
+
+.scan-ocr-word {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-family: var(--body);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: .04em;
+
+  opacity: .7;
+}
+
+
+.scan-ocr-word.highlight {
+  background: var(--scan-red);
+
+  color: white;
+
+  padding: 4px 6px;
+
+  opacity: 1;
+}
+
+
+.scan-ocr-arrow {
+  position: absolute;
+
+  left: 50%;
+  top: 245px;
+
+  transform:
+    translateX(-50%);
+
+  font-family: var(--display);
+
+  font-size: 35px;
+
+  z-index: 5;
+}
+
+
+/* ---------------------------------------------------------
+   SAFETY SCENE
+   --------------------------------------------------------- */
+
+.scan-profile-card {
+  position: absolute;
+
+  width: 190px;
+
+  left: 50%;
+  top: 38px;
+
+  transform:
+    translateX(-50%)
+    rotate(2deg);
+
+  background: var(--scan-cream);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 7px 7px 0 var(--scan-black);
+
+  padding: 15px;
+
+  z-index: 2;
+}
+
+
+.scan-profile-title {
+  font-family: var(--display);
+
+  font-size: 18px;
+  line-height: .9;
+
+  text-transform: uppercase;
+
+  margin-bottom: 13px;
+}
+
+
+.scan-allergen-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+
+.scan-allergen {
+  padding: 5px 7px;
+
+  background: white;
+
+  border: 2px solid var(--scan-black);
+
+  font-family: var(--body);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+
+.scan-check {
+  position: absolute;
+
+  left: 50%;
+  top: 245px;
+
+  transform:
+    translateX(-50%);
+
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--scan-red);
+
+  color: white;
+
+  border: 3px solid var(--scan-black);
+
+  border-radius: 50%;
+
+  font-family: var(--display);
+  font-size: 25px;
+
+  z-index: 5;
+}
+
+
+/* ---------------------------------------------------------
+   SCENARIO LABEL
+   --------------------------------------------------------- */
+
+.scan-scenario-label {
+  margin: 0 18px 18px;
+
+  min-height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 10px 14px;
+
+  background: var(--scan-cream);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 5px 5px 0 var(--scan-black);
+
+  font-family: var(--body);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: .06em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-scenario-label strong {
+  font-family: var(--display);
+
+  font-size: 22px;
+}
+
+
+/* ---------------------------------------------------------
+   SCENARIO CONTENT
+   --------------------------------------------------------- */
+
+.scan-scenario-content {
+  padding: 22px 30px 30px;
+
+  border-top: 3px solid var(--scan-black);
+
+  min-height: 185px;
+}
+
+
+.scan-scenario-content h3 {
+  margin: 0 0 10px;
+
+  font-family: var(--display);
+
+  font-size: 31px;
+
+  line-height: .88;
+
+  text-transform: uppercase;
+
+  letter-spacing: -.025em;
+}
+
+
+.scan-scenario-content p {
+  margin: 0;
+
+  font-family: var(--body);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   EXPLANATION SECTION
+   ========================================================= */
+
+.scan-explain {
+  padding-top: 130px;
+  padding-bottom: 130px;
+}
+
+
+.scan-explain-grid {
+  display: grid;
+
+  grid-template-columns: .72fr 1.28fr;
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 14px 14px 0 var(--scan-black);
+}
+
+
+/* Appy scene */
+
+.scan-explain-scene {
+  position: relative;
+
+  min-height: 470px;
+
+  overflow: hidden;
+
+  background: var(--scan-red);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+
+.scan-explain-scene::before {
+  content: "READ";
+
+  position: absolute;
+
+  left: -15px;
+  bottom: -30px;
+
+  font-family: var(--display);
+
+  font-size: 145px;
+
+  line-height: 1;
+
+  color: rgba(255,255,255,.1);
+}
+
+
+.scan-explain-appy {
+  width: 210px;
+
+  position: relative;
+
+  z-index: 2;
+
+  transition:
+    transform .4s cubic-bezier(.5,1.8,.5,1);
+}
+
+
+.scan-explain-scene:hover .scan-explain-appy {
+  transform:
+    translateY(-14px)
+    rotate(4deg);
+}
+
+
+.scan-explain-appy img {
+  display: block;
+
+  width: 100%;
+
+  filter:
+    drop-shadow(9px 10px 0 rgba(20,20,20,.2));
+}
+
+
+/* copy */
+
+.scan-explain-copy {
+  background: var(--scan-cream);
+
+  padding: 55px;
+}
+
+
+.scan-explain-eyebrow {
+  margin-bottom: 15px;
+
+  font-family: var(--body);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: .14em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-explain-copy h2 {
+  margin: 0 0 24px;
+
+  font-family: var(--display);
+
+  font-size: clamp(48px, 5vw, 82px);
+
+  line-height: .82;
+
+  letter-spacing: -.055em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-explain-copy h2 span {
+  color: var(--scan-red);
+}
+
+
+.scan-explain-copy p {
+  max-width: 620px;
+
+  margin: 0 0 30px;
+
+  font-family: var(--body);
+
+  font-size: 16px;
+
+  line-height: 1.55;
+}
+
+
+/* verdict states */
+
+.scan-verdict-flow {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+
+.scan-verdict {
+  min-height: 110px;
+
+  padding: 16px;
+
+  border: 2px solid var(--scan-black);
+
+  background: white;
+}
+
+
+.scan-verdict.safe {
+  background: var(--scan-green);
+}
+
+
+.scan-verdict.flagged {
+  background: var(--scan-red);
+}
+
+
+.scan-verdict.unclear {
+  background: var(--scan-yellow);
+}
+
+
+.scan-verdict strong {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-family: var(--display);
+
+  font-size: 22px;
+
+  line-height: .9;
+
+  text-transform: uppercase;
+}
+
+
+.scan-verdict span {
+  font-family: var(--body);
+
+  font-size: 11px;
+
+  line-height: 1.35;
+}
+
+
+/* =========================================================
+   FINAL MESSAGE
+   ========================================================= */
+
+.scan-final {
+  border-top: 3px solid var(--scan-black);
+  border-bottom: 3px solid var(--scan-black);
+
+  padding: 30px 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 40px;
+}
+
+
+.scan-final-title {
+  margin: 0;
+
+  font-family: var(--display);
+
+  font-size: clamp(35px, 4.4vw, 62px);
+
+  line-height: .85;
+
+  letter-spacing: -.045em;
+
+  text-transform: uppercase;
+}
+
+
+.scan-final-copy {
+  max-width: 430px;
+
+  margin: 0;
+
+  font-family: var(--body);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PROCESSING OVERLAY
+   ========================================================= */
+
+.state-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9990;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    rgba(20,20,20,.78);
+}
+
+
+.state-overlay.active {
+  display: flex;
+}
+
+
+.state-overlay-card {
+  width: min(500px, 100%);
+
+  background: var(--scan-cream);
+
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 14px 14px 0 var(--scan-black);
+
+  padding: 40px;
+
+  text-align: center;
+}
+
+
+.state-overlay-sprite {
+  width: 150px;
+  height: 150px;
+
+  margin: 0 auto 20px;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+
+.state-overlay-sprite--processing {
+  background-image:
+    url("assets/appy/static/read.png");
+}
+
+
+.state-overlay-sprite--error {
+  background-image:
+    url("assets/appy/static/think.png");
+}
+
+
+.state-overlay-text {
+  font-family: var(--display);
+
+  font-size: 45px;
+
+  line-height: .85;
+
+  text-transform: uppercase;
+}
+
+
+.state-overlay-sub {
+  max-width: 420px;
+
+  margin: 18px auto 0;
+
+  font-family: var(--body);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+.state-overlay-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+
+.state-overlay-actions button {
+  border: 3px solid var(--scan-black);
+
+  box-shadow: 5px 5px 0 var(--scan-black);
+
+  background: var(--scan-yellow);
+
+  padding: 13px 18px;
+
+  font-family: var(--display);
+
+  text-transform: uppercase;
+
+  cursor: none;
+}
+
+
+.state-overlay-actions button:last-child {
+  background: white;
+}
+
+
+/* =========================================================
+   DEMO NOTE
+   ========================================================= */
+
+.scan-demo-note {
+  margin-top: 35px;
+
+  padding: 18px 20px;
+
+  border: 2px solid var(--scan-black);
+
+  background: rgba(255,255,255,.45);
+
+  font-family: var(--body);
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+.scan-demo-note strong {
+  font-family: var(--display);
+
+  text-transform: uppercase;
+}
+
+
+.scan-demo-note button {
+  margin-top: 10px;
+
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  color: var(--scan-red);
+
+  font-family: var(--body);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-decoration: underline;
+
+  cursor: none;
+}
+
+
+/* =========================================================
+   SCROLL EFFECTS
+   These work without GSAP.
+   ========================================================= */
+
+.scan-motion-ready .scan-reveal {
+  opacity: 0;
+
+  transform:
+    translateY(45px);
+
+  transition:
+    opacity .75s ease,
+    transform .75s cubic-bezier(.2,.8,.2,1);
+}
+
+
+.scan-motion-ready .scan-reveal.is-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+
+.scan-motion-ready .scan-reveal-delay-1 {
+  transition-delay: .08s;
+}
+
+
+.scan-motion-ready .scan-reveal-delay-2 {
+  transition-delay: .16s;
+}
+
+
+.scan-motion-ready .scan-reveal-delay-3 {
+  transition-delay: .24s;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .scan-hero {
+    grid-template-columns: 1fr;
+    min-height: 760px;
+  }
+
+
+  .scan-hero-scene {
+    position: absolute;
+
+    right: 0;
+    bottom: 80px;
+
+    width: 470px;
+  }
+
+
+  .scan-hero-description {
+    left: 0;
+    right: auto;
+    bottom: 10px;
+  }
+
+
+  .scan-workspace {
+    grid-template-columns: 1fr;
+  }
+
+
+  .scan-action-card {
+    min-height: auto;
+  }
+
+
+  .scan-scenarios {
+    grid-template-columns: 1fr;
+  }
+
+
+  .scan-scenario {
+    min-height: 600px;
+
+    border-right: 0;
+
+    border-bottom: 3px solid var(--scan-black);
+  }
+
+
+  .scan-scenario:last-child {
+    border-bottom: 0;
+  }
+
+}
+
+
+@media (max-width: 760px) {
+
+  .scan-main {
+    width: calc(100% - 32px);
+
+    padding-top: 125px;
+  }
+
+
+  .scan-hero {
+    min-height: 720px;
+
+    padding-bottom: 30px;
+  }
+
+
+  .scan-title {
+    font-size: clamp(68px, 18vw, 115px);
+  }
+
+
+  .scan-hero-scene {
+    position: relative;
+
+    right: auto;
+    bottom: auto;
+
+    width: 100%;
+
+    height: 330px;
+
+    margin-top: 15px;
+  }
+
+
+  .scan-hero-description {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    width: 100%;
+
+    margin-top: 20px;
+  }
+
+
+  .scan-label-object {
+    width: 190px;
+    height: 245px;
+  }
+
+
+  .scan-hero-appy {
+    width: 125px;
+
+    transform:
+      translateX(-50%)
+      translateX(88px);
+  }
+
+
+  .scan-hero-speech {
+    width: 200px;
+
+    right: 0;
+    top: 0;
+
+    font-size: 11px;
+  }
+
+
+  .scan-camera-card {
+    min-height: 560px;
+  }
+
+
+  .scan-frame {
+    width: 88%;
+  }
+
+
+  .scan-camera-appy {
+    width: 90px;
+
+    right: 16px;
+    bottom: 65px;
+  }
+
+
+  .scan-camera-status-note {
+    display: none;
+  }
+
+
+  .scan-process-intro {
+    grid-template-columns: 1fr;
+
+    padding-top: 90px;
+  }
+
+
+  .scan-process-copy {
+    margin: 0;
+  }
+
+
+  .scan-scenario-content {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+
+  .scan-explain-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .scan-explain-copy {
+    padding: 32px;
+  }
+
+
+  .scan-verdict-flow {
+    grid-template-columns: 1fr;
+  }
+
+
+  .scan-final {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+}
+
+
+</style>
+</head>
+
+
+<body class="scan-page">
+
+
+<!-- =========================================================
+     EXISTING SAFEBITE BEE CURSOR
+     script.js controls the bee + trail.
+     ========================================================= -->
+
+<canvas id="trail-canvas"></canvas>
+
+<div
+  class="custom-appy-cursor"
+  id="appy-cursor"
+></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+      <li class="nav-item"><a href="settings.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>Settings</a></li>
+      <li class="nav-item"><a href="#" id="signout-link"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Sign out</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="scan-main">
+
+
+  <!-- =======================================================
+       HERO
+       ======================================================= -->
+
+  <section class="scan-hero">
+
+    <div>
+
+      <div class="scan-kicker">
+        SAFEBITE VISION / 01
+      </div>
+
+
+      <h1 class="scan-title">
+        SCAN
+        <span>THE LABEL</span>
+      </h1>
+
+    </div>
+
+
+    <!-- =====================================================
+         APPY + ACTUAL LABEL SCENARIO
+         ===================================================== -->
+
+    <div class="scan-hero-scene">
+
+      <div class="scan-label-object">
+
+        <div class="scan-label-top">
+          Ingredients
+        </div>
+
+
+        <div class="scan-label-product">
+          Food product
+        </div>
+
+
+        <div class="scan-label-lines">
+
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </div>
+
+
+        <div class="scan-label-ingredients">
+
+          <strong>
+            INGREDIENTS
+          </strong>
+
+          Wheat flour, milk,
+          cocoa, sugar, salt...
+
+        </div>
+
+
+        <div class="scan-label-target"></div>
+
+      </div>
+
+
+      <div class="scan-hero-speech">
+
+        <strong>
+          Appy found it.
+        </strong>
+
+        The ingredients panel is the useful
+        part of the photograph.
+
+      </div>
+
+
+      <div class="scan-hero-appy">
+
+        <img
+          src="assets/appy/static/read.png"
+          alt="Appy reading a food label"
+        >
+
+      </div>
+
+    </div>
+
+
+    <p class="scan-hero-description">
+
+      Point your camera at an ingredients panel.
+      Appy finds the useful bit, reads the text,
+      and checks it against your allergen profile.
+
+    </p>
+
+  </section>
+
+
+  <!-- =======================================================
+       SCANNER WORKSPACE
+       ======================================================= -->
+
+  <section class="scan-workspace scan-reveal">
+
+
+    <!-- =====================================================
+         CAMERA
+         ===================================================== -->
+
+    <div
+      class="scan-camera-card"
+      id="scan-camera-card"
+    >
+
+      <div class="scan-card-label">
+        LIVE LABEL SCANNER
+      </div>
+
+
+      <div class="scan-frame" id="scan-dropzone">
+
+        <span
+          class="scan-frame-corner scan-frame-corner--tl"
+        ></span>
+
+        <span
+          class="scan-frame-corner scan-frame-corner--tr"
+        ></span>
+
+        <span
+          class="scan-frame-corner scan-frame-corner--br"
+        ></span>
+
+        <span
+          class="scan-frame-corner scan-frame-corner--bl"
+        ></span>
+
+
+        <div class="scan-line"></div>
+
+
+        <img
+          id="scan-preview"
+          class="scan-preview"
+          alt="Selected food label"
+        >
+
+
+        <div class="scan-target">
+
+          <div class="scan-target-icon"></div>
+
+          <strong>
+            PLACE THE LABEL HERE
+          </strong>
+
+          <small>
+            Ingredients panel works best
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- Appy is actively reading -->
+
+      <div class="scan-camera-appy">
+
+        <img
+          src="assets/appy/static/read.png"
+          alt="Appy reading the label"
+        >
+
+      </div>
+
+
+      <div class="scan-camera-status">
+
+        <div class="scan-status-left">
+
+          <span class="scan-status-dot"></span>
+
+          <span>
+            CAMERA READY
+          </span>
+
+        </div>
+
+
+        <span class="scan-camera-status-note">
+          DROP AN IMAGE INTO THE FRAME
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTROL PANEL
+         ===================================================== -->
+
+    <aside class="scan-action-card">
+
+      <div class="scan-panel-head">
+
+        <p class="scan-panel-label">
+          YOUR NEXT MOVE
+        </p>
+
+
+        <h2 class="scan-panel-title">
+          LET APPY<br>
+          READ IT.
+        </h2>
+
+      </div>
+
+
+      <div class="scan-actions">
+
+        <button
+          id="scan-capture-btn"
+          class="scan-capture"
+          type="button"
+        >
+
+          <span class="scan-camera-icon"></span>
+
+          CAPTURE LABEL
+
+        </button>
+
+
+        <!-- REQUIRED BY app.js -->
+
+        <input
+          type="file"
+          id="scan-file-input"
+          accept="image/*"
+          capture="environment"
+        >
+
+
+        <input
+          type="file"
+          id="scan-upload-input"
+          accept="image/*"
+        >
+
+
+        <a
+          href="#"
+          id="scan-upload-alt-link"
+          class="scan-upload-alt"
+        >
+          or upload a photo instead →
+        </a>
+
+      </div>
+
+
+      <!-- =================================================
+           APPY'S THREE JOBS
+           ================================================= -->
+
+      <div class="scan-mini-process">
+
+        <p class="scan-mini-process-title">
+          WHAT APPY DOES
+        </p>
+
+
+        <div class="scan-mini-step">
+
+          <div class="scan-mini-number">
+            01
+          </div>
+
+          <div>
+
+            <h3>
+              FIND
+            </h3>
+
+            <p>
+              Appy locates the ingredients panel
+              inside your photograph.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="scan-mini-step">
+
+          <div class="scan-mini-number">
+            02
+          </div>
+
+          <div>
+
+            <h3>
+              READ
+            </h3>
+
+            <p>
+              The label is converted into clean
+              ingredient text.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="scan-mini-step">
+
+          <div class="scan-mini-number">
+            03
+          </div>
+
+          <div>
+
+            <h3>
+              CHECK
+            </h3>
+
+            <p>
+              Ingredients are compared with
+              your allergen profile.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+  </section>
+
+
+  <!-- =======================================================
+       PROCESS INTRO
+       ======================================================= -->
+
+  <section class="scan-process-intro scan-reveal">
+
+    <div>
+
+      <div class="scan-process-kicker">
+        FROM PHOTO TO ANSWER
+      </div>
+
+
+      <h2 class="scan-process-title">
+
+        THREE STEPS.<br>
+
+        <span>ONE CLEAR CHECK.</span>
+
+      </h2>
+
+    </div>
+
+
+    <p class="scan-process-copy">
+
+      You don't need to understand what the models
+      are doing. Appy handles the visual work first.
+      SafeBite then turns the extracted ingredients
+      into a clear safety check.
+
+    </p>
+
+  </section>
+
+
+  <!-- =======================================================
+       THREE SCENARIOS
+       Appy is the visual protagonist.
+       ======================================================= -->
+
+  <section class="scan-scenarios">
+
+
+    <!-- =====================================================
+         01 — VISION
+         ===================================================== -->
+
+    <article
+      class="
+        scan-scenario
+        scan-scenario--vision
+        scan-reveal
+      "
+    >
+
+      <div class="scan-scenario-number">
+        01
+      </div>
+
+
+      <div class="scan-scenario-scene">
+
+
+        <!-- actual package / label -->
+
+        <div class="scan-scene-panel">
+
+          <div class="scan-scene-panel-title">
+            Ingredients
+          </div>
+
+
+          <div class="scan-scene-panel-lines">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+        </div>
+
+
+        <!-- detection box -->
+
+        <div class="scan-scene-target"></div>
+
+
+        <!-- Appy finds the panel -->
+
+        <div class="scan-scenario-appy">
+
+          <img
+            src="assets/appy/static/read.png"
+            alt="Appy finding the ingredients panel"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="scan-scenario-label">
+
+        <strong>
+          01
+        </strong>
+
+        <span>
+          FIND THE USEFUL TEXT
+        </span>
+
+      </div>
+
+
+      <div class="scan-scenario-content">
+
+        <h3>
+          VISION
+        </h3>
+
+        <p>
+          A detector identifies the useful ingredients
+          panel instead of requiring a perfectly framed
+          photograph.
+
+        </p>
+
+      </div>
+
+    </article>
+
+
+    <!-- =====================================================
+         02 — OCR
+         ===================================================== -->
+
+    <article
+      class="
+        scan-scenario
+        scan-scenario--ocr
+        scan-reveal
+        scan-reveal-delay-1
+      "
+    >
+
+      <div class="scan-scenario-number">
+        02
+      </div>
+
+
+      <div class="scan-scenario-scene">
+
+
+        <!-- panel becomes text -->
+
+        <div class="scan-ocr-paper">
+
+          <div class="scan-ocr-heading">
+            Ingredients
+          </div>
+
+
+          <span class="scan-ocr-word">
+            wheat flour
+          </span>
+
+          <span class="scan-ocr-word highlight">
+            milk
+          </span>
+
+          <span class="scan-ocr-word">
+            cocoa
+          </span>
+
+          <span class="scan-ocr-word">
+            sugar
+          </span>
+
+          <span class="scan-ocr-word highlight">
+            almonds
+          </span>
+
+          <span class="scan-ocr-word">
+            salt
+          </span>
+
+        </div>
+
+
+        <div class="scan-ocr-arrow">
+          ↓
+        </div>
+
+
+        <!-- Appy reads -->
+
+        <div class="scan-scenario-appy">
+
+          <img
+            src="assets/appy/static/think.png"
+            alt="Appy reading and understanding ingredient text"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="scan-scenario-label">
+
+        <strong>
+          02
+        </strong>
+
+        <span>
+          TURN PIXELS INTO INGREDIENTS
+        </span>
+
+      </div>
+
+
+      <div class="scan-scenario-content">
+
+        <h3>
+          OCR
+        </h3>
+
+        <p>
+          The text is extracted and cleaned before
+          SafeBite starts making a safety decision.
+
+        </p>
+
+      </div>
+
+    </article>
+
+
+    <!-- =====================================================
+         03 — SAFETY
+         ===================================================== -->
+
+    <article
+      class="
+        scan-scenario
+        scan-scenario--safety
+        scan-reveal
+        scan-reveal-delay-2
+      "
+    >
+
+      <div class="scan-scenario-number">
+        03
+      </div>
+
+
+      <div class="scan-scenario-scene">
+
+
+        <!-- allergen profile -->
+
+        <div class="scan-profile-card">
+
+          <div class="scan-profile-title">
+            Your profile
+          </div>
+
+
+          <div class="scan-allergen-list">
+
+            <span class="scan-allergen">
+              MILK
+            </span>
+
+            <span class="scan-allergen">
+              NUTS
+            </span>
+
+            <span class="scan-allergen">
+              WHEAT
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="scan-check">
+          ✓
+        </div>
+
+
+        <!-- Appy checks -->
+
+        <div class="scan-scenario-appy">
+
+          <img
+            src="assets/appy/static/meditate.png"
+            alt="Appy checking the ingredient result"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="scan-scenario-label">
+
+        <strong>
+          03
+        </strong>
+
+        <span>
+          CHECK WHAT MATTERS
+        </span>
+
+      </div>
+
+
+      <div class="scan-scenario-content">
+
+        <h3>
+          SAFETY
+        </h3>
+
+        <p>
+          The final verdict is checked against the
+          allergen profile rather than guessed from
+          the image.
+
+        </p>
+
+      </div>
+
+    </article>
+
+
+  </section>
+
+
+  <!-- =======================================================
+       APPY / SAFETY EXPLANATION
+       ======================================================= -->
+
+  <section class="scan-explain">
+
+    <div
+      class="
+        scan-explain-grid
+        scan-reveal
+      "
+    >
+
+
+      <div class="scan-explain-scene">
+
+        <div class="scan-explain-appy">
+
+          <img
+            src="assets/appy/static/read.png"
+            alt="Appy reading a food label"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="scan-explain-copy">
+
+        <div class="scan-explain-eyebrow">
+          THE IMPORTANT PART
+        </div>
+
+
+        <h2>
+
+          APPY READS.<br>
+
+          <span>SAFEBITE DECIDES.</span>
+
+        </h2>
+
+
+        <p>
+
+          The learned models help SafeBite find
+          and understand the label. The final safety
+          state comes from comparing the extracted
+          ingredients against the user's allergen profile.
+
+        </p>
+
+
+        <div class="scan-verdict-flow">
+
+
+          <div class="scan-verdict safe">
+
+            <strong>
+              SAFE
+            </strong>
+
+            <span>
+              No matching allergen was found.
+            </span>
+
+          </div>
+
+
+          <div class="scan-verdict flagged">
+
+            <strong>
+              FLAGGED
+            </strong>
+
+            <span>
+              A relevant allergen was detected.
+            </span>
+
+          </div>
+
+
+          <div class="scan-verdict unclear">
+
+            <strong>
+              UNCLEAR
+            </strong>
+
+            <span>
+              The available text is not reliable enough.
+            </span>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       DEMO NOTE
+       ======================================================= -->
+
+  <div class="scan-demo-note">
+
+    <strong>
+      Prototype mode.
+    </strong>
+
+    Capture currently connects to the existing scan
+    pipeline. The detector/OCR behaviour depends on
+    the backend implementation.
+
+    <br>
+
+    <button
+      id="scan-error-demo-btn"
+      type="button"
+    >
+      Simulate a low-confidence scan instead →
+    </button>
+
+  </div>
+
+
+  <!-- =======================================================
+       FINAL MESSAGE
+       ======================================================= -->
+
+  <section
+    class="
+      scan-final
+      scan-reveal
+    "
+  >
+
+    <h2 class="scan-final-title">
+
+      DON'T READ<br>
+      THE LABEL.<br>
+      SCAN IT.
+
+    </h2>
+
+
+    <p class="scan-final-copy">
+
+      SafeBite turns the boring part of buying food
+      into a quick visual check: find the panel,
+      extract the ingredients, and compare them
+      with your profile.
+
+    </p>
+
+  </section>
+
+
+</main>
+
+
+<!-- =========================================================
+     PROCESSING OVERLAY
+     Existing IDs preserved.
+     ========================================================= -->
+
+<div
+  class="state-overlay"
+  id="processing-overlay"
+>
+
+  <div class="state-overlay-card">
+
+    <div
+      class="
+        state-overlay-sprite
+        state-overlay-sprite--processing
+      "
+    ></div>
+
+
+    <div
+      class="state-overlay-text"
+      id="processing-text"
+    >
+      Finding the label…
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     ERROR OVERLAY
+     Existing IDs preserved.
+     ========================================================= -->
+
+<div
+  class="state-overlay"
+  id="error-overlay"
+>
+
+  <div class="state-overlay-card">
+
+    <div
+      class="
+        state-overlay-sprite
+        state-overlay-sprite--error
+      "
+    ></div>
+
+
+    <div class="state-overlay-text">
+
+      COULDN'T READ<br>
+      THIS ONE CLEARLY
+
+    </div>
+
+
+    <p class="state-overlay-sub">
+
+      We're not fully confident on this label.
+      You can retake the photo or continue anyway.
+
+    </p>
+
+
+    <div class="state-overlay-actions">
+
+      <button
+        id="error-retake-btn"
+        type="button"
+      >
+        TRY AGAIN
+      </button>
+
+
+      <button
+        id="error-continue-btn"
+        type="button"
+      >
+        CONTINUE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     EXACT SAFEBITE FOOTER STRUCTURE
+     INCLUDING THE FOOTER PAW CURSOR
+     ========================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-color="#FFF8E0"
+>
+
+
+  <!-- FOOTER PAW -->
+
+  <div
+    class="footer-paw-cursor"
+    id="footer-paw-cursor"
+  >
+
+    <div class="footer-paw-leg">
+
+      <img
+        id="footer-paw-cursor-img"
+        src="assets/footer/paw-a.png"
+        alt=""
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- FOOTER TOPBAR -->
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5"
+        ></rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1"
+        ></circle>
+
+      </svg>
+
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link"
+    >
+      HOW IT WORKS
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link"
+    >
+      HOW IT THINKS
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link"
+    >
+      RESULTS
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link"
+    >
+      ABOUT
+    </a>
+
+
+    <span
+      class="
+        footer-topbar-link
+        footer-topbar-credit
+      "
+    >
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <!-- FOOTER FLATLAY -->
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay"
+  >
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10"
+    >
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8"
+    >
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11"
+    >
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08"
+    >
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <!-- jar.png is not currently present in your ZIP, so it is
+         intentionally omitted to avoid a broken image. -->
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04"
+    >
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6"
+    >
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03"
+    >
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4"
+    >
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05"
+    >
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     EXISTING SCRIPTS
+     ========================================================= -->
+
+<script src="app-data.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+<script src="app.js"></script>
+
+
+<!-- =========================================================
+     SCAN PAGE MOTION
+     Native JS fallback — does not depend on GSAP.
+     ========================================================= -->
+
+<script>
+
+(function () {
+
+  "use strict";
+
+
+  /* =======================================================
+     ENABLE MOTION CSS
+     ======================================================= */
+
+  document.documentElement.classList.add(
+    "scan-motion-ready"
+  );
+
+
+  /* =======================================================
+     INTERSECTION SCROLL REVEALS
+     ======================================================= */
+
+  const revealItems =
+    document.querySelectorAll(
+      ".scan-reveal"
+    );
+
+
+  if ("IntersectionObserver" in window) {
+
+    const revealObserver =
+      new IntersectionObserver(
+        function (entries) {
+
+          entries.forEach(function (entry) {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add(
+                "is-visible"
+              );
+
+              revealObserver.unobserve(
+                entry.target
+              );
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.14,
+          rootMargin: "0px 0px -60px 0px"
+        }
+      );
+
+
+    revealItems.forEach(function (item) {
+
+      revealObserver.observe(item);
+
+    });
+
+  } else {
+
+    revealItems.forEach(function (item) {
+
+      item.classList.add(
+        "is-visible"
+      );
+
+    });
+
+  }
+
+
+  /* =======================================================
+     SCROLL PARALLAX
+     Small and intentional — no random floating artwork.
+     ======================================================= */
+
+  const heroAppy =
+    document.querySelector(
+      ".scan-hero-appy"
+    );
+
+
+  const heroScene =
+    document.querySelector(
+      ".scan-hero-scene"
+    );
+
+
+  let ticking = false;
+
+
+  function updateParallax() {
+
+    const scrollY =
+      window.scrollY || 0;
+
+
+    if (heroAppy && scrollY < 900) {
+
+      const movement =
+        Math.min(scrollY * 0.035, 25);
+
+
+      heroAppy.style.marginBottom =
+        `${movement}px`;
+
+    }
+
+
+    if (heroScene && scrollY < 900) {
+
+      const movement =
+        Math.min(scrollY * -0.012, 0);
+
+
+      heroScene.style.transform =
+        `translateY(${movement}px)`;
+
+    }
+
+
+    ticking = false;
+
+  }
+
+
+  window.addEventListener(
+    "scroll",
+    function () {
+
+      if (!ticking) {
+
+        window.requestAnimationFrame(
+          updateParallax
+        );
+
+        ticking = true;
+
+      }
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  /* =======================================================
+     CAMERA CARD TILT
+     Only desktop.
+     ======================================================= */
+
+  const cameraCard =
+    document.getElementById(
+      "scan-camera-card"
+    );
+
+
+  if (
+    cameraCard &&
+    window.matchMedia(
+      "(hover:hover) and (pointer:fine)"
+    ).matches
+  ) {
+
+    cameraCard.addEventListener(
+      "mousemove",
+      function (event) {
+
+        const rect =
+          cameraCard.getBoundingClientRect();
+
+
+        const x =
+          (event.clientX - rect.left)
+          / rect.width
+          - 0.5;
+
+
+        const y =
+          (event.clientY - rect.top)
+          / rect.height
+          - 0.5;
+
+
+        cameraCard.style.transform =
+          `
+          perspective(1400px)
+          rotateX(${y * -1.1}deg)
+          rotateY(${x * 1.1}deg)
+          `;
+
+      }
+    );
+
+
+    cameraCard.addEventListener(
+      "mouseleave",
+      function () {
+
+        cameraCard.style.transform = "";
+
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     DRAG AND DROP
+     ======================================================= */
+
+  const dropzone =
+    document.getElementById(
+      "scan-dropzone"
+    );
+
+
+  const uploadInput =
+    document.getElementById(
+      "scan-upload-input"
+    );
+
+
+  const preview =
+    document.getElementById(
+      "scan-preview"
+    );
+
+
+  function previewImage(file) {
+
+    if (
+      !file ||
+      !file.type ||
+      !file.type.startsWith("image/")
+    ) {
+      return;
+    }
+
+
+    const objectURL =
+      URL.createObjectURL(file);
+
+
+    preview.src =
+      objectURL;
+
+
+    preview.onload =
+      function () {
+
+        preview.classList.add(
+          "is-visible"
+        );
+
+      };
+
+  }
+
+
+  if (dropzone) {
+
+    [
+      "dragenter",
+      "dragover"
+    ].forEach(function (eventName) {
+
+      dropzone.addEventListener(
+        eventName,
+        function (event) {
+
+          event.preventDefault();
+
+          dropzone.classList.add(
+            "is-dragging"
+          );
+
+        }
+      );
+
+    });
+
+
+    [
+      "dragleave",
+      "drop"
+    ].forEach(function (eventName) {
+
+      dropzone.addEventListener(
+        eventName,
+        function (event) {
+
+          event.preventDefault();
+
+          dropzone.classList.remove(
+            "is-dragging"
+          );
+
+        }
+      );
+
+    });
+
+
+    dropzone.addEventListener(
+      "drop",
+      function (event) {
+
+        const files =
+          event.dataTransfer.files;
+
+
+        if (
+          files &&
+          files.length
+        ) {
+
+          const file =
+            files[0];
+
+
+          previewImage(file);
+
+
+          try {
+
+            if (uploadInput) {
+
+              const transfer =
+                new DataTransfer();
+
+
+              transfer.items.add(
+                file
+              );
+
+
+              uploadInput.files =
+                transfer.files;
+
+            }
+
+          } catch (error) {
+
+            console.log(
+              "Browser prevented file assignment."
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     FILE PREVIEW
+     ======================================================= */
+
+  if (uploadInput) {
+
+    uploadInput.addEventListener(
+      "change",
+      function () {
+
+        const file =
+          uploadInput.files &&
+          uploadInput.files[0];
+
+
+        previewImage(file);
+
+      }
+    );
+
+  }
+
+
+  const cameraFile =
+    document.getElementById(
+      "scan-file-input"
+    );
+
+
+  if (cameraFile) {
+
+    cameraFile.addEventListener(
+      "change",
+      function () {
+
+        const file =
+          cameraFile.files &&
+          cameraFile.files[0];
+
+
+        previewImage(file);
+
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     APPY HOVER REACTION
+     ======================================================= */
+
+  const scenarioCards =
+    document.querySelectorAll(
+      ".scan-scenario"
+    );
+
+
+  scenarioCards.forEach(
+    function (card) {
+
+      const appy =
+        card.querySelector(
+          ".scan-scenario-appy"
+        );
+
+
+      if (!appy) {
+        return;
+      }
+
+
+      card.addEventListener(
+        "mouseenter",
+        function () {
+
+          appy.style.transform =
+            "translateX(-50%) translateY(-13px) rotate(-3deg)";
+
+        }
+      );
+
+
+      card.addEventListener(
+        "mouseleave",
+        function () {
+
+          appy.style.transform = "";
+
+        }
+      );
+
+    }
+  );
+
+
+  /* =======================================================
+     GSAP ENHANCEMENT
+     If GSAP exists, add small entrance motion.
+     The page still works without it.
+     ======================================================= */
+
+  if (
+    typeof window.gsap !== "undefined"
+  ) {
+
+    window.gsap.from(
+      ".scan-kicker",
+      {
+        x: -25,
+        opacity: 0,
+        duration: .6,
+        ease: "power2.out"
+      }
+    );
+
+
+    window.gsap.from(
+      ".scan-title",
+      {
+        y: 50,
+        opacity: 0,
+        duration: .9,
+        delay: .08,
+        ease: "power3.out"
+      }
+    );
+
+
+    window.gsap.from(
+      ".scan-hero-scene",
+      {
+        scale: .92,
+        rotate: -3,
+        opacity: 0,
+        duration: .9,
+        delay: .18,
+        ease: "back.out(1.4)"
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     FOOTER BACKGROUND / SCROLL REFRESH
+     ======================================================= */
+
+  if (
+    typeof window.ScrollTrigger !== "undefined"
+  ) {
+
+    try {
+
+      window.ScrollTrigger.refresh();
+
+    } catch (error) {
+
+      console.log(
+        "ScrollTrigger refresh skipped."
+      );
+
+    }
+
+  }
+
+})();
+
+</script>
+
+
+</body>
+</html>

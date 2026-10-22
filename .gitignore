@@ -1,0 +1,34 @@
+# Python virtual environment
+backend/venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Backend local data
+backend/app/cache/*.db
+backend/app/core/*.db
+
+# Environment variables
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+backend/env
+data.pkl
+.data/
+best/
+*.pt
+*.pth
+*.db
+venv/
+__pycache__/

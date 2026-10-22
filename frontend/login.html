@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SAFEBITE AUTH PAGE
+   ========================================================= */
+
+:root{
+  --auth-purple:#6B66A6;
+  --auth-cream:#FCF6E8;
+  --auth-yellow:#F2DB66;
+  --auth-red:#BD3647;
+  --auth-green:#A2BF8A;
+  --auth-black:#141414;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.auth-page{
+  min-height:100vh;
+  background:var(--auth-cream);
+  color:var(--auth-black);
+  overflow-x:hidden;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.auth-main{
+  min-height:calc(100vh - 82px);
+  padding:5rem 5vw 7rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.auth-main::before{
+  content:"";
+  position:absolute;
+
+  width:420px;
+  height:420px;
+
+  border:3px solid var(--auth-black);
+  border-radius:50%;
+
+  right:-170px;
+  top:100px;
+
+  opacity:.12;
+}
+
+.auth-main::after{
+  content:"";
+
+  position:absolute;
+
+  width:260px;
+  height:260px;
+
+  background:var(--auth-yellow);
+
+  left:-150px;
+  bottom:80px;
+
+  transform:rotate(18deg);
+
+  opacity:.7;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.auth-layout{
+  max-width:1280px;
+
+  min-height:690px;
+
+  margin:0 auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:6rem;
+
+  position:relative;
+  z-index:2;
+}
+
+
+/* =========================================================
+   LEFT EDITORIAL SIDE
+   ========================================================= */
+
+.auth-intro{
+  width:52%;
+  position:relative;
+}
+
+.auth-kicker{
+  display:inline-block;
+
+  font-family:var(--body);
+
+  font-size:.72rem;
+  font-weight:700;
+
+  letter-spacing:.16em;
+  text-transform:uppercase;
+
+  border:3px solid var(--auth-black);
+
+  background:var(--auth-yellow);
+
+  padding:.55rem .8rem;
+
+  box-shadow:5px 5px 0 var(--auth-black);
+
+  margin-bottom:2rem;
+}
+
+
+.auth-title{
+  margin:0;
+
+  font-family:'Cabinet Grotesk',var(--display),sans-serif;
+
+  font-weight:800;
+
+  font-size:clamp(5rem,9vw,10rem);
+
+  line-height:.78;
+
+  letter-spacing:-.055em;
+
+  text-transform:uppercase;
+}
+
+
+.auth-title span{
+  display:block;
+}
+
+
+.auth-title .outline{
+  color:transparent;
+
+  -webkit-text-stroke:3px var(--auth-black);
+
+  margin-left:7vw;
+}
+
+
+.auth-description{
+  max-width:480px;
+
+  margin:2.5rem 0 0 7vw;
+
+  font-family:var(--body);
+
+  font-size:1rem;
+
+  line-height:1.65;
+}
+
+
+.auth-note{
+  margin:2rem 0 0 7vw;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:.7rem;
+
+  font-family:var(--body);
+
+  font-size:.72rem;
+
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+
+.auth-note-dot{
+  width:12px;
+  height:12px;
+
+  background:var(--auth-red);
+
+  border:2px solid var(--auth-black);
+
+  display:block;
+}
+
+
+/* =========================================================
+   APPY
+   ========================================================= */
+
+.auth-appy{
+  position:absolute;
+
+  width:190px;
+
+  right:0;
+
+  bottom:-80px;
+
+  z-index:3;
+
+  filter:drop-shadow(8px 8px 0 rgba(20,20,20,.14));
+
+  transform:rotate(5deg);
+}
+
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+.auth-card-wrap{
+  width:420px;
+
+  flex-shrink:0;
+
+  position:relative;
+}
+
+
+.auth-card{
+  background:#fff;
+
+  border:3px solid var(--auth-black);
+
+  padding:2.5rem;
+
+  box-shadow:14px 14px 0 var(--auth-black);
+
+  position:relative;
+
+  z-index:2;
+}
+
+
+/* Paper tape */
+
+.auth-card::before{
+  content:"";
+
+  position:absolute;
+
+  width:72px;
+  height:20px;
+
+  background:var(--auth-yellow);
+
+  border:2px solid var(--auth-black);
+
+  top:-13px;
+  left:50%;
+
+  transform:translateX(-50%) rotate(-3deg);
+
+  z-index:5;
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.auth-card-top{
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:1rem;
+
+  margin-bottom:2rem;
+}
+
+
+.auth-card-label{
+  font-family:var(--body);
+
+  font-size:.68rem;
+
+  font-weight:700;
+
+  letter-spacing:.13em;
+
+  text-transform:uppercase;
+
+  opacity:.65;
+}
+
+
+.auth-mode{
+  font-family:var(--body);
+
+  font-size:.65rem;
+
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  padding:.35rem .5rem;
+
+  background:var(--auth-purple);
+
+  color:white;
+
+  border:2px solid var(--auth-black);
+}
+
+
+/* =========================================================
+   CARD TITLE
+   ========================================================= */
+
+.auth-card h2{
+  font-family:'Cabinet Grotesk',var(--display),sans-serif;
+
+  font-size:2.7rem;
+
+  line-height:.9;
+
+  letter-spacing:-.04em;
+
+  text-transform:uppercase;
+
+  margin:0 0 .7rem;
+}
+
+
+.auth-card-intro{
+  font-family:var(--body);
+
+  font-size:.82rem;
+
+  line-height:1.5;
+
+  margin:0 0 1.8rem;
+
+  opacity:.7;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-field{
+  margin-bottom:1.15rem;
+}
+
+
+.auth-field label{
+  display:block;
+
+  font-family:var(--body);
+
+  font-size:.65rem;
+
+  font-weight:700;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  margin-bottom:.45rem;
+}
+
+
+.auth-input-wrap{
+  position:relative;
+}
+
+
+.auth-input{
+  width:100%;
+
+  box-sizing:border-box;
+
+  border:3px solid var(--auth-black);
+
+  background:var(--auth-cream);
+
+  padding:.9rem 1rem;
+
+  font-family:var(--body);
+
+  font-size:.9rem;
+
+  color:var(--auth-black);
+
+  outline:none;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+
+.auth-input:focus{
+  background:white;
+
+  transform:translate(-3px,-3px);
+
+  box-shadow:6px 6px 0 var(--auth-purple);
+}
+
+
+.auth-input::placeholder{
+  color:var(--auth-black);
+
+  opacity:.35;
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
+
+.password-toggle{
+  position:absolute;
+
+  right:.7rem;
+
+  top:50%;
+
+  transform:translateY(-50%);
+
+  border:0;
+
+  background:transparent;
+
+  font-family:var(--body);
+
+  font-size:.62rem;
+
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.auth-submit{
+  width:100%;
+
+  border:3px solid var(--auth-black);
+
+  background:var(--auth-yellow);
+
+  padding:1rem 1.2rem;
+
+  font-family:'Cabinet Grotesk',var(--display),sans-serif;
+
+  font-size:1.05rem;
+
+  font-weight:800;
+
+  letter-spacing:.02em;
+
+  cursor:pointer;
+
+  box-shadow:7px 7px 0 var(--auth-black);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+
+  margin-top:.4rem;
+}
+
+
+.auth-submit:hover{
+  transform:translate(4px,4px);
+
+  box-shadow:3px 3px 0 var(--auth-black);
+
+  background:#e8cf4f;
+}
+
+
+.auth-submit:active{
+  transform:translate(7px,7px);
+
+  box-shadow:none;
+}
+
+
+/* =========================================================
+   LOGIN / SIGNUP SWITCH
+   ========================================================= */
+
+.auth-switch{
+  text-align:center;
+
+  margin:1.5rem 0 0;
+
+  font-family:var(--body);
+
+  font-size:.76rem;
+
+  line-height:1.5;
+}
+
+
+.auth-switch button{
+  border:0;
+
+  background:none;
+
+  padding:0;
+
+  font-family:var(--body);
+
+  font-weight:700;
+
+  font-size:inherit;
+
+  text-decoration:underline;
+
+  text-underline-offset:3px;
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   SAFETY NOTE
+   ========================================================= */
+
+.auth-safety{
+  margin-top:1.5rem;
+
+  padding:1rem;
+
+  border:3px solid var(--auth-black);
+
+  background:var(--auth-green);
+
+  font-family:var(--body);
+
+  font-size:.68rem;
+
+  line-height:1.5;
+}
+
+
+.auth-safety strong{
+  display:block;
+
+  font-family:'Cabinet Grotesk',var(--display),sans-serif;
+
+  font-size:.82rem;
+
+  text-transform:uppercase;
+
+  margin-bottom:.25rem;
+}
+
+
+/* =========================================================
+   RED STICKER
+   ========================================================= */
+
+.auth-card-sticker{
+  position:absolute;
+
+  width:86px;
+  height:86px;
+
+  background:var(--auth-red);
+
+  color:white;
+
+  border:3px solid var(--auth-black);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  font-family:'Cabinet Grotesk',var(--display),sans-serif;
+
+  font-size:.78rem;
+
+  line-height:.95;
+
+  text-transform:uppercase;
+
+  transform:rotate(8deg);
+
+  right:-38px;
+
+  bottom:-38px;
+
+  box-shadow:6px 6px 0 var(--auth-black);
+
+  z-index:5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1050px){
+
+  .auth-layout{
+    gap:3rem;
+  }
+
+  .auth-title{
+    font-size:clamp(4.5rem,9vw,8rem);
+  }
+
+  .auth-card-wrap{
+    width:390px;
+  }
+
+  .auth-appy{
+    width:150px;
+
+    bottom:-60px;
+  }
+
+}
+
+
+@media(max-width:820px){
+
+  .auth-main{
+    padding:4rem 20px 6rem;
+  }
+
+  .auth-layout{
+    min-height:auto;
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+    gap:5rem;
+  }
+
+  .auth-intro{
+    width:100%;
+  }
+
+  .auth-title{
+    font-size:clamp(5rem,18vw,8rem);
+  }
+
+  .auth-description,
+  .auth-note{
+    margin-left:4vw;
+  }
+
+  .auth-appy{
+    width:140px;
+
+    right:8%;
+
+    bottom:-100px;
+  }
+
+  .auth-card-wrap{
+    width:100%;
+
+    max-width:500px;
+
+    margin:0 auto;
+  }
+
+}
+
+
+@media(max-width:520px){
+
+  .auth-main{
+    padding:3rem 16px 5rem;
+  }
+
+  .auth-title{
+    font-size:clamp(4rem,20vw,6rem);
+  }
+
+  .auth-title .outline{
+    -webkit-text-stroke:2px var(--auth-black);
+  }
+
+  .auth-card{
+    padding:1.6rem;
+
+    box-shadow:9px 9px 0 var(--auth-black);
+  }
+
+  .auth-card h2{
+    font-size:2.2rem;
+  }
+
+  .auth-card-sticker{
+    width:70px;
+
+    height:70px;
+
+    right:-15px;
+
+    bottom:-25px;
+
+    font-size:.65rem;
+  }
+
+  .auth-appy{
+    width:115px;
+
+    right:0;
+  }
+
+}
+
+
+@media(prefers-reduced-motion:reduce){
+
+  .auth-input,
+  .auth-submit{
+    transition:none;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body class="auth-page">
+
+
+<!-- =====================================================
+     CUSTOM CURSOR
+     ===================================================== -->
+
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+
+<div
+  class="custom-appy-cursor"
+  id="appy-cursor"
+  aria-hidden="true">
+</div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="auth-main">
+
+  <div class="auth-layout">
+
+
+    <!-- =================================================
+         LEFT SIDE
+         ================================================= -->
+
+    <section class="auth-intro">
+
+      <div class="auth-kicker">
+        YOUR FOOD / YOUR RULES
+      </div>
+
+
+      <h1 class="auth-title">
+
+        <span>KNOW</span>
+
+        <span class="outline">YOUR</span>
+
+        <span>BITE.</span>
+
+      </h1>
+
+
+      <p class="auth-description">
+
+        Your allergen profile follows you through SafeBite.
+        Scan a label, understand what's inside, and find
+        a craving-matched alternative when something isn't safe.
+
+      </p>
+
+
+      <div class="auth-note">
+
+        <span class="auth-note-dot"></span>
+
+        Personalised food safety starts here.
+
+      </div>
+
+
+      <img
+        class="auth-appy"
+        src="assets/appy/static/think.png"
+        alt="Appy thinking about food safety">
+
+    </section>
+
+
+    <!-- =================================================
+         RIGHT SIDE
+         ================================================= -->
+
+    <section class="auth-card-wrap">
+
+
+      <div class="auth-card-sticker">
+
+        EAT<br>
+        WITH<br>
+        CONFIDENCE
+
+      </div>
+
+
+      <div class="auth-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="auth-card-top">
+
+          <span class="auth-card-label">
+            SAFEBITE / ACCESS
+          </span>
+
+          <span
+            class="auth-mode"
+            id="auth-mode">
+            NEW USER
+          </span>
+
+        </div>
+
+
+        <!-- CARD TITLE -->
+
+        <h2 id="auth-title">
+          LET'S<br>
+          START.
+        </h2>
+
+
+        <p
+          class="auth-card-intro"
+          id="auth-description">
+
+          Create your SafeBite profile and tell us
+          what you need to watch out for.
+
+        </p>
+
+
+        <!-- FORM -->
+
+        <form
+          id="auth-form"
+          novalidate>
+
+
+          <!-- EMAIL -->
+
+          <div class="auth-field">
+
+            <label for="email">
+              Email
+            </label>
+
+            <div class="auth-input-wrap">
+
+              <input
+                id="email"
+                class="auth-input"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required>
+
+            </div>
+
+          </div>
+
+
+          <!-- PASSWORD -->
+
+          <div class="auth-field">
+
+            <label for="password">
+              Password
+            </label>
+
+            <div class="auth-input-wrap">
+
+              <input
+                id="password"
+                class="auth-input"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Enter your password"
+                required>
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="password-toggle">
+
+                SHOW
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- SUBMIT -->
+
+          <button
+            type="submit"
+            class="auth-submit"
+            id="auth-submit">
+
+            CREATE MY SAFEBITE →
+
+          </button>
+
+        </form>
+
+
+        <!-- MODE SWITCH -->
+
+        <p class="auth-switch">
+
+          <span id="switch-text">
+            Already have a SafeBite account?
+          </span>
+
+          <button
+            type="button"
+            id="toggle-mode">
+
+            LOG IN
+
+          </button>
+
+        </p>
+
+
+        <!-- SAFETY MESSAGE -->
+
+        <div class="auth-safety">
+
+          <strong>
+            YOUR PROFILE MATTERS
+          </strong>
+
+          Your allergen preferences help SafeBite
+          personalise the safety checks and recommendations
+          throughout the app.
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- =====================================================
+     ORIGINAL SAFEBITE FOOTER
+     DO NOT CHANGE STRUCTURE
+     ===================================================== -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram">
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5">
+        </rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4">
+        </circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1">
+        </circle>
+
+      </svg>
+
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link">
+
+      HOW IT WORKS
+
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link">
+
+      HOW IT THINKS
+
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link">
+
+      RESULTS
+
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link">
+
+      ABOUT
+
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit">
+
+      SITE BY SAFEBITE
+
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay">
+
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10">
+
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8">
+
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05">
+
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09">
+
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07">
+
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11">
+
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08">
+
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05">
+
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09">
+
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07">
+
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04">
+
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6">
+
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06">
+
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03">
+
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4">
+
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05">
+
+  </div>
+
+</footer>
+
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   AUTH MODE
+   ========================================================= */
+
+let isSignup = true;
+
+const form =
+  document.getElementById('auth-form');
+
+const toggleMode =
+  document.getElementById('toggle-mode');
+
+const submitButton =
+  document.getElementById('auth-submit');
+
+const authTitle =
+  document.getElementById('auth-title');
+
+const authDescription =
+  document.getElementById('auth-description');
+
+const authMode =
+  document.getElementById('auth-mode');
+
+const switchText =
+  document.getElementById('switch-text');
+
+const password =
+  document.getElementById('password');
+
+const passwordToggle =
+  document.getElementById('password-toggle');
+
+
+function updateAuthMode(){
+
+  if(isSignup){
+
+    authTitle.innerHTML =
+      'LET\'S<br>START.';
+
+    authDescription.textContent =
+      'Create your SafeBite profile and tell us what you need to watch out for.';
+
+    authMode.textContent =
+      'NEW USER';
+
+    submitButton.textContent =
+      'CREATE MY SAFEBITE →';
+
+    switchText.textContent =
+      'Already have a SafeBite account?';
+
+    toggleMode.textContent =
+      'LOG IN';
+
+    password.setAttribute(
+      'autocomplete',
+      'new-password'
+    );
+
+  }else{
+
+    authTitle.innerHTML =
+      'WELCOME<br>BACK.';
+
+    authDescription.textContent =
+      'Pick up where you left off and keep your food choices personal.';
+
+    authMode.textContent =
+      'RETURNING';
+
+    submitButton.textContent =
+      'LOG IN →';
+
+    switchText.textContent =
+      'New to SafeBite?';
+
+    toggleMode.textContent =
+      'SIGN UP';
+
+    password.setAttribute(
+      'autocomplete',
+      'current-password'
+    );
+
+  }
+
+}
+
+
+toggleMode.addEventListener(
+  'click',
+  () => {
+
+    isSignup = !isSignup;
+
+    updateAuthMode();
+
+  }
+);
+
+
+/* =========================================================
+   PASSWORD VISIBILITY
+   ========================================================= */
+
+passwordToggle.addEventListener(
+  'click',
+  () => {
+
+    const visible =
+      password.type === 'text';
+
+    password.type =
+      visible ? 'password' : 'text';
+
+    passwordToggle.textContent =
+      visible ? 'SHOW' : 'HIDE';
+
+  }
+);
+
+
+/* =========================================================
+   FORM SUBMISSION
+   ========================================================= */
+
+function showAuthError(msg){
+  let el = document.getElementById('auth-error');
+  if(!el){
+    el = document.createElement('p');
+    el.id = 'auth-error';
+    el.style.cssText = 'margin:12px 0 0;font-weight:700;color:#BD3647;font-size:13px;';
+    form.appendChild(el);
+  }
+  el.textContent = msg;
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const passwordValue = password.value;
+  if(!email || !passwordValue) return;
+
+  submitButton.disabled = true;
+  const originalLabel = submitButton.textContent;
+  submitButton.textContent = 'ONE SEC…';
+
+  try {
+    const res = await fetch(`${SB_API}/api/auth/${isSignup ? 'signup' : 'login'}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: passwordValue })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(data.detail || 'Something went wrong.');
+
+    SBAuth.clear();
+    SBAuth.save(data);
+    window.location.href = isSignup ? 'onboarding-allergens.html' : 'dashboard.html';
+  } catch(err){
+    showAuthError(err.message === 'Failed to fetch'
+      ? "Can't reach the server. Is the backend running and port 8000 public?"
+      : err.message);
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+
+/* =========================================================
+   GSAP INTRO
+   ========================================================= */
+
+if(typeof gsap !== 'undefined'){
+
+  const timeline =
+    gsap.timeline({
+      defaults:{
+        ease:'power4.out'
+      }
+    });
+
+
+  timeline.from(
+    '.auth-kicker',
+    {
+      y:30,
+      opacity:0,
+      duration:.7
+    }
+  );
+
+
+  timeline.from(
+    '.auth-title span',
+    {
+      yPercent:110,
+      opacity:0,
+      rotate:2,
+      duration:1,
+      stagger:.12
+    },
+    '-=.35'
+  );
+
+
+  timeline.from(
+    '.auth-description, .auth-note',
+    {
+      y:25,
+      opacity:0,
+      duration:.7,
+      stagger:.12
+    },
+    '-=.55'
+  );
+
+
+  timeline.from(
+    '.auth-card',
+    {
+      x:70,
+      opacity:0,
+      rotate:2,
+      duration:1,
+      ease:'back.out(1.4)'
+    },
+    '-=.8'
+  );
+
+
+  timeline.from(
+    '.auth-appy',
+    {
+      scale:.55,
+      opacity:0,
+      rotate:-15,
+      duration:1,
+      ease:'back.out(1.7)'
+    },
+    '-=.65'
+  );
+
+
+  timeline.from(
+    '.auth-card-sticker',
+    {
+      scale:0,
+      rotate:-20,
+      duration:.6,
+      ease:'back.out(2)'
+    },
+    '-=.45'
+  );
+
+}
+
+</script>
+
+</body>
+</html>

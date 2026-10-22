@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Set Up Your Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+
+<style>
+
+/* =========================================================
+   SAFE BITE — ALLERGEN ONBOARDING
+   Matches the established SafeBite visual system
+   ========================================================= */
+
+.onboarding-page{
+  background:var(--cream);
+  min-height:100vh;
+  overflow:hidden;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.onboarding-hero{
+  min-height:72vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  border-bottom:4px solid var(--black);
+  background:var(--cream);
+}
+
+.onboarding-hero-inner{
+  width:min(1380px,92%);
+  margin:0 auto;
+  position:relative;
+  z-index:3;
+  padding:110px 0 90px;
+}
+
+.onboarding-kicker{
+  font-family:var(--body);
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:24px;
+  color:var(--red);
+}
+
+.onboarding-title{
+  max-width:950px;
+  margin:0;
+
+  font-family:var(--display-heading);
+  font-weight:800;
+
+  font-size:clamp(4.5rem,10vw,10rem);
+  line-height:.80;
+  letter-spacing:-.055em;
+
+  text-transform:uppercase;
+}
+
+.onboarding-title .outline{
+  display:block;
+  color:transparent;
+  -webkit-text-stroke:3px var(--black);
+}
+
+.onboarding-sub{
+  max-width:620px;
+  margin-top:38px;
+
+  font-family:var(--body);
+  font-size:18px;
+  line-height:1.55;
+}
+
+/* =========================================================
+   APPY HERO
+   ========================================================= */
+
+.onboarding-appy{
+  position:absolute;
+  right:10%;
+  bottom:5%;
+  width:260px;
+  z-index:4;
+  pointer-events:none;
+}
+
+.onboarding-appy img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+
+/* paper shapes */
+
+.onboarding-hero::before{
+  content:"";
+  position:absolute;
+
+  width:330px;
+  height:330px;
+
+  right:7%;
+  top:17%;
+
+  background:var(--purple);
+
+  border:4px solid var(--black);
+  box-shadow:14px 14px 0 var(--black);
+
+  transform:rotate(8deg);
+
+  z-index:1;
+}
+
+.onboarding-hero::after{
+  content:"01";
+
+  position:absolute;
+
+  right:13%;
+  top:23%;
+
+  font-family:var(--display-heading);
+  font-size:clamp(8rem,15vw,15rem);
+  line-height:.7;
+
+  color:transparent;
+  -webkit-text-stroke:3px var(--cream);
+
+  transform:rotate(-8deg);
+
+  z-index:2;
+}
+
+/* =========================================================
+   SETUP STRIP
+   ========================================================= */
+
+.onboarding-strip{
+  display:flex;
+  border-bottom:4px solid var(--black);
+}
+
+.onboarding-strip-item{
+  flex:1;
+  min-height:150px;
+
+  padding:28px 36px;
+
+  border-right:4px solid var(--black);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.onboarding-strip-item:last-child{
+  border-right:none;
+}
+
+.onboarding-strip-item:nth-child(1){
+  background:var(--yellow);
+}
+
+.onboarding-strip-item:nth-child(2){
+  background:var(--green);
+}
+
+.onboarding-strip-item:nth-child(3){
+  background:var(--slate);
+}
+
+.onboarding-strip-number{
+  font-family:var(--display-heading);
+  font-size:14px;
+  letter-spacing:.12em;
+}
+
+.onboarding-strip-title{
+  font-family:var(--display-heading);
+  font-size:clamp(1.8rem,3vw,3rem);
+  line-height:.85;
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   MAIN SETUP
+   ========================================================= */
+
+.onboarding-section{
+  position:relative;
+  background:var(--purple);
+  padding:100px 0 120px;
+
+  border-bottom:4px solid var(--black);
+
+  overflow:hidden;
+}
+
+.onboarding-section-inner{
+  width:min(1200px,90%);
+  margin:0 auto;
+  position:relative;
+  z-index:3;
+}
+
+.onboarding-section-kicker{
+  font-family:var(--body);
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--yellow);
+  margin-bottom:16px;
+}
+
+.onboarding-section-title{
+  margin:0;
+  max-width:900px;
+
+  font-family:var(--display-heading);
+  font-size:clamp(3.5rem,7vw,7rem);
+  line-height:.82;
+  letter-spacing:-.05em;
+
+  text-transform:uppercase;
+
+  color:var(--cream);
+}
+
+.onboarding-section-copy{
+  max-width:580px;
+  margin:28px 0 55px;
+
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+
+  color:var(--cream);
+}
+
+/* =========================================================
+   APPY MESSAGE
+   ========================================================= */
+
+.onboarding-appy-note{
+  display:flex;
+  align-items:center;
+  gap:22px;
+
+  width:min(720px,100%);
+
+  background:var(--cream);
+  border:3px solid var(--black);
+  box-shadow:10px 10px 0 var(--black);
+
+  padding:20px 24px;
+
+  margin-bottom:50px;
+
+  transform:rotate(-1deg);
+}
+
+.onboarding-appy-note-image{
+  width:90px;
+  height:90px;
+
+  flex-shrink:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.onboarding-appy-note-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.onboarding-appy-note-copy strong{
+  display:block;
+
+  font-family:var(--display-heading);
+  font-size:20px;
+
+  text-transform:uppercase;
+
+  margin-bottom:5px;
+}
+
+.onboarding-appy-note-copy p{
+  margin:0;
+
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* =========================================================
+   ALLERGEN PANEL
+   ========================================================= */
+
+.allergen-panel{
+  background:var(--cream);
+
+  border:4px solid var(--black);
+
+  box-shadow:14px 14px 0 var(--black);
+
+  padding:42px;
+
+  position:relative;
+}
+
+.allergen-panel-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:30px;
+
+  padding-bottom:28px;
+
+  border-bottom:3px solid var(--black);
+
+  margin-bottom:32px;
+}
+
+.allergen-panel-heading{
+  margin:0;
+
+  font-family:var(--display-heading);
+  font-size:clamp(2.6rem,5vw,5rem);
+  line-height:.82;
+  letter-spacing:-.045em;
+
+  text-transform:uppercase;
+}
+
+.allergen-count{
+  flex-shrink:0;
+
+  padding:12px 16px;
+
+  background:var(--yellow);
+
+  border:3px solid var(--black);
+  box-shadow:5px 5px 0 var(--black);
+
+  font-family:var(--display-heading);
+  font-size:13px;
+
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   CHOICES
+   ========================================================= */
+
+.allergen-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+}
+
+.allergen-choice{
+  appearance:none;
+
+  background:#fff;
+
+  border:3px solid var(--black);
+
+  padding:18px 24px;
+
+  min-width:150px;
+
+  cursor:pointer;
+
+  font-family:var(--display-heading);
+  font-size:16px;
+
+  text-transform:uppercase;
+
+  box-shadow:6px 6px 0 var(--black);
+
+  transition:
+    transform .14s ease,
+    box-shadow .14s ease,
+    background .14s ease;
+}
+
+.allergen-choice:hover{
+  transform:translate(3px,3px);
+  box-shadow:3px 3px 0 var(--black);
+}
+
+.allergen-choice.active{
+  background:var(--red);
+  color:var(--cream);
+
+  transform:translate(4px,4px);
+
+  box-shadow:2px 2px 0 var(--black);
+}
+
+.allergen-choice.active::before{
+  content:"✓ ";
+}
+
+/* none */
+
+.allergen-choice.none{
+  background:var(--green);
+}
+
+.allergen-choice.none.active{
+  background:var(--green);
+  color:var(--black);
+}
+
+/* =========================================================
+   SAFETY NOTE
+   ========================================================= */
+
+.onboarding-warning{
+  margin-top:35px;
+
+  padding:22px 24px;
+
+  border-left:8px solid var(--red);
+
+  background:#fff;
+
+  font-family:var(--body);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.onboarding-warning strong{
+  display:block;
+
+  font-family:var(--display-heading);
+  font-size:15px;
+
+  text-transform:uppercase;
+
+  margin-bottom:5px;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.onboarding-actions{
+  margin-top:40px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:20px;
+}
+
+.onboarding-skip{
+  font-family:var(--body);
+  font-weight:700;
+
+  font-size:12px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  color:var(--ink);
+
+  border-bottom:2px solid var(--ink);
+
+  padding-bottom:4px;
+}
+
+.onboarding-skip:hover{
+  color:var(--red);
+  border-color:var(--red);
+}
+
+.onboarding-continue{
+  border:var(--border-thick);
+
+  background:var(--yellow);
+
+  color:var(--ink);
+
+  padding:16px 26px;
+
+  font-family:var(--display-heading);
+  font-size:15px;
+
+  text-transform:uppercase;
+
+  box-shadow:var(--shadow-sm);
+
+  cursor:pointer;
+
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease;
+}
+
+.onboarding-continue:hover{
+  transform:translate(3px,3px);
+  box-shadow:2px 2px 0 var(--ink);
+}
+
+.onboarding-continue:active{
+  transform:translate(5px,5px);
+  box-shadow:none;
+}
+
+/* =========================================================
+   DECORATIVE FOOD OBJECTS
+   ========================================================= */
+
+.onboarding-prop{
+  position:absolute;
+  pointer-events:none;
+  z-index:1;
+}
+
+.onboarding-prop--bread{
+  width:120px;
+  right:5%;
+  top:8%;
+  transform:rotate(8deg);
+}
+
+.onboarding-prop--fork{
+  width:90px;
+  left:5%;
+  bottom:8%;
+  transform:rotate(-14deg);
+}
+
+.onboarding-prop--cheese{
+  width:95px;
+  right:8%;
+  bottom:10%;
+  transform:rotate(12deg);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:900px){
+
+  .onboarding-hero{
+    min-height:auto;
+  }
+
+  .onboarding-hero-inner{
+    padding:90px 0 300px;
+  }
+
+  .onboarding-appy{
+    width:210px;
+    right:10%;
+    bottom:20px;
+  }
+
+  .onboarding-hero::before{
+    width:260px;
+    height:260px;
+    right:4%;
+    top:auto;
+    bottom:30px;
+  }
+
+  .onboarding-hero::after{
+    right:10%;
+    top:auto;
+    bottom:90px;
+  }
+
+  .onboarding-strip{
+    flex-direction:column;
+  }
+
+  .onboarding-strip-item{
+    min-height:110px;
+    border-right:none;
+    border-bottom:4px solid var(--black);
+  }
+
+  .onboarding-strip-item:last-child{
+    border-bottom:none;
+  }
+
+}
+
+@media(max-width:650px){
+
+  .onboarding-hero-inner{
+    width:88%;
+    padding:75px 0 270px;
+  }
+
+  .onboarding-title{
+    font-size:clamp(4rem,18vw,6rem);
+  }
+
+  .onboarding-sub{
+    font-size:15px;
+  }
+
+  .onboarding-appy{
+    width:175px;
+    right:8%;
+  }
+
+  .onboarding-hero::before{
+    width:210px;
+    height:210px;
+  }
+
+  .onboarding-section{
+    padding:70px 0 90px;
+  }
+
+  .allergen-panel{
+    padding:24px;
+    box-shadow:8px 8px 0 var(--black);
+  }
+
+  .allergen-panel-header{
+    flex-direction:column;
+  }
+
+  .allergen-grid{
+    flex-direction:column;
+  }
+
+  .allergen-choice{
+    width:100%;
+    text-align:left;
+  }
+
+  .onboarding-appy-note{
+    align-items:flex-start;
+    padding:16px;
+  }
+
+  .onboarding-appy-note-image{
+    width:65px;
+    height:65px;
+  }
+
+  .onboarding-actions{
+    flex-direction:column-reverse;
+    align-items:stretch;
+  }
+
+  .onboarding-continue{
+    width:100%;
+  }
+
+  .onboarding-skip{
+    text-align:center;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<header class="onboarding-hero">
+
+  <div class="onboarding-hero-inner">
+
+    <p class="onboarding-kicker">
+      SAFE BITE / YOUR PROFILE
+    </p>
+
+    <h1 class="onboarding-title split-title split-letters">
+
+      MAKE IT
+      <span class="outline">PERSONAL.</span>
+
+    </h1>
+
+    <p class="onboarding-sub">
+      Tell SafeBite what you need to avoid.
+      Appy will use this information whenever
+      your food is checked.
+    </p>
+
+  </div>
+
+
+  <!-- APPY -->
+
+  <div class="onboarding-appy">
+
+    <img
+      src="assets/appy/static/think.png"
+      alt="Appy thinking"
+    >
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     SETUP STRIP
+     ========================================================= -->
+
+<section class="onboarding-strip">
+
+  <div class="onboarding-strip-item">
+
+    <span class="onboarding-strip-number">
+      01
+    </span>
+
+    <span class="onboarding-strip-title">
+      Tell us
+    </span>
+
+  </div>
+
+
+  <div class="onboarding-strip-item">
+
+    <span class="onboarding-strip-number">
+      02
+    </span>
+
+    <span class="onboarding-strip-title">
+      We remember
+    </span>
+
+  </div>
+
+
+  <div class="onboarding-strip-item">
+
+    <span class="onboarding-strip-number">
+      03
+    </span>
+
+    <span class="onboarding-strip-title">
+      You check
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     ALLERGEN SETUP
+     ========================================================= -->
+
+<section class="onboarding-section">
+
+  <img
+    src="assets/footer/bread-board.png"
+    class="onboarding-prop onboarding-prop--bread"
+    alt=""
+  >
+
+  <img
+    src="assets/footer/fork.png"
+    class="onboarding-prop onboarding-prop--fork"
+    alt=""
+  >
+
+  <img
+    src="assets/footer/cheese-block.png"
+    class="onboarding-prop onboarding-prop--cheese"
+    alt=""
+  >
+
+
+  <div class="onboarding-section-inner">
+
+    <p class="onboarding-section-kicker">
+      WHAT SHOULD WE WATCH FOR?
+    </p>
+
+    <h2 class="onboarding-section-title split-title split-letters">
+      YOUR FOOD.
+      <br>
+      YOUR RULES.
+    </h2>
+
+    <p class="onboarding-section-copy">
+      Select every allergen that applies to you.
+      These preferences become part of your SafeBite
+      profile and help Appy make your verdicts personal.
+    </p>
+
+
+    <!-- APPY -->
+
+    <div class="onboarding-appy-note">
+
+      <div class="onboarding-appy-note-image">
+
+        <img
+          src="assets/appy/static/read.png"
+          alt="Appy reading"
+        >
+
+      </div>
+
+      <div class="onboarding-appy-note-copy">
+
+        <strong>
+          Appy says: start here.
+        </strong>
+
+        <p>
+          You can change these preferences later.
+          For now, just tell me what I should look out for.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- PANEL -->
+
+    <div class="allergen-panel">
+
+      <div class="allergen-panel-header">
+
+        <div>
+
+          <h3 class="allergen-panel-heading">
+            What should<br>
+            I flag?
+          </h3>
+
+        </div>
+
+        <div
+          class="allergen-count"
+          id="selection-count"
+        >
+          0 selected
+        </div>
+
+      </div>
+
+
+      <!-- OPTIONS -->
+
+      <div
+        class="allergen-grid"
+        id="allergen-grid"
+      >
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="peanut"
+          aria-pressed="false"
+        >
+          Peanut
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="tree-nut"
+          aria-pressed="false"
+        >
+          Tree Nut
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="dairy"
+          aria-pressed="false"
+        >
+          Dairy
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="gluten"
+          aria-pressed="false"
+        >
+          Gluten
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="egg"
+          aria-pressed="false"
+        >
+          Egg
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="shellfish"
+          aria-pressed="false"
+        >
+          Shellfish
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice"
+          data-value="soy"
+          aria-pressed="false"
+        >
+          Soy
+        </button>
+
+        <button
+          type="button"
+          class="allergen-choice none"
+          data-value="none"
+          aria-pressed="false"
+        >
+          None of these
+        </button>
+
+      </div>
+
+
+      <!-- WARNING -->
+
+      <div class="onboarding-warning">
+
+        <strong>
+          One important thing.
+        </strong>
+
+        SafeBite uses your selections to personalise
+        its results, but always check the actual packaging
+        and ingredient information yourself, especially
+        for severe allergies.
+
+      </div>
+
+
+      <!-- ACTIONS -->
+
+      <div class="onboarding-actions">
+
+        <a
+          href="dashboard.html"
+          class="onboarding-skip"
+        >
+          Skip for now
+        </a>
+
+        <button
+          type="button"
+          id="allergen-continue"
+          class="onboarding-continue"
+        >
+          SAVE MY PROFILE →
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA STRIP
+     ========================================================= -->
+
+<section
+  class="cta-strip"
+  data-color="#FFF8E0"
+>
+
+  <p style="color:var(--ink)">
+    Set once. SafeBite remembers.
+  </p>
+
+  <a
+    href="dashboard.html"
+    class="brutal-btn brutal-btn--yellow"
+  >
+    GO TO DASHBOARD →
+  </a>
+
+</section>
+
+
+<!-- =========================================================
+     SHARED FOOTER
+     ========================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-color="#FFF8E0"
+>
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5"
+        ></rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1"
+        ></circle>
+
+      </svg>
+
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link"
+    >
+      HOW IT WORKS
+    </a>
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link"
+    >
+      HOW IT THINKS
+    </a>
+
+    <a
+      href="results.html"
+      class="footer-topbar-link"
+    >
+      RESULTS
+    </a>
+
+    <a
+      href="about.html"
+      class="footer-topbar-link"
+    >
+      ABOUT
+    </a>
+
+    <span
+      class="footer-topbar-link footer-topbar-credit"
+    >
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay"
+  >
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10"
+    >
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8"
+    >
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11"
+    >
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08"
+    >
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04"
+    >
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6"
+    >
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03"
+    >
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4"
+    >
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05"
+    >
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   PROFILE DATA
+   ========================================================= */
+
+const API_BASE = location.hostname.endsWith('.app.github.dev') ? location.origin.replace(/-[0-9]+[.]/, '-8000.') : 'http://localhost:8000';
+
+const grid =
+  document.getElementById('allergen-grid');
+
+const countDisplay =
+  document.getElementById('selection-count');
+
+const continueButton =
+  document.getElementById('allergen-continue');
+
+const selected =
+  new Set();
+
+
+/* =========================================================
+   COUNT
+   ========================================================= */
+
+function updateCount(){
+
+  const count =
+    selected.has('none')
+      ? 0
+      : selected.size;
+
+  countDisplay.textContent =
+    `${count} ${count === 1 ? 'allergen' : 'allergens'} selected`;
+
+}
+
+
+/* =========================================================
+   ALLERGEN BUTTONS
+   ========================================================= */
+
+grid
+  .querySelectorAll('.allergen-choice')
+  .forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      const value =
+        button.dataset.value;
+
+
+      /* NONE */
+
+      if(value === 'none'){
+
+        const wasActive =
+          button.classList.contains('active');
+
+
+        selected.clear();
+
+
+        grid
+          .querySelectorAll('.allergen-choice')
+          .forEach(item => {
+
+            item.classList.remove('active');
+
+            item.setAttribute(
+              'aria-pressed',
+              'false'
+            );
+
+          });
+
+
+        if(!wasActive){
+
+          selected.add('none');
+
+          button.classList.add('active');
+
+          button.setAttribute(
+            'aria-pressed',
+            'true'
+          );
+
+        }
+
+      }
+
+
+      /* NORMAL ALLERGEN */
+
+      else{
+
+        selected.delete('none');
+
+
+        const noneButton =
+          grid.querySelector(
+            '[data-value="none"]'
+          );
+
+
+        noneButton.classList.remove('active');
+
+        noneButton.setAttribute(
+          'aria-pressed',
+          'false'
+        );
+
+
+        if(selected.has(value)){
+
+          selected.delete(value);
+
+          button.classList.remove('active');
+
+          button.setAttribute(
+            'aria-pressed',
+            'false'
+          );
+
+        }
+
+        else{
+
+          selected.add(value);
+
+          button.classList.add('active');
+
+          button.setAttribute(
+            'aria-pressed',
+            'true'
+          );
+
+        }
+
+      }
+
+
+      updateCount();
+
+    });
+
+  });
+
+
+/* =========================================================
+   SAVE PROFILE
+   ========================================================= */
+
+continueButton.addEventListener(
+  'click',
+  async () => {
+
+    continueButton.disabled = true;
+
+    continueButton.textContent =
+      'SAVING...';
+
+
+    const allergens =
+      selected.has('none')
+        ? []
+        : Array.from(selected);
+
+
+    try{
+
+      const response =
+        await fetch(
+          `${API_BASE}/api/profile`,
+          {
+            method:'POST',
+
+            headers:{
+              'Content-Type':
+                'application/json'
+            },
+
+            body:JSON.stringify({
+              allergens:allergens
+            })
+          }
+        );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          `Backend returned ${response.status}`
+        );
+
+      }
+
+
+      window.location.href =
+        'dashboard.html';
+
+    }
+
+    catch(error){
+
+      console.error(
+        'Failed to save profile:',
+        error
+      );
+
+
+      continueButton.disabled = false;
+
+      continueButton.textContent =
+        'SAVE MY PROFILE →';
+
+
+      alert(
+        `Couldn't reach the backend at ${API_BASE} — is it running?`
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   GSAP
+   ========================================================= */
+
+if(typeof gsap !== 'undefined'){
+
+  gsap.registerPlugin(ScrollTrigger);
+
+
+  gsap.from(
+    '.onboarding-kicker',
+    {
+      y:30,
+      opacity:0,
+      duration:.7,
+      ease:'power3.out'
+    }
+  );
+
+
+  gsap.from(
+    '.onboarding-title .line',
+    {
+      yPercent:110,
+      opacity:0,
+      rotate:2,
+      duration:1,
+      stagger:.1,
+      ease:'power4.out',
+      delay:.1
+    }
+  );
+
+
+  gsap.from(
+    '.onboarding-sub',
+    {
+      y:25,
+      opacity:0,
+      duration:.7,
+      delay:.45,
+      ease:'power3.out'
+    }
+  );
+
+
+  gsap.from(
+    '.onboarding-appy',
+    {
+      scale:.65,
+      opacity:0,
+      rotate:-12,
+      duration:1,
+      delay:.4,
+      ease:'back.out(1.7)'
+    }
+  );
+
+
+  gsap.from(
+    '.onboarding-appy-note',
+    {
+      y:45,
+      opacity:0,
+      duration:.8,
+      ease:'power3.out',
+
+      scrollTrigger:{
+        trigger:'.onboarding-appy-note',
+        start:'top 85%'
+      }
+    }
+  );
+
+
+  gsap.from(
+    '.allergen-panel',
+    {
+      y:60,
+      opacity:0,
+      duration:.9,
+      ease:'power3.out',
+
+      scrollTrigger:{
+        trigger:'.allergen-panel',
+        start:'top 85%'
+      }
+    }
+  );
+
+
+  gsap.from(
+    '.allergen-choice',
+    {
+      y:25,
+      opacity:0,
+      duration:.5,
+      stagger:.06,
+      ease:'power3.out',
+
+      scrollTrigger:{
+        trigger:'.allergen-grid',
+        start:'top 85%'
+      }
+    }
+  );
+
+}
+
+</script>
+
+</body>
+</html>

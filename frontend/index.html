@@ -1,0 +1,3568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6B66A6">
+
+<title>SafeBite — Know What You Eat</title>
+<script>if(localStorage.getItem('safebite_token')) location.replace('dashboard.html');</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+<style>
+
+
+body.index-page .verdict-panel-sprite,
+body.index-page .swap-success-sprite{
+  background-color:transparent;
+}
+/* =========================================================
+   SAFEBITE INDEX — INTERACTIVE EXPERIENCE
+   ========================================================= */
+
+:root{
+  --sb-purple:#6B66A6;
+  --sb-red:#BD3647;
+  --sb-yellow:#F2DB66;
+  --sb-cream:#FCF6E8;
+  --sb-green:#A2BF8A;
+  --sb-blue:#CFDCFF;
+  --sb-plum:#816AA8;
+  --sb-black:#141414;
+
+  --sb-display:'Bungee','Impact',sans-serif;
+  --sb-body:'Space Mono',ui-monospace,monospace;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+html, body, *, *::before, *::after { cursor: none !important; }
+html{
+  scroll-behavior:smooth;
+}
+
+body.index-page{
+  margin:0;
+  background:var(--sb-purple);
+  color:var(--sb-black);
+  overflow-x:hidden;
+  font-family:var(--sb-body);
+}
+
+body.index-page *,
+body.index-page *::before,
+body.index-page *::after{
+  box-sizing:border-box;
+}
+
+body.index-page h1,
+body.index-page h2,
+body.index-page h3,
+body.index-page h4{
+  font-family:var(--sb-display);
+  font-weight:400;
+}
+
+body.index-page a{
+  color:inherit;
+}
+
+/* =========================================================
+   SCROLL PROGRESS
+   ========================================================= */
+
+.sb-scroll-progress{
+  position:fixed;
+  left:0;
+  top:0;
+  width:0;
+  height:4px;
+  background:var(--sb-yellow);
+  z-index:99999;
+  transform-origin:left center;
+  pointer-events:none;
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+body.index-page .navbar{
+  transition:
+    transform .45s cubic-bezier(.6,0,.3,1),
+    box-shadow .3s ease,
+    background .3s ease;
+  z-index:9000;
+}
+
+
+body.index-page .navbar.sb-nav-scrolled{
+  box-shadow:6px 6px 0 var(--sb-black);
+}
+
+body.index-page .nav-item a{
+  transition:transform .25s ease;
+}
+
+body.index-page .nav-item a:hover{
+  transform:translateY(-2px);
+}
+
+body.index-page .nav-frame{
+  transition:transform .3s cubic-bezier(.5,1.8,.5,1);
+}
+
+body.index-page .nav-item a:hover .nav-frame{
+  transform:translateY(-5px) rotate(-5deg) scale(1.08);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.sb-hero{
+  position:relative;
+  min-height:100svh;
+  padding:9rem 4vw 5rem;
+  overflow:hidden;
+  background:var(--sb-purple);
+  display:flex;
+  align-items:center;
+}
+
+.sb-hero::before{
+  content:"";
+  position:absolute;
+  width:50vw;
+  height:50vw;
+  max-width:760px;
+  max-height:760px;
+  right:-8vw;
+  top:8vh;
+  border-radius:50%;
+  background:var(--sb-yellow);
+  border:3px solid var(--sb-black);
+  transform:rotate(-8deg);
+  transition:transform 1.2s cubic-bezier(.2,.8,.2,1);
+}
+
+.sb-hero:hover::before{
+  transform:rotate(-3deg) scale(1.03);
+}
+
+.sb-hero::after{
+  content:"SCAN / READ / MATCH / KNOW";
+  position:absolute;
+  left:-1rem;
+  bottom:5rem;
+  color:var(--sb-cream);
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.12em;
+  transform:rotate(-90deg);
+  transform-origin:left bottom;
+  opacity:.8;
+}
+
+.sb-hero-inner{
+  width:min(1500px,100%);
+  margin:auto;
+  min-height:78svh;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:3vw;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+
+.sb-hero-copy{
+  position:relative;
+  z-index:10;
+}
+
+.sb-hero-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:10px 14px;
+  margin-bottom:1.7rem;
+  background:var(--sb-cream);
+  border:3px solid var(--sb-black);
+  box-shadow:6px 6px 0 var(--sb-black);
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.08em;
+}
+
+.sb-hero-kicker::before{
+  content:"";
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--sb-red);
+  border:2px solid var(--sb-black);
+  animation:sb-pulse 1.8s infinite;
+}
+
+@keyframes sb-pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.5)}
+}
+
+.sb-hero-title{
+  margin:0;
+  font-family:var(--sb-display)!important;
+  font-size:clamp(5rem,10.5vw,12.5rem)!important;
+  line-height:.75!important;
+  letter-spacing:-.035em!important;
+  text-transform:uppercase;
+  color:var(--sb-yellow);
+}
+
+.sb-hero-title .line{
+  display:block;
+  overflow:hidden;
+}
+
+.sb-hero-title .line-inner{
+  display:block;
+  will-change:transform;
+}
+
+.sb-hero-title .outline{
+  color:transparent;
+  -webkit-text-stroke:3px var(--sb-yellow);
+  margin-left:8vw;
+}
+
+.sb-hero-title .cream{
+  color:var(--sb-cream);
+}
+
+.sb-hero-subline{
+  max-width:470px;
+  margin:2rem 0 0 8vw;
+  color:var(--sb-cream);
+  font-size:15px;
+  line-height:1.25;
+}
+
+.sb-hero-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+  margin:2rem 0 0 8vw;
+}
+
+.sb-primary-btn,
+.sb-outline-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:56px;
+  padding:14px 23px;
+  border:3px solid var(--sb-black);
+  text-decoration:none;
+  font-family:var(--sb-display);
+  font-size:19px;
+  text-transform:uppercase;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+  will-change:transform;
+}
+
+.sb-primary-btn{
+  background:var(--sb-yellow);
+  box-shadow:8px 8px 0 var(--sb-black);
+}
+
+.sb-primary-btn:hover{
+  box-shadow:3px 3px 0 var(--sb-black);
+}
+
+.sb-small-link{
+  color:var(--sb-cream);
+  font-family:var(--sb-body);
+  font-size:10px;
+  text-transform:uppercase;
+  text-underline-offset:5px;
+}
+
+.sb-hero-stage{
+  min-height:650px;
+  position:relative;
+  z-index:5;
+  perspective:1000px;
+}
+
+.sb-label-card{
+  position:absolute;
+  width:min(30vw,390px);
+  min-width:280px;
+  aspect-ratio:.72;
+  right:9%;
+  top:50%;
+  transform:translateY(-50%) rotate(6deg);
+  background:var(--sb-cream);
+  border:3px solid var(--sb-black);
+  box-shadow:14px 14px 0 var(--sb-black);
+  padding:23px;
+  z-index:3;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  will-change:transform;
+}
+
+.sb-hero-stage:hover .sb-label-card{
+  transform:translateY(-50%) rotate(3deg) translate(-8px,-5px);
+}
+
+.sb-label-top{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:3px solid var(--sb-black);
+  padding-bottom:12px;
+  font-family:var(--sb-body);
+  font-size:9px;
+}
+
+.sb-label-brand{
+  font-family:var(--sb-display);
+  font-size:30px;
+  line-height:.8;
+}
+
+.sb-label-title{
+  margin:30px 0 16px;
+  font-family:var(--sb-display);
+  font-size:clamp(3rem,5vw,5.2rem);
+  line-height:.76;
+}
+
+.sb-label-lines{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.sb-label-lines span{
+  height:6px;
+  width:100%;
+  background:var(--sb-black);
+}
+
+.sb-label-lines span:nth-child(2){width:76%}
+.sb-label-lines span:nth-child(3){width:91%}
+.sb-label-lines span:nth-child(4){width:63%}
+
+.sb-label-warning{
+  position:absolute;
+  bottom:18px;
+  left:18px;
+  width:100px;
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border:3px solid var(--sb-black);
+  border-radius:50%;
+  background:var(--sb-red);
+  color:var(--sb-cream);
+  font-family:var(--sb-display);
+  font-size:16px;
+  line-height:.8;
+  transform:rotate(-12deg);
+}
+
+.sb-hero-character{
+  position:absolute;
+  width:clamp(180px,21vw,310px);
+  left:1%;
+  bottom:2%;
+  z-index:8;
+  filter:drop-shadow(8px 8px 0 var(--sb-black));
+  pointer-events:none;
+  will-change:transform;
+}
+
+.sb-hero-note{
+  position:absolute;
+  top:5%;
+  right:0;
+  width:180px;
+  padding:13px;
+  background:var(--sb-cream);
+  border:3px solid var(--sb-black);
+  box-shadow:6px 6px 0 var(--sb-black);
+  font-family:var(--sb-body);
+  font-size:10px;
+  line-height:1.15;
+  transform:rotate(-5deg);
+  z-index:10;
+  transition:transform .35s ease;
+}
+
+.sb-hero-note:hover{
+  transform:rotate(0deg) translateY(-5px);
+}
+
+.sb-hero-note strong{
+  color:var(--sb-red);
+}
+
+.sb-hero-sticker{
+  position:absolute;
+  right:1%;
+  bottom:3%;
+  width:110px;
+  height:110px;
+  border:3px solid var(--sb-black);
+  border-radius:50%;
+  background:var(--sb-blue);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-family:var(--sb-display);
+  font-size:18px;
+  line-height:.8;
+  transform:rotate(8deg);
+  z-index:11;
+  transition:transform .35s cubic-bezier(.5,1.8,.5,1);
+}
+
+.sb-hero-sticker:hover{
+  transform:rotate(-4deg) scale(1.12);
+}
+
+/* =========================================================
+   KINETIC SECTION
+   ========================================================= */
+
+.sb-kinetic{
+  position:relative;
+  height:190vh;
+  overflow:hidden;
+  background:var(--sb-red);
+  color:var(--sb-yellow);
+}
+
+.sb-kinetic-sticky{
+  position:sticky;
+  top:0;
+  height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:3vh;
+  overflow:hidden;
+}
+
+.sb-kinetic-label{
+  position:absolute;
+  top:8vh;
+  left:3vw;
+  color:var(--sb-cream);
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.sb-kinetic-row{
+  display:flex;
+  width:max-content;
+  white-space:nowrap;
+  font-family:var(--sb-display);
+  font-size:clamp(5rem,12vw,12rem);
+  line-height:.78;
+  letter-spacing:.01em;
+  will-change:transform;
+}
+
+.sb-kinetic-row:nth-of-type(odd){
+  color:var(--sb-yellow);
+}
+
+.sb-kinetic-row:nth-of-type(even){
+  color:transparent;
+  -webkit-text-stroke:2px var(--sb-yellow);
+}
+
+.sb-kinetic-row span{
+  padding:0 2vw;
+}
+
+.sb-kinetic-centre{
+  position:absolute;
+  left:50%;
+  top:70%;
+  width:clamp(600px,100vw,720px);
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(7px 7px 0 var(--sb-black));
+  pointer-events:none;
+  z-index:5;
+  animation:sb-float 3.5s ease-in-out infinite;
+}
+
+@keyframes sb-float{
+  0%,100%{transform:translate(-50%,-50%) rotate(-3deg)}
+  50%{transform:translate(-50%,-55%) rotate(3deg)}
+}
+
+/* =========================================================
+   ENTRY SECTION
+   ========================================================= */
+
+.sb-entry{
+  position:relative;
+  padding:12rem 4vw;
+  background:var(--sb-cream);
+  overflow:hidden;
+}
+
+.sb-section-head{
+  width:min(1200px,100%);
+  margin:0 auto 5rem;
+}
+
+.sb-micro{
+  margin:0 0 14px;
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.sb-big-heading{
+  margin:0!important;
+  font-family:var(--sb-display)!important;
+  font-size:clamp(5rem,11vw,11rem)!important;
+  line-height:.76!important;
+  letter-spacing:-.02em!important;
+  text-transform:uppercase;
+}
+
+.sb-entry-grid{
+  width:min(1200px,100%);
+  margin:auto;
+  display:flex;
+  gap:28px;
+}
+
+.sb-entry-card{
+  position:relative;
+  min-height:620px;
+  flex:1;
+  padding:28px;
+  border:3px solid var(--sb-black);
+  overflow:hidden;
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transform-style:preserve-3d;
+  transition:
+    transform .15s ease,
+    box-shadow .25s ease;
+  will-change:transform;
+}
+
+.sb-entry-card--scan{
+  background:var(--sb-yellow);
+}
+
+.sb-entry-card--crave{
+  background:var(--sb-blue);
+}
+
+.sb-entry-card:hover{
+  box-shadow:12px 12px 0 var(--sb-black);
+}
+
+.sb-entry-num{
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.08em;
+  position:relative;
+  z-index:4;
+}
+
+.sb-entry-title{
+  margin:0!important;
+  font-family:var(--sb-display)!important;
+  font-size:clamp(4rem,7vw,7rem)!important;
+  line-height:.75!important;
+  position:relative;
+  z-index:3;
+}
+
+.sb-entry-copy{
+  max-width:360px;
+  margin:0;
+  font-size:14px;
+  line-height:1.25;
+  position:relative;
+  z-index:4;
+}
+
+.sb-entry-image{
+  position:absolute;
+  width:48%;
+  max-width:340px;
+  right:5%;
+  top:5%;
+  mix-blend-mode:multiply;
+  transform:rotate(5deg);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+}
+
+.sb-entry-card:hover .sb-entry-image{
+  transform:rotate(-2deg) scale(1.08) translate(-5px,-8px);
+}
+
+.sb-entry-arrow{
+  width:62px;
+  height:62px;
+  border:3px solid var(--sb-black);
+  border-radius:50%;
+  background:var(--sb-cream);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--sb-display);
+  font-size:25px;
+  align-self:flex-end;
+  transition:
+    transform .35s cubic-bezier(.5,1.8,.5,1),
+    background .25s ease;
+}
+
+.sb-entry-card:hover .sb-entry-arrow{
+  transform:rotate(45deg) scale(1.1);
+  background:var(--sb-yellow);
+}
+
+/* =========================================================
+   FLOW / STICKY CARDS
+   ========================================================= */
+
+.sb-stack-section{
+  position:relative;
+  padding:12rem 3vw 18rem;
+  background:var(--sb-purple);
+  color:var(--sb-cream);
+}
+
+.sb-stack-intro{
+  width:min(1200px,100%);
+  margin:0 auto 7rem;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:40px;
+}
+
+.sb-stack-intro > div{
+  flex:1;
+}
+
+.sb-stack-intro > p{
+  max-width:380px;
+  margin:0;
+  font-size:15px;
+  line-height:1.25;
+}
+
+.sb-stack-intro .sb-big-heading{
+  color:var(--sb-yellow);
+}
+
+.sb-stack-shell{
+  width:min(900px,100%);
+  height:270vh;
+  margin:auto;
+  position:relative;
+}
+
+.sb-stack-card{
+  position:sticky;
+  top:13vh;
+  width:min(86vw,760px);
+  height:min(70vh,600px);
+  margin:0 auto;
+  border:3px solid var(--sb-black);
+  overflow:hidden;
+  display:flex;
+  transform-origin:top center;
+  will-change:transform;
+}
+
+.sb-stack-card + .sb-stack-card{
+  margin-top:-48vh;
+}
+
+.sb-stack-card:nth-child(1){background:var(--sb-cream);color:var(--sb-black);z-index:1}
+.sb-stack-card:nth-child(2){background:var(--sb-yellow);color:var(--sb-black);z-index:2}
+.sb-stack-card:nth-child(3){background:var(--sb-blue);color:var(--sb-black);z-index:3}
+.sb-stack-card:nth-child(4){background:var(--sb-green);color:var(--sb-black);z-index:4}
+
+.sb-stack-copy{
+  width:50%;
+  padding:clamp(25px,4vw,45px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.sb-stack-index{
+  font-family:var(--sb-body);
+  font-size:10px;
+}
+
+.sb-stack-title{
+  margin:0!important;
+  font-family:var(--sb-display)!important;
+  font-size:clamp(4rem,7vw,7rem)!important;
+  line-height:.75!important;
+}
+
+.sb-stack-copy p{
+  max-width:310px;
+  margin:0;
+  font-size:14px;
+  line-height:1.2;
+}
+
+.sb-stack-image-wrap{
+  width:50%;
+  padding:18px;
+  display:flex;
+}
+
+.sb-stack-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border:3px solid var(--sb-black);
+  mix-blend-mode:multiply;
+  transition:transform .6s ease;
+}
+
+.sb-stack-card:hover .sb-stack-image{
+  transform:scale(1.04) rotate(1deg);
+}
+
+/* =========================================================
+   PIPELINE
+   ========================================================= */
+
+.sb-pipeline{
+  position:relative;
+  min-height:130vh;
+  background:var(--sb-cream);
+  overflow:hidden;
+}
+
+.sb-pipeline-sticky{
+  position:sticky;
+  top:0;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.sb-pipeline-kicker{
+  color:var(--sb-red);
+}
+
+.sb-pipeline-title{
+  width:100%;
+  margin:0;
+  text-align:center;
+  font-family:var(--sb-display);
+  font-size:clamp(4rem,11vw,12rem);
+  line-height:.76;
+  letter-spacing:-.02em;
+}
+
+.sb-pipeline-title .word{
+  display:inline-block;
+  opacity:.12;
+  transform:translateY(50px) rotate(2deg);
+  transition:
+    opacity .5s ease,
+    transform .6s cubic-bezier(.5,1.8,.5,1);
+  margin:0 .2vw;
+}
+
+.sb-pipeline-title .word.active{
+  opacity:1;
+  transform:translateY(0) rotate(0);
+}
+
+.sb-pipeline-caption{
+  max-width:450px;
+  margin:3rem auto 0;
+  text-align:center;
+  font-family:var(--sb-body);
+  font-size:11px;
+  line-height:1.2;
+}
+
+.sb-pipeline-progress{
+  position:absolute;
+  bottom:7vh;
+  width:min(600px,80vw);
+  height:4px;
+  background:rgba(20,20,20,.18);
+}
+
+.sb-pipeline-progress span{
+  display:block;
+  width:0;
+  height:100%;
+  background:var(--sb-red);
+}
+
+/* =========================================================
+   VERDICT
+   ========================================================= */
+
+.sb-verdict-wrap{
+  background:var(--sb-yellow);
+  padding:12rem 4vw;
+}
+
+.sb-verdict-grid{
+  width:min(1200px,100%);
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:60px;
+}
+
+.sb-verdict-grid > div{
+  flex:1;
+}
+
+.sb-verdict-grid .section-title{
+  margin:0 0 25px!important;
+  font-family:var(--sb-display)!important;
+  font-size:clamp(5rem,9vw,10rem)!important;
+  line-height:.75!important;
+}
+
+.sb-verdict-sub{
+  max-width:360px;
+  font-size:15px;
+  line-height:1.25;
+}
+
+.sb-verdict-right{
+  min-width:0;
+}
+
+body.index-page .verdict-menu{
+  display:flex;
+  gap:10px;
+  justify-content:flex-start;
+  margin-bottom:20px;
+}
+
+body.index-page .gooey-btn{
+  cursor:pointer;
+  transition:
+    transform .25s cubic-bezier(.5,1.8,.5,1),
+    box-shadow .2s ease;
+}
+
+body.index-page .gooey-btn:hover{
+  transform:translateY(-7px) rotate(-2deg);
+}
+
+body.index-page .gooey-btn.is-active{
+  transform:translateY(-5px) scale(1.05);
+  box-shadow:6px 6px 0 var(--sb-black);
+}
+
+body.index-page .verdict-stage{
+  max-width:none!important;
+  min-height:400px;
+}
+
+body.index-page .verdict-panel{
+  border:3px solid var(--sb-black);
+  border-radius:0;
+  box-shadow:10px 10px 0 var(--sb-black);
+  background:var(--sb-cream);
+  transition:
+    transform .35s ease,
+    opacity .35s ease;
+}
+
+body.index-page .verdict-panel h3{
+  font-family:var(--sb-display);
+}
+
+.sb-verdict-status{
+  display:inline-flex;
+  margin-top:20px;
+  padding:7px 10px;
+  border:2px solid var(--sb-black);
+  font-family:var(--sb-body);
+  font-size:9px;
+  background:var(--sb-yellow);
+}
+
+/* =========================================================
+   SWAP CAROUSEL
+   ========================================================= */
+
+.sb-swipe-section{
+  position:relative;
+  background:var(--sb-red);
+  color:var(--sb-cream);
+  padding:12rem 0 14rem;
+  overflow:hidden;
+}
+
+.sb-swipe-head{
+  text-align:center;
+  margin-bottom:4rem;
+  padding:0 5vw;
+}
+
+.sb-swipe-head .sb-big-heading{
+  color:var(--sb-yellow);
+}
+
+.sb-swipe-swiper{
+  width:min(90vw,440px);
+  height:610px;
+}
+
+.sb-swipe-card{
+  border:3px solid var(--sb-black);
+  padding:18px;
+  color:var(--sb-black);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:grab;
+  transition:transform .25s ease;
+}
+
+.sb-swipe-card:active{
+  cursor:grabbing;
+}
+
+.sb-swipe-card:nth-child(1){background:var(--sb-cream)}
+.sb-swipe-card:nth-child(2){background:var(--sb-yellow)}
+.sb-swipe-card:nth-child(3){background:var(--sb-green)}
+.sb-swipe-card:nth-child(4){background:var(--sb-blue)}
+.sb-swipe-card:nth-child(5){background:#F8C1BA}
+
+.sb-swipe-number{
+  font-family:var(--sb-body);
+  font-size:10px;
+}
+
+.sb-swipe-image{
+  width:100%;
+  height:330px;
+  object-fit:cover;
+  border:3px solid var(--sb-black);
+  mix-blend-mode:multiply;
+  transition:transform .5s ease;
+}
+
+.sb-swipe-card:hover .sb-swipe-image{
+  transform:scale(1.04) rotate(-1deg);
+}
+
+.sb-swipe-card h3{
+  margin:0;
+  font-family:var(--sb-display);
+  font-size:clamp(2.8rem,6vw,4.8rem);
+  line-height:.75;
+}
+
+.sb-swipe-card p{
+  max-width:330px;
+  margin:0;
+  font-size:13px;
+  line-height:1.15;
+}
+
+.sb-swipe-hint{
+  text-align:center;
+  margin:2rem 0 0;
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
+
+.sb-gallery{
+  background:var(--sb-cream);
+  padding:12rem 3vw 14rem;
+  overflow:hidden;
+}
+
+.sb-gallery-grid{
+  width:min(1300px,100%);
+  margin:5rem auto 0;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  justify-content:center;
+  gap:18px;
+}
+
+.sb-art{
+  position:relative;
+  flex:0 1 calc(33.333% - 18px);
+  min-height:300px;
+  height:400px;
+  margin:0;
+  border:3px solid var(--sb-black);
+  background:#efe5d9;
+  overflow:hidden;
+  transition:
+    transform .4s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease;
+}
+
+.sb-art:nth-child(2){
+  height:330px;
+}
+
+.sb-art:nth-child(3){
+  height:430px;
+}
+
+.sb-art:nth-child(4){
+  height:350px;
+}
+
+.sb-art:nth-child(5){
+  height:430px;
+}
+
+.sb-art:nth-child(6){
+  height:320px;
+}
+
+.sb-art:hover{
+  transform:rotate(0deg) translateY(-12px) scale(1.015)!important;
+  box-shadow:10px 10px 0 var(--sb-black);
+  z-index:5;
+}
+
+.sb-art img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  mix-blend-mode:multiply;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+.sb-art:hover img{
+  transform:scale(1.08);
+}
+
+.sb-art figcaption{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  background:var(--sb-cream);
+  border:2px solid var(--sb-black);
+  padding:6px 8px;
+  font-family:var(--sb-body);
+  font-size:9px;
+}
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+.sb-final{
+  position:relative;
+  min-height:75vh;
+  padding:10rem 4vw;
+  background:var(--sb-purple);
+  color:var(--sb-yellow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+.sb-final::before,
+.sb-final::after{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  border:3px solid var(--sb-black);
+  background:var(--sb-green);
+  border-radius:50%;
+  opacity:.8;
+}
+
+.sb-final::before{
+  left:-70px;
+  top:20%;
+}
+
+.sb-final::after{
+  right:-70px;
+  bottom:15%;
+  background:var(--sb-blue);
+}
+
+.sb-final-inner{
+  position:relative;
+  z-index:2;
+}
+
+.sb-final p{
+  color:var(--sb-cream);
+  font-family:var(--sb-body);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.sb-final h2{
+  margin:0 0 2.5rem;
+  font-family:var(--sb-display);
+  font-size:clamp(5rem,13vw,15rem);
+  line-height:.73;
+}
+
+.sb-outline-btn{
+  background:transparent;
+  color:var(--sb-yellow);
+  border-color:var(--sb-yellow);
+  box-shadow:7px 7px 0 var(--sb-yellow);
+}
+
+.sb-outline-btn:hover{
+  background:var(--sb-yellow);
+  color:var(--sb-black);
+  box-shadow:3px 3px 0 var(--sb-yellow);
+}
+
+/* =========================================================
+   REVEAL
+   ========================================================= */
+
+.sb-reveal{
+  opacity:0;
+  transform:translateY(50px);
+}
+
+.sb-reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.2,.8,.2,1);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:900px){
+
+  .sb-hero{
+    padding:7rem 20px 4rem;
+  }
+
+  .sb-hero-inner{
+    grid-template-columns:1fr;
+  }
+
+  .sb-hero-stage{
+    min-height:540px;
+  }
+
+  .sb-hero-title{
+    font-size:clamp(4.5rem,15vw,8rem)!important;
+  }
+
+  .sb-label-card{
+    width:280px;
+    right:4%;
+  }
+
+  .sb-hero-character{
+    width:190px;
+    left:0;
+  }
+
+  .sb-entry-grid,
+  .sb-verdict-grid{
+    flex-direction:column;
+  }
+
+  .sb-entry-card{
+    width:100%;
+    min-height:540px;
+  }
+
+  .sb-stack-intro{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .sb-stack-card{
+    width:92vw;
+    height:68vh;
+  }
+
+  .sb-stack-copy{
+    width:100%;
+  }
+
+  .sb-stack-image-wrap{
+    display:none;
+  }
+
+  .sb-art{
+    flex-basis:calc(50% - 18px);
+  }
+}
+
+@media(max-width:640px){
+
+  body.index-page .nav-links{
+    gap:4px;
+  }
+
+  .sb-hero{
+    min-height:100svh;
+  }
+
+  .sb-hero-title{
+    font-size:clamp(4.2rem,18vw,7rem)!important;
+  }
+
+  .sb-hero-title .outline{
+    -webkit-text-stroke:2px var(--sb-yellow);
+    margin-left:5vw;
+  }
+
+  .sb-hero-subline,
+  .sb-hero-actions{
+    margin-left:5vw;
+  }
+
+  .sb-hero-stage{
+    min-height:460px;
+  }
+
+  .sb-label-card{
+    width:235px;
+    min-width:0;
+    right:4%;
+    top:48%;
+  }
+
+  .sb-hero-character{
+    width:165px;
+  }
+
+  .sb-hero-note{
+    width:145px;
+    font-size:9px;
+  }
+
+  .sb-hero-sticker{
+    width:82px;
+    height:82px;
+    font-size:13px;
+  }
+
+  .sb-entry,
+  .sb-stack-section,
+  .sb-verdict-wrap,
+  .sb-gallery{
+    padding-top:8rem;
+    padding-bottom:9rem;
+  }
+
+  .sb-big-heading{
+    font-size:clamp(4.2rem,17vw,7rem)!important;
+  }
+
+  .sb-entry-card{
+    min-height:470px;
+    padding:20px;
+  }
+
+  .sb-entry-image{
+    width:50%;
+  }
+
+  .sb-stack-shell{
+    height:235vh;
+  }
+
+  .sb-stack-card{
+    top:12vh;
+    height:64vh;
+  }
+
+  .sb-stack-title{
+    font-size:4.1rem!important;
+  }
+
+  .sb-pipeline{
+    min-height:145vh;
+  }
+
+  .sb-pipeline-title{
+    font-size:clamp(4rem,17vw,7rem);
+  }
+
+  .sb-verdict-grid{
+    gap:35px;
+  }
+
+  .sb-swipe-swiper{
+    height:550px;
+  }
+
+  .sb-swipe-image{
+    height:270px;
+  }
+
+  .sb-art{
+    flex-basis:100%;
+    height:360px!important;
+  }
+
+  .sb-final{
+    min-height:65vh;
+  }
+
+  .sb-final h2{
+    font-size:clamp(5rem,21vw,9rem);
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+
+  .sb-reveal{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.sb-verdict-grid{align-items:flex-start}
+.sb-verdict-right{flex:0 0 min(520px,100%)!important}
+body.index-page .verdict-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%}
+body.index-page .gooey-btn{width:100%;margin:0}
+body.index-page .verdict-stage{width:100%;min-height:440px}
+.sb-stack-shell{height:80vh!important}
+.sb-stack-card{position:absolute!important;top:0!important;left:0;right:0;margin:0 auto!important;height:min(70vh,600px)}
+.sb-stack-card + .sb-stack-card{margin-top:0!important}
+</style>
+</head>
+
+<body class="index-page color-wash">
+
+<!-- =======================================================
+     SCROLL PROGRESS
+     ======================================================= -->
+
+<div class="sb-scroll-progress" id="sb-scroll-progress"></div>
+
+<!-- =======================================================
+     CUSTOM CURSOR
+     ======================================================= -->
+
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor" aria-hidden="true"></div>
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="index.html" class="is-active"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Home</a></li>
+      <li class="nav-item"><a href="how-it-works.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>How It Works</a></li>
+      <li class="nav-item"><a href="architecture.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>How It Thinks</a></li>
+      <li class="nav-item"><a href="results.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Results</a></li>
+      <li class="nav-item"><a href="about.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>About</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- =======================================================
+     01 — HERO
+     ======================================================= -->
+
+<header class="sb-hero" id="hero" data-color="#6B66A6">
+
+  <div class="sb-hero-inner">
+
+    <div class="sb-hero-copy">
+
+      <div class="sb-hero-kicker">
+        PERSONAL FOOD SAFETY / BUILT AROUND YOU
+      </div>
+
+      <h1 class="sb-hero-title" aria-label="Know before you bite">
+
+        <span class="line">
+          <span class="line-inner">KNOW</span>
+        </span>
+
+        <span class="line outline">
+          <span class="line-inner">BEFORE</span>
+        </span>
+
+        <span class="line cream">
+          <span class="line-inner">YOU BITE.</span>
+        </span>
+
+      </h1>
+
+      <p class="sb-hero-subline">
+        Read the ingredient label, check it against your allergen profile,
+        and find a craving-matched alternative when the answer isn't what
+        you hoped for.
+      </p>
+
+      <div class="sb-hero-actions">
+
+        <a
+          class="sb-primary-btn sb-magnetic"
+          href="scan.html"
+        >
+          SCAN A LABEL →
+        </a>
+
+        <a
+          class="sb-small-link"
+          href="craving-search.html"
+        >
+          I'M CRAVING SOMETHING →
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="sb-hero-stage" id="hero-stage">
+
+      <div class="sb-label-card" id="hero-label">
+
+        <div class="sb-label-top">
+          <span>INGREDIENT PANEL / 01</span>
+          <span>SAFEBITE</span>
+        </div>
+
+        <div class="sb-label-brand">
+          CHECK<br>THIS.
+        </div>
+
+        <div class="sb-label-title">
+          WHAT'S<br>INSIDE?
+        </div>
+
+        <div class="sb-label-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="sb-label-warning">
+          READ<br>THE<br>LABEL
+        </div>
+
+      </div>
+
+
+      <img
+        class="sb-hero-character"
+        id="hero-appy"
+        src="assets/appy/static/think.png"
+        alt="Appy"
+      >
+
+
+      <div class="sb-hero-note">
+
+        <strong>APPY'S NOTE</strong>
+
+        <br><br>
+
+        Safety first. If the evidence is unclear,
+        SafeBite keeps it visible instead of guessing.
+
+      </div>
+
+
+      <div class="sb-hero-sticker">
+        NO<br>GUESSING.
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     02 — KINETIC PROMISE
+     ======================================================= -->
+
+<section
+  class="sb-kinetic"
+  id="kinetic"
+  data-color="#BD3647"
+>
+
+  <div class="sb-kinetic-sticky">
+
+    <div class="sb-kinetic-label">
+      01 / THE PROMISE
+    </div>
+
+
+    <div
+      class="sb-kinetic-row"
+      data-kinetic-speed="1.2"
+    >
+      <span>NO GUESSING.</span>
+      <span>NO GUESSING.</span>
+      <span>NO GUESSING.</span>
+      <span>NO GUESSING.</span>
+    </div>
+
+
+    <div
+      class="sb-kinetic-row"
+      data-kinetic-speed="-1"
+    >
+      <span>JUST KNOWING.</span>
+      <span>JUST KNOWING.</span>
+      <span>JUST KNOWING.</span>
+      <span>JUST KNOWING.</span>
+    </div>
+
+
+    <div
+      class="sb-kinetic-row"
+      data-kinetic-speed="1.45"
+    >
+      <span>BEFORE YOU BITE.</span>
+      <span>BEFORE YOU BITE.</span>
+      <span>BEFORE YOU BITE.</span>
+      <span>BEFORE YOU BITE.</span>
+    </div>
+
+
+    
+
+  </div>
+  <img
+      class="sb-kinetic-centre"
+      src="assets/appy/static/eat.png"
+      alt="Appy reading"
+    >
+
+</section>
+
+
+<!-- =======================================================
+     03 — TWO CORE JOURNEYS
+     ======================================================= -->
+
+<section
+  class="sb-entry"
+  id="entryways"
+  data-color="#FCF6E8"
+>
+
+  <div class="sb-section-head sb-reveal">
+
+    <p class="sb-micro">
+      02 / START HERE
+    </p>
+
+    <h2 class="sb-big-heading">
+      TWO WAYS<br>IN.
+    </h2>
+
+  </div>
+
+
+  <div class="sb-entry-grid">
+
+
+    <a
+      class="sb-entry-card sb-entry-card--scan sb-reveal"
+      href="scan.html"
+      data-appy="assets/appy/static/read.png"
+    >
+
+      <span class="sb-entry-num">
+        01 / SCAN A LABEL
+      </span>
+
+      <img
+        class="sb-entry-image"
+        src="assets/illustrations/coffee.png"
+        alt="Hand-drawn coffee and croissant illustration"
+      >
+
+      <h3 class="sb-entry-title">
+        READ<br>THE<br>LABEL.
+      </h3>
+
+      <p class="sb-entry-copy">
+        Upload the ingredient panel. SafeBite detects the panel,
+        reads the text, matches your allergen profile, and gives
+        you a deterministic safety verdict.
+      </p>
+
+      <span class="sb-entry-arrow" aria-hidden="true">
+        ↗
+      </span>
+
+    </a>
+
+
+    <a
+      class="sb-entry-card sb-entry-card--crave sb-reveal"
+      href="craving-search.html"
+      data-appy="assets/appy/static/drinkwalk.png"
+    >
+
+      <span class="sb-entry-num">
+        02 / I'M CRAVING
+      </span>
+
+      <img
+        class="sb-entry-image"
+        src="assets/illustrations/picnic.png"
+        alt="Hand-drawn food illustration"
+      >
+
+      <h3 class="sb-entry-title">
+        FIND<br>THE<br>SWAP.
+      </h3>
+
+      <p class="sb-entry-copy">
+        Tell SafeBite what you want. It searches the craving space,
+        filters against your allergens, and surfaces safer
+        alternatives with an explanation.
+      </p>
+
+      <span class="sb-entry-arrow" aria-hidden="true">
+        ↗
+      </span>
+
+    </a>
+
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     04 — THE FLOW
+     ======================================================= -->
+
+<section
+  class="sb-stack-section"
+  id="how-it-works"
+  data-color="#6B66A6"
+>
+
+  <div class="sb-stack-intro">
+
+    <div class="sb-reveal">
+
+      <p class="sb-micro">
+        03 / THE FLOW
+      </p>
+
+      <h2 class="sb-big-heading">
+        FROM<br>PHOTO<br>TO ANSWER.
+      </h2>
+
+    </div>
+
+    <p class="sb-reveal">
+      Scroll through the actual SafeBite pipeline.
+      Each layer stays visible while the next stage arrives.
+      Nothing important gets hidden behind a black box.
+    </p>
+
+  </div>
+
+
+  <div
+    class="sb-stack-shell"
+    id="sb-stack-shell"
+  >
+
+
+    <article class="sb-stack-card">
+
+      <div class="sb-stack-copy">
+
+        <span class="sb-stack-index">
+          01 / DETECT
+        </span>
+
+        <h3 class="sb-stack-title">
+          FIND<br>THE<br>PANEL.
+        </h3>
+
+        <p>
+          YOLO locates the ingredient panel before
+          the reading stage begins.
+        </p>
+
+      </div>
+
+      <div class="sb-stack-image-wrap">
+
+        <img
+          class="sb-stack-image"
+          src="assets/illustrations/dinner.png"
+          alt="Hand-drawn dinner table illustration"
+        >
+
+      </div>
+
+    </article>
+
+
+    <article class="sb-stack-card">
+
+      <div class="sb-stack-copy">
+
+        <span class="sb-stack-index">
+          02 / READ
+        </span>
+
+        <h3 class="sb-stack-title">
+          TURN<br>PIXELS<br>INTO WORDS.
+        </h3>
+
+        <p>
+          CNN/CRNN OCR converts the detected label
+          into a cleaned ingredient sequence.
+        </p>
+
+      </div>
+
+      <div class="sb-stack-image-wrap">
+
+        <img
+          class="sb-stack-image"
+          src="assets/illustrations/chez-marianne.png"
+          alt="Hand-drawn storefront illustration"
+        >
+
+      </div>
+
+    </article>
+
+
+    <article class="sb-stack-card">
+
+      <div class="sb-stack-copy">
+
+        <span class="sb-stack-index">
+          03 / MATCH
+        </span>
+
+        <h3 class="sb-stack-title">
+          CHECK<br>THE<br>RISK.
+        </h3>
+
+        <p>
+          Ingredients are tokenized and matched
+          against the user's deterministic allergen profile.
+        </p>
+
+      </div>
+
+      <div class="sb-stack-image-wrap">
+
+        <img
+          class="sb-stack-image"
+          src="assets/illustrations/pizza.png"
+          alt="Hand-drawn pizza illustration"
+        >
+
+      </div>
+
+    </article>
+
+
+    <article class="sb-stack-card">
+
+      <div class="sb-stack-copy">
+
+        <span class="sb-stack-index">
+          04 / VERDICT
+        </span>
+
+        <h3 class="sb-stack-title">
+          SAFE.<br>FLAGGED.<br>UNCLEAR.
+        </h3>
+
+        <p>
+          No black-box wording for the final safety state.
+          The verdict stays auditable.
+        </p>
+
+      </div>
+
+      <div class="sb-stack-image-wrap">
+
+        <img
+          class="sb-stack-image"
+          src="assets/illustrations/charcuterie.png"
+          alt="Hand-drawn food board illustration"
+        >
+
+      </div>
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     05 — PIPELINE
+     ======================================================= -->
+
+<section
+  class="sb-pipeline"
+  id="pipeline"
+  data-color="#FCF6E8"
+>
+
+  <div class="sb-pipeline-sticky">
+
+    <p class="sb-micro sb-pipeline-kicker">
+      04 / NO BLACK BOX VERDICTS
+    </p>
+
+
+    <h2
+      class="sb-pipeline-title"
+      id="pipeline-title"
+    >
+
+      <span class="word">
+        DETECT.
+      </span>
+
+      <span class="word">
+        READ.
+      </span>
+
+      <span class="word">
+        MATCH.
+      </span>
+
+      <span class="word">
+        DECIDE.
+      </span>
+
+    </h2>
+
+
+    <p class="sb-pipeline-caption">
+      The learned models help SafeBite see and understand
+      the label. The final safety state is deterministic
+      so the user can understand why a product was flagged.
+    </p>
+
+
+    <div class="sb-pipeline-progress">
+      <span id="pipeline-progress"></span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     06 — VERDICT
+     ======================================================= -->
+
+<section
+  class="sb-verdict-wrap"
+  id="verdict"
+  data-color="#F2DB66"
+>
+
+  <div class="sb-verdict-grid">
+
+
+    <div class="sb-reveal">
+
+      <p class="sb-micro">
+        05 / THE VERDICT
+      </p>
+
+      <h2 class="section-title">
+        YES.<br>
+        MAYBE.<br>
+        NO.
+      </h2>
+
+      <p class="sb-verdict-sub">
+        SafeBite does not hide the result behind a
+        probability score. Choose a state and see how
+        the interface communicates it.
+      </p>
+
+    </div>
+
+
+    <div class="sb-verdict-right sb-reveal">
+
+
+      <div
+        class="verdict-menu"
+        role="tablist"
+        aria-label="SafeBite verdict examples"
+      >
+
+        <button
+          class="gooey-btn gooey-btn--yes is-active"
+          data-state="yes"
+          role="tab"
+          aria-selected="true"
+        >
+          <span>YES</span>
+        </button>
+
+        <button
+          class="gooey-btn gooey-btn--maybe"
+          data-state="maybe"
+          role="tab"
+          aria-selected="false"
+        >
+          <span>MAYBE</span>
+        </button>
+
+        <button
+          class="gooey-btn gooey-btn--no"
+          data-state="no"
+          role="tab"
+          aria-selected="false"
+        >
+          <span>NO</span>
+        </button>
+
+      </div>
+
+
+      <div
+        class="verdict-stage"
+        id="verdict-stage"
+      >
+
+
+        <div
+          class="verdict-panel"
+          data-panel="yes"
+        >
+
+          <div
+            class="swap-success-sprite"
+            id="swap-success-sprite"
+          ></div>
+
+          <h3>
+            CLEAN BITE
+          </h3>
+
+          <p>
+            No matched allergen was found in the
+            detected ingredient sequence.
+          </p>
+
+          <span class="sb-verdict-status">
+            STATUS / SAFE
+          </span>
+
+        </div>
+
+
+        <div
+          class="verdict-panel"
+          data-panel="maybe"
+        >
+
+          <div
+            class="verdict-panel-sprite"
+            id="verdict-maybe-sprite"
+            style="background-image:url('assets/appy/sprite-think.png')"
+          ></div>
+
+          <h3>
+            UNCLEAR
+          </h3>
+
+          <p>
+            The system cannot confidently establish safety.
+            Check the source label rather than guessing.
+          </p>
+
+          <span class="sb-verdict-status">
+            STATUS / UNCLEAR
+          </span>
+
+        </div>
+
+
+        <div
+          class="verdict-panel"
+          data-panel="no"
+        >
+
+          <div
+            class="verdict-panel-sprite"
+            id="verdict-no-sprite"
+            style="background-image:url('assets/appy/sprite-dirty.png')"
+          ></div>
+
+          <h3>
+            FLAGGED
+          </h3>
+
+          <p>
+            A known allergen match was found.
+            SafeBite recommends putting it back
+            and finding a swap.
+          </p>
+
+          <span class="sb-verdict-status">
+            STATUS / FLAGGED
+          </span>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     07 — SWAP ENGINE
+     ======================================================= -->
+
+<section
+  class="sb-swipe-section"
+  id="swaps"
+  data-color="#BD3647"
+>
+
+  <div class="sb-swipe-head sb-reveal">
+
+    <p class="sb-micro">
+      06 / SAME CRAVING. BETTER CHOICE.
+    </p>
+
+    <h2 class="sb-big-heading">
+      FIND<br>YOUR<br>SWAP.
+    </h2>
+
+  </div>
+
+
+  <div
+    class="swiper sb-swipe-swiper"
+    id="swap-swiper"
+  >
+
+    <div class="swiper-wrapper">
+
+
+      <article class="swiper-slide sb-swipe-card">
+
+        <span class="sb-swipe-number">
+          01 / CRAVING
+        </span>
+
+        <img
+          class="sb-swipe-image"
+          src="assets/illustrations/pizza.png"
+          alt="Hand-drawn pizza illustration"
+        >
+
+        <h3>
+          CRAVE<br>IT.
+        </h3>
+
+        <p>
+          Start with the thing you actually want,
+          not a generic health recommendation.
+        </p>
+
+      </article>
+
+
+      <article class="swiper-slide sb-swipe-card">
+
+        <span class="sb-swipe-number">
+          02 / EMBED
+        </span>
+
+        <img
+          class="sb-swipe-image"
+          src="assets/illustrations/coffee.png"
+          alt="Hand-drawn coffee and croissant illustration"
+        >
+
+        <h3>
+          UNDER-<br>STAND<br>IT.
+        </h3>
+
+        <p>
+          The craving is represented in an embedding
+          space so similar choices can be found.
+        </p>
+
+      </article>
+
+
+      <article class="swiper-slide sb-swipe-card">
+
+        <span class="sb-swipe-number">
+          03 / FILTER
+        </span>
+
+        <img
+          class="sb-swipe-image"
+          src="assets/illustrations/To-Do List Longer Than My Coffee Break-Photoroom.png"
+          alt="Hand-drawn dinner illustration"
+        >
+
+        <h3>
+          FILTER<br>THE<br>RISK.
+        </h3>
+
+        <p>
+          Unsafe candidates are removed before
+          the recommendation is shown.
+        </p>
+
+      </article>
+
+
+      <article class="swiper-slide sb-swipe-card">
+
+        <span class="sb-swipe-number">
+          04 / RANK
+        </span>
+
+        <img
+          class="sb-swipe-image"
+          src="assets/illustrations/charcuterie.png"
+          alt="Hand-drawn food board illustration"
+        >
+
+        <h3>
+          RANK<br>THE<br>OPTIONS.
+        </h3>
+
+        <p>
+          Safe alternatives are ranked by similarity
+          to the craving, not just by calories.
+        </p>
+
+      </article>
+
+
+      <article class="swiper-slide sb-swipe-card">
+
+        <span class="sb-swipe-number">
+          05 / EXPLAIN
+        </span>
+
+        <img
+          class="sb-swipe-image"
+          src="assets/illustrations/cat-coffee.png"
+          alt="Hand-drawn cat with coffee illustration"
+        >
+
+        <h3>
+          MAKE<br>THE<br>WHY CLEAR.
+        </h3>
+
+        <p>
+          The recommendation comes with a human-readable
+          explanation and comparison.
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+
+  <p class="sb-swipe-hint">
+    DRAG / SWIPE / SCROLL / EXPLORE
+  </p>
+
+</section>
+
+
+<!-- =======================================================
+     08 — ILLUSTRATION WALL
+     ======================================================= -->
+
+<section
+  class="sb-gallery"
+  id="gallery"
+  data-color="#FCF6E8"
+>
+
+  <div class="sb-section-head sb-reveal">
+
+    <p class="sb-micro">
+      07 / FOOD IS VISUAL
+    </p>
+
+    <h2 class="sb-big-heading">
+      THE LABEL<br>
+      ISN'T THE<br>
+      WHOLE STORY.
+    </h2>
+
+  </div>
+
+
+  <div class="sb-gallery-grid">
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/coffee.png"
+        alt="Coffee and croissant line drawing"
+      >
+
+      <figcaption>
+        COFFEE / CRAVING
+      </figcaption>
+
+    </figure>
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/cat-coffee.png"
+        alt="Cat with coffee line drawing"
+      >
+
+      <figcaption>
+        QUIET MOMENT
+      </figcaption>
+
+    </figure>
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/charcuterie.png"
+        alt="Food board line drawing"
+      >
+
+      <figcaption>
+        SHARE / EAT
+      </figcaption>
+
+    </figure>
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/dinner-table.png"
+        alt="Dinner table illustration"
+      >
+
+      <figcaption>
+        DINNER
+      </figcaption>
+
+    </figure>
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/pizza.png"
+        alt="Pizza line drawing"
+      >
+
+      <figcaption>
+        CRAVE / CHOOSE
+      </figcaption>
+
+    </figure>
+
+
+    <figure class="sb-art sb-reveal">
+
+      <img
+        src="assets/illustrations/disco-ball.png"
+        alt="Disco ball line drawing"
+      >
+
+      <figcaption>
+        APPETITE HAS A MOOD
+      </figcaption>
+
+    </figure>
+
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     09 — FINAL CTA
+     ======================================================= -->
+
+<section
+  class="sb-final"
+  id="final"
+  data-color="#6B66A6"
+>
+
+  <div class="sb-final-inner sb-reveal">
+
+    <p>
+      SAFE BITE / SMART CHOICE / BETTER ANSWERS
+    </p>
+
+    <h2>
+      CHECK<br>
+      BEFORE<br>
+      YOU BITE.
+    </h2>
+
+    <a
+      class="sb-outline-btn sb-magnetic"
+      href="scan.html"
+    >
+      SCAN A LABEL →
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     SHARED FOOTER
+     DO NOT CHANGE THIS STRUCTURE
+     ======================================================= -->
+
+<footer
+  class="footer"
+  id="footer"
+  data-color="#FFF8E0"
+>
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5"
+        ></rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1"
+        ></circle>
+
+      </svg>
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link"
+    >
+      HOW IT WORKS
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link"
+    >
+      HOW IT THINKS
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link"
+    >
+      RESULTS
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link"
+    >
+      ABOUT
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit"
+    >
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay"
+  >
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10"
+    >
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8"
+    >
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11"
+    >
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08"
+    >
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04"
+    >
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6"
+    >
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03"
+    >
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4"
+    >
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05"
+    >
+
+  </div>
+
+</footer>
+
+
+<!-- =======================================================
+     LIBRARIES
+     ======================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+
+<!-- =======================================================
+     INDEX INTERACTION ENGINE
+     ======================================================= -->
+
+<script>
+
+(function(){
+
+"use strict";
+
+
+/* =========================================================
+   SAFETY
+   ========================================================= */
+
+const reducedMotion =
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+/* =========================================================
+   REGISTER GSAP
+   ========================================================= */
+
+if(window.gsap && window.ScrollTrigger){
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+
+/* =========================================================
+   SCROLL PROGRESS
+   ========================================================= */
+
+const progress =
+  document.getElementById("sb-scroll-progress");
+
+function updateScrollProgress(){
+
+  const scrollTop =
+    window.scrollY || document.documentElement.scrollTop;
+
+  const max =
+    document.documentElement.scrollHeight -
+    window.innerHeight;
+
+  const amount =
+    max > 0 ? scrollTop / max : 0;
+
+  if(progress){
+    progress.style.width =
+      `${amount * 100}%`;
+  }
+
+}
+
+window.addEventListener(
+  "scroll",
+  updateScrollProgress,
+  {passive:true}
+);
+
+updateScrollProgress();
+
+
+/* =========================================================
+   NAVBAR HIDE / SHOW
+   ========================================================= */
+
+const navbar =
+  document.getElementById("navbar");
+
+let lastScroll =
+  window.scrollY;
+
+window.addEventListener(
+  "scroll",
+  function(){
+
+    const current =
+      window.scrollY;
+
+    if(!navbar) return;
+
+    if(current > 80){
+      navbar.classList.add("sb-nav-scrolled");
+    }else{
+      navbar.classList.remove("sb-nav-scrolled");
+    }
+
+    if(
+      current > lastScroll &&
+      current > 160
+    ){
+      navbar.classList.add("sb-nav-hidden");
+    }else{
+      navbar.classList.remove("sb-nav-hidden");
+    }
+
+    lastScroll = current;
+
+  },
+  {passive:true}
+);
+
+
+/* =========================================================
+   SMOOTH INTERNAL NAVIGATION
+   ========================================================= */
+
+document.querySelectorAll(
+  'a[href^="#"]'
+).forEach(function(link){
+
+  link.addEventListener(
+    "click",
+    function(event){
+
+      const targetId =
+        this.getAttribute("href");
+
+      if(
+        !targetId ||
+        targetId === "#"
+      ) return;
+
+      const target =
+        document.querySelector(targetId);
+
+      if(!target) return;
+
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior:
+          reducedMotion
+            ? "auto"
+            : "smooth",
+        block:"start"
+      });
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   HERO INTRO
+   ========================================================= */
+
+const heroLines =
+  document.querySelectorAll(
+    ".sb-hero-title .line-inner"
+  );
+
+const heroAppy =
+  document.getElementById("hero-appy");
+
+const heroLabel =
+  document.getElementById("hero-label");
+
+if(
+  !reducedMotion &&
+  window.gsap &&
+  heroLines.length
+){
+
+  gsap.fromTo(
+    heroLines,
+    {
+      yPercent:120,
+      opacity:0
+    },
+    {
+      yPercent:0,
+      opacity:1,
+      duration:1.05,
+      stagger:.12,
+      ease:"power4.out",
+      delay:.15
+    }
+  );
+
+  if(heroAppy){
+
+    gsap.fromTo(
+      heroAppy,
+      {
+        scale:.55,
+        opacity:0,
+        rotate:-15
+      },
+      {
+        scale:1,
+        opacity:1,
+        rotate:-7,
+        duration:1.1,
+        ease:"back.out(1.7)",
+        delay:.45
+      }
+    );
+
+  }
+
+  if(heroLabel){
+
+    gsap.fromTo(
+      heroLabel,
+      {
+        y:-30,
+        opacity:0,
+        rotate:10
+      },
+      {
+        y:0,
+        opacity:1,
+        rotate:6,
+        duration:1,
+        ease:"power3.out",
+        delay:.35
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   HERO APPY FLOAT
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  window.gsap &&
+  heroAppy
+){
+
+  gsap.to(
+    heroAppy,
+    {
+      y:-18,
+      rotate:-3,
+      duration:2.2,
+      repeat:-1,
+      yoyo:true,
+      ease:"sine.inOut"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   HERO MOUSE PARALLAX
+   ========================================================= */
+
+const heroStage =
+  document.getElementById("hero-stage");
+
+if(
+  !reducedMotion &&
+  heroStage &&
+  !window.matchMedia("(hover:none)").matches
+){
+
+  heroStage.addEventListener(
+    "pointermove",
+    function(event){
+
+      const rect =
+        heroStage.getBoundingClientRect();
+
+      const x =
+        (event.clientX - rect.left) /
+        rect.width -
+        .5;
+
+      const y =
+        (event.clientY - rect.top) /
+        rect.height -
+        .5;
+
+      if(heroLabel){
+
+        heroLabel.style.transform =
+          `translateY(-50%)
+           translate(${x * -12}px,${y * -10}px)
+           rotate(${6 + x * 3}deg)`;
+
+      }
+
+      if(heroAppy){
+
+        heroAppy.style.transform =
+          `translate(${x * 14}px,${y * 12}px)
+           rotate(${-7 + x * 4}deg)`;
+
+      }
+
+    }
+  );
+
+  heroStage.addEventListener(
+    "pointerleave",
+    function(){
+
+      if(heroLabel){
+        heroLabel.style.transform =
+          "translateY(-50%) rotate(6deg)";
+      }
+
+      if(heroAppy){
+        heroAppy.style.transform =
+          "rotate(-7deg)";
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MAGNETIC BUTTONS
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  !window.matchMedia("(hover:none)").matches
+){
+
+  document.querySelectorAll(
+    ".sb-magnetic"
+  ).forEach(function(button){
+
+    button.addEventListener(
+      "pointermove",
+      function(event){
+
+        const rect =
+          button.getBoundingClientRect();
+
+        const x =
+          event.clientX -
+          rect.left -
+          rect.width / 2;
+
+        const y =
+          event.clientY -
+          rect.top -
+          rect.height / 2;
+
+        button.style.transform =
+          `translate(${x * .12}px,${y * .12}px)`;
+
+      }
+    );
+
+    button.addEventListener(
+      "pointerleave",
+      function(){
+
+        button.style.transform =
+          "translate(0,0)";
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   KINETIC SCROLL MOTION
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  window.gsap &&
+  window.ScrollTrigger
+){
+
+  document.querySelectorAll(
+    ".sb-kinetic-row"
+  ).forEach(function(row,index){
+
+    const speed =
+      parseFloat(
+        row.dataset.kineticSpeed || "1"
+      );
+
+    const distance =
+      Math.max(
+        window.innerWidth * .65,
+        500
+      ) * Math.abs(speed);
+
+    gsap.fromTo(
+      row,
+      {
+        x:index % 2
+          ? -distance
+          : distance
+      },
+      {
+        x:index % 2
+          ? distance
+          : -distance,
+
+        ease:"none",
+
+        scrollTrigger:{
+          trigger:"#kinetic",
+          start:"top bottom",
+          end:"bottom top",
+          scrub:1.2
+        }
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   ENTRY CARD 3D TILT
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  !window.matchMedia("(hover:none)").matches
+){
+
+  document.querySelectorAll(
+    ".sb-entry-card"
+  ).forEach(function(card){
+
+    card.addEventListener(
+      "pointermove",
+      function(event){
+
+        const rect =
+          card.getBoundingClientRect();
+
+        const x =
+          (event.clientX - rect.left) /
+          rect.width -
+          .5;
+
+        const y =
+          (event.clientY - rect.top) /
+          rect.height -
+          .5;
+
+        card.style.transform =
+          `perspective(900px)
+           rotateX(${y * -5}deg)
+           rotateY(${x * 5}deg)
+           translateY(-8px)`;
+
+      }
+    );
+
+    card.addEventListener(
+      "pointerleave",
+      function(){
+
+        card.style.transform =
+          "perspective(900px) rotateX(0) rotateY(0) translateY(0)";
+
+      }
+    );
+
+
+    /* Appy reaction */
+
+    card.addEventListener(
+      "pointerenter",
+      function(){
+
+        const appy =
+          document.getElementById("hero-appy");
+
+        if(!appy) return;
+
+        const src =
+          card.dataset.appy;
+
+        if(src){
+          appy.src = src;
+        }
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   REVEAL OBSERVER
+   ========================================================= */
+
+const revealObserver =
+  new IntersectionObserver(
+    function(entries){
+
+      entries.forEach(function(entry){
+
+        if(
+          entry.isIntersecting
+        ){
+
+          entry.target.classList.add(
+            "is-visible"
+          );
+
+          revealObserver.unobserve(
+            entry.target
+          );
+
+        }
+
+      });
+
+    },
+    {
+      threshold:.12,
+      rootMargin:"0px 0px -50px 0px"
+    }
+  );
+
+
+document.querySelectorAll(
+  ".sb-reveal"
+).forEach(function(element){
+
+  if(reducedMotion){
+    element.classList.add("is-visible");
+  }else{
+    revealObserver.observe(element);
+  }
+
+});
+
+
+/* =========================================================
+   STICKY CARD SCALE
+   ========================================================= */
+
+if(!reducedMotion && window.gsap && window.ScrollTrigger){
+  const cards = gsap.utils.toArray(".sb-stack-card");
+  gsap.set(cards.slice(1), {yPercent:115});
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger:"#sb-stack-shell", start:"top 12%",
+      end:"+=" + cards.length * 70 + "%",
+      scrub:1, pin:true, anticipatePin:1, invalidateOnRefresh:true
+    }
+  });
+  cards.slice(1).forEach((card,i)=>{
+    tl.to(card,{yPercent:0,ease:"none",duration:1},i);
+    cards.slice(0,i+1).forEach((prev,j)=>{
+      tl.to(prev,{scale:1-(i+1-j)*0.05,y:-(i+1-j)*14,ease:"none",duration:1},i);
+    });
+  });
+}
+
+/* =========================================================
+   PIPELINE INTERACTION
+   ========================================================= */
+
+const pipelineSection =
+  document.getElementById("pipeline");
+
+const pipelineWords =
+  document.querySelectorAll(
+    ".sb-pipeline-title .word"
+  );
+
+const pipelineProgress =
+  document.getElementById(
+    "pipeline-progress"
+  );
+
+
+function updatePipeline(){
+
+  if(!pipelineSection) return;
+
+  const rect =
+    pipelineSection.getBoundingClientRect();
+
+  const total =
+    pipelineSection.offsetHeight -
+    window.innerHeight;
+
+  const passed =
+    Math.min(
+      Math.max(
+        -rect.top / Math.max(total,1),
+        0
+      ),
+      1
+    );
+
+  const activeIndex =
+    Math.min(
+      pipelineWords.length - 1,
+      Math.floor(
+        passed * pipelineWords.length
+      )
+    );
+
+  pipelineWords.forEach(
+    function(word,index){
+
+      word.classList.toggle(
+        "active",
+        index <= activeIndex
+      );
+
+    }
+  );
+
+  if(pipelineProgress){
+
+    pipelineProgress.style.width =
+      `${passed * 100}%`;
+
+  }
+
+}
+
+
+window.addEventListener(
+  "scroll",
+  updatePipeline,
+  {passive:true}
+);
+
+updatePipeline();
+
+
+const firstVerdict = document.querySelector('.gooey-btn[data-state="yes"]');
+if(firstVerdict) firstVerdict.click();
+
+
+/* =========================================================
+   SWIPER
+   ========================================================= */
+
+if(
+  window.Swiper &&
+  document.querySelector(
+    "#swap-swiper"
+  )
+){
+
+  new Swiper(
+    "#swap-swiper",
+    {
+
+      effect:"cards",
+
+      grabCursor:true,
+
+      centeredSlides:true,
+
+      slidesPerView:1,
+
+      loop:true,
+
+      speed:700,
+
+      keyboard:{
+        enabled:true
+      },
+
+      mousewheel:{
+        forceToAxis:true,
+        sensitivity:.8
+      },
+
+      cardsEffect:{
+        perSlideOffset:12,
+        perSlideRotate:2.5,
+        rotate:true,
+        slideShadows:false
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   GALLERY RANDOMIZED PAPER MOTION
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  !window.matchMedia("(hover:none)").matches
+){
+
+  const gallery =
+    document.querySelector(
+      ".sb-gallery"
+    );
+
+  if(gallery){
+
+    gallery.addEventListener(
+      "pointermove",
+      function(event){
+
+        const rect =
+          gallery.getBoundingClientRect();
+
+        const x =
+          (event.clientX - rect.left) /
+          rect.width -
+          .5;
+
+        const y =
+          (event.clientY - rect.top) /
+          rect.height -
+          .5;
+
+        document.querySelectorAll(
+          ".sb-art"
+        ).forEach(
+          function(art,index){
+
+            if(
+              art.matches(":hover")
+            ) return;
+
+            const depth =
+              (index + 1) * .5;
+
+            art.style.transform =
+              `translate(
+                ${x * depth}px,
+                ${y * depth}px
+              ) rotate(${index % 2 ? 1.5 : -1.5}deg)`;
+
+          }
+        );
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FOOTER PARALLAX
+   Keep IDs / data-depth intact for shared SafeBite JS.
+   This only adds a subtle extra mouse response.
+   ========================================================= */
+
+if(
+  !reducedMotion &&
+  !window.matchMedia("(hover:none)").matches
+){
+
+  const footer =
+    document.getElementById(
+      "footer-flatlay"
+    );
+
+  if(footer){
+
+    footer.addEventListener(
+      "pointermove",
+      function(event){
+
+        const rect =
+          footer.getBoundingClientRect();
+
+        const x =
+          (event.clientX - rect.left) /
+          rect.width -
+          .5;
+
+        const y =
+          (event.clientY - rect.top) /
+          rect.height -
+          .5;
+
+        footer
+          .querySelectorAll(".fl-item")
+          .forEach(function(item){
+
+            const depth =
+              parseFloat(
+                item.dataset.depth || ".05"
+              );
+
+            item.style.setProperty(
+              "--mouse-x",
+              `${x * depth * 80}px`
+            );
+
+            item.style.setProperty(
+              "--mouse-y",
+              `${y * depth * 80}px`
+            );
+
+          });
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   IMAGE LOAD SAFETY
+   ========================================================= */
+
+document.querySelectorAll(
+  "img"
+).forEach(function(image){
+
+  image.addEventListener(
+    "error",
+    function(){
+
+      this.style.opacity = "0";
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   GSAP REFRESH
+   ========================================================= */
+
+if(
+  window.ScrollTrigger
+){
+
+  window.addEventListener(
+    "load",
+    function(){
+
+      setTimeout(
+        function(){
+          ScrollTrigger.refresh();
+        },
+        250
+      );
+
+    }
+  );
+
+}
+
+
+})();
+
+</script>
+
+</body>
+</html>

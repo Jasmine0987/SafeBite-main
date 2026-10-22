@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="auth.js"></script>
+<script>
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('#signout-link');
+    if (!link) return;
+    e.preventDefault();
+    try { localStorage.clear(); sessionStorage.clear(); } catch (err) {}
+    window.location.href = 'login.html';
+  });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SafeBite — Swaps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+
+<style>
+
+/* =========================================================
+   SWAPS PAGE ONLY
+   Does NOT modify the shared navbar / cursor / theme.
+   ========================================================= */
+
+.swaps-page{
+  background:var(--cream,#FCF6E8);
+  color:var(--black,#141414);
+  overflow-x:hidden;
+}
+
+/* ---------------------------------------------------------
+   PAGE WRAPPER
+   --------------------------------------------------------- */
+
+.swaps-page .swaps-main{
+  width:100%;
+  padding:170px 4vw 0;
+}
+
+.swaps-page .swaps-container{
+  width:min(1380px,100%);
+  margin:0 auto;
+}
+
+/* ---------------------------------------------------------
+   HERO
+   --------------------------------------------------------- */
+
+.swaps-page .swap-hero{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:70px;
+  align-items:end;
+  margin-bottom:55px;
+}
+
+.swaps-page .swap-kicker{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+  font-family:var(--body,'General Sans',sans-serif);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.swaps-page .swap-kicker-line{
+  width:54px;
+  height:4px;
+  background:var(--red,#BD3647);
+}
+
+.swaps-page .swap-title{
+  margin:0;
+  max-width:700px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:clamp(70px,9vw,150px);
+  line-height:.78;
+  letter-spacing:-.075em;
+  text-transform:uppercase;
+}
+
+.swaps-page .swap-title span{
+  color:var(--yellow,#F2DB66);
+  -webkit-text-stroke:2px var(--black,#141414);
+}
+
+.swaps-page .swap-intro{
+  max-width:430px;
+  justify-self:end;
+  padding-bottom:8px;
+  font-family:var(--body,'General Sans',sans-serif);
+  font-size:16px;
+  line-height:1.55;
+}
+
+.swaps-page .swap-intro strong{
+  display:block;
+  margin-top:18px;
+  font-weight:700;
+}
+
+/* ---------------------------------------------------------
+   APPY FLOATING CHARACTER
+   --------------------------------------------------------- */
+
+.swaps-page .appy-guide{
+  position:relative;
+  min-height:120px;
+  margin-bottom:35px;
+  padding:20px 25px;
+  background:var(--black,#141414);
+  color:var(--cream,#FCF6E8);
+  border:3px solid var(--black,#141414);
+  box-shadow:10px 10px 0 var(--red,#BD3647);
+  display:flex;
+  align-items:center;
+  gap:25px;
+  overflow:hidden;
+}
+
+.swaps-page .appy-guide::after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  border:3px solid rgba(242,219,102,.55);
+  border-radius:50%;
+  right:-90px;
+  top:-115px;
+}
+
+.swaps-page .appy-guide img{
+  width:76px;
+  height:76px;
+  object-fit:contain;
+  flex:none;
+  animation:swapsAppyFloat 2.8s ease-in-out infinite;
+}
+
+@keyframes swapsAppyFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-8px) rotate(2deg)}
+}
+
+.swaps-page .appy-guide-copy{
+  position:relative;
+  z-index:2;
+}
+
+.swaps-page .appy-guide-label{
+  margin-bottom:5px;
+  color:var(--yellow,#F2DB66);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+.swaps-page .appy-guide-title{
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:26px;
+  line-height:1;
+  text-transform:uppercase;
+}
+
+.swaps-page .appy-guide-text{
+  margin-top:6px;
+  color:#d8d4ca;
+  font-size:13px;
+}
+
+/* ---------------------------------------------------------
+   FILTER BAR
+   --------------------------------------------------------- */
+
+.swaps-page .swap-filter-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.swaps-page .swap-filter{
+  appearance:none;
+  border:3px solid var(--black,#141414);
+  background:var(--cream,#FCF6E8);
+  color:var(--black,#141414);
+  padding:14px 20px;
+  font-family:var(--body,'General Sans',sans-serif);
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:5px 5px 0 var(--black,#141414);
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.swaps-page .swap-filter:hover{
+  transform:translate(3px,3px);
+  box-shadow:2px 2px 0 var(--black,#141414);
+}
+
+.swaps-page .swap-filter.active{
+  background:var(--yellow,#F2DB66);
+}
+
+/* ---------------------------------------------------------
+   RESULT INTRO
+   --------------------------------------------------------- */
+
+.swaps-page .result-strip{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:20px;
+  margin-bottom:25px;
+  padding:18px 22px;
+  border-top:3px solid var(--black,#141414);
+  border-bottom:3px solid var(--black,#141414);
+}
+
+.swaps-page .result-strip strong{
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:23px;
+  text-transform:uppercase;
+}
+
+.swaps-page .result-count{
+  padding:7px 12px;
+  background:var(--green,#A2BF8A);
+  border:2px solid var(--black,#141414);
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+/* ---------------------------------------------------------
+   VISUAL SWAP GRID
+   --------------------------------------------------------- */
+
+.swaps-page .visual-swaps{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:25px;
+  margin-bottom:55px;
+}
+
+/* BIG FEATURE */
+
+.swaps-page .swap-feature{
+  position:relative;
+  min-height:470px;
+  padding:32px;
+  background:var(--slate,#8FA3C4);
+  border:3px solid var(--black,#141414);
+  box-shadow:12px 12px 0 var(--black,#141414);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .3s ease;
+}
+
+.swaps-page .swap-feature:hover{
+  transform:translateY(-7px) rotate(-.4deg);
+}
+
+.swaps-page .swap-feature::before{
+  content:"01";
+  position:absolute;
+  right:22px;
+  top:15px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:80px;
+  line-height:1;
+  opacity:.14;
+}
+
+.swaps-page .swap-feature-tag{
+  display:inline-block;
+  padding:7px 10px;
+  background:var(--yellow,#F2DB66);
+  border:2px solid var(--black,#141414);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.swaps-page .swap-feature-content{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:20px;
+  height:100%;
+  align-items:center;
+}
+
+.swaps-page .swap-feature h2{
+  margin:20px 0 12px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:clamp(45px,5vw,78px);
+  line-height:.84;
+  letter-spacing:-.06em;
+  text-transform:uppercase;
+}
+
+.swaps-page .swap-feature p{
+  max-width:440px;
+  margin:0;
+  font-size:14px;
+  line-height:1.55;
+}
+
+.swaps-page .swap-image{
+  position:relative;
+  height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--cream,#FCF6E8);
+  border:3px solid var(--black,#141414);
+  transform:rotate(3deg);
+}
+
+.swaps-page .swap-image img{
+  width:82%;
+  height:82%;
+  object-fit:contain;
+  transition:transform .35s ease;
+}
+
+.swaps-page .swap-feature:hover .swap-image img{
+  transform:scale(1.08) rotate(-4deg);
+}
+
+/* SIDE CARDS */
+
+.swaps-page .swap-side{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.swaps-page .mini-swap{
+  position:relative;
+  flex:1;
+  min-height:220px;
+  padding:25px;
+  border:3px solid var(--black,#141414);
+  box-shadow:9px 9px 0 var(--black,#141414);
+  overflow:hidden;
+  transition:transform .25s ease;
+}
+
+.swaps-page .mini-swap:hover{
+  transform:translateX(-6px);
+}
+
+.swaps-page .mini-swap.yellow{
+  background:var(--yellow,#F2DB66);
+}
+
+.swaps-page .mini-swap.green{
+  background:var(--green,#A2BF8A);
+}
+
+.swaps-page .mini-swap-number{
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:48px;
+  line-height:.8;
+}
+
+.swaps-page .mini-swap h3{
+  margin:25px 0 8px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:27px;
+  line-height:.9;
+  text-transform:uppercase;
+}
+
+.swaps-page .mini-swap p{
+  max-width:330px;
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.swaps-page .mini-star{
+  position:absolute;
+  right:20px;
+  bottom:10px;
+  width:90px;
+  height:90px;
+  object-fit:contain;
+  opacity:.85;
+  transform:rotate(8deg);
+}
+
+/* ---------------------------------------------------------
+   HOW THE RANKING WORKS
+   --------------------------------------------------------- */
+
+.swaps-page .ranking-section{
+  margin-bottom:65px;
+}
+
+.swaps-page .section-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:30px;
+  margin-bottom:22px;
+}
+
+.swaps-page .section-heading h2{
+  margin:0;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:clamp(42px,6vw,82px);
+  line-height:.85;
+  letter-spacing:-.06em;
+  text-transform:uppercase;
+}
+
+.swaps-page .section-heading p{
+  max-width:350px;
+  margin:0;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.swaps-page .ranking-track{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border:3px solid var(--black,#141414);
+  box-shadow:10px 10px 0 var(--black,#141414);
+}
+
+.swaps-page .rank-step{
+  position:relative;
+  min-height:220px;
+  padding:25px;
+  border-right:3px solid var(--black,#141414);
+  transition:transform .25s ease;
+}
+
+.swaps-page .rank-step:last-child{
+  border-right:0;
+}
+
+.swaps-page .rank-step:nth-child(1){
+  background:var(--red,#BD3647);
+  color:var(--cream,#FCF6E8);
+}
+
+.swaps-page .rank-step:nth-child(2){
+  background:var(--yellow,#F2DB66);
+}
+
+.swaps-page .rank-step:nth-child(3){
+  background:var(--green,#A2BF8A);
+}
+
+.swaps-page .rank-step:hover{
+  transform:translateY(-8px);
+}
+
+.swaps-page .rank-number{
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:58px;
+  line-height:.8;
+}
+
+.swaps-page .rank-step h3{
+  margin:30px 0 8px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:28px;
+  text-transform:uppercase;
+}
+
+.swaps-page .rank-step p{
+  max-width:330px;
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+}
+
+/* ---------------------------------------------------------
+   DATA / SAFETY PANEL
+   --------------------------------------------------------- */
+
+.swaps-page .safety-panel{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:0;
+  margin-bottom:65px;
+  border:3px solid var(--black,#141414);
+  box-shadow:12px 12px 0 var(--black,#141414);
+}
+
+.swaps-page .safety-art{
+  min-height:330px;
+  padding:30px;
+  background:var(--purple,#6B66A6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.swaps-page .safety-art img{
+  width:70%;
+  max-width:270px;
+  object-fit:contain;
+  filter:drop-shadow(7px 8px 0 rgba(20,20,20,.8));
+  animation:starFloat 4s ease-in-out infinite;
+}
+
+@keyframes starFloat{
+  0%,100%{transform:rotate(-5deg) translateY(0)}
+  50%{transform:rotate(5deg) translateY(-12px)}
+}
+
+.swaps-page .safety-copy{
+  padding:38px;
+  background:white;
+}
+
+.swaps-page .safety-label{
+  color:var(--red,#BD3647);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.swaps-page .safety-copy h2{
+  margin:12px 0 15px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:clamp(38px,5vw,65px);
+  line-height:.86;
+  letter-spacing:-.05em;
+  text-transform:uppercase;
+}
+
+.swaps-page .safety-copy p{
+  max-width:580px;
+  font-size:14px;
+  line-height:1.55;
+}
+
+.swaps-page .safety-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:25px;
+}
+
+.swaps-page .safety-pill{
+  padding:9px 12px;
+  border:2px solid var(--black,#141414);
+  background:var(--cream,#FCF6E8);
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+/* ---------------------------------------------------------
+   REAL APP ROOT
+   --------------------------------------------------------- */
+
+.swaps-page #swaps-root{
+  width:100%;
+  margin-bottom:65px;
+}
+
+.swaps-page #swaps-root:empty{
+  display:none;
+}
+
+/* Style common dynamically generated swap cards too */
+
+.swaps-page #swaps-root .swap-card,
+.swaps-page #swaps-root .result-card{
+  border:3px solid var(--black,#141414);
+  background:white;
+  box-shadow:9px 9px 0 var(--black,#141414);
+  transition:transform .25s ease;
+}
+
+.swaps-page #swaps-root .swap-card:hover,
+.swaps-page #swaps-root .result-card:hover{
+  transform:translateY(-5px);
+}
+
+.swaps-page #swaps-root .swap-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:25px; margin-bottom:55px;
+}
+.swaps-page #swaps-root .swap-result-card{
+  padding:26px; background:#fff; color:#141414;
+  border:3px solid #141414; box-shadow:9px 9px 0 #141414;
+}
+.swaps-page #swaps-root .swap-result-card h3{ margin:10px 0; color:#141414; }
+.swaps-page #swaps-root .swap-result-card a{ color:#141414; font-weight:800; }
+.swaps-page #swaps-root .swap-macro-delta{
+  display:inline-block; padding:5px 10px; background:#FFD84D;
+  border:2px solid #141414; font-size:11px; font-weight:800; text-transform:uppercase;
+}
+
+/* ---------------------------------------------------------
+   CTA
+   --------------------------------------------------------- */
+
+.swaps-page .swap-cta{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:30px;
+  margin-bottom:100px;
+  padding:35px;
+  background:var(--red,#BD3647);
+  color:var(--cream,#FCF6E8);
+  border:3px solid var(--black,#141414);
+  box-shadow:12px 12px 0 var(--black,#141414);
+  overflow:hidden;
+}
+
+.swaps-page .swap-cta::after{
+  content:"★";
+  position:absolute;
+  right:40px;
+  bottom:-35px;
+  font-family:Arial,sans-serif;
+  font-size:180px;
+  line-height:1;
+  color:var(--yellow,#F2DB66);
+  opacity:.45;
+}
+
+.swaps-page .swap-cta h2{
+  position:relative;
+  z-index:2;
+  margin:0 0 8px;
+  font-family:var(--display,'Cabinet Grotesk',sans-serif);
+  font-size:clamp(40px,5vw,70px);
+  line-height:.85;
+  text-transform:uppercase;
+}
+
+.swaps-page .swap-cta p{
+  position:relative;
+  z-index:2;
+  max-width:500px;
+  margin:0;
+  font-size:14px;
+}
+
+.swaps-page .swap-cta a{
+  position:relative;
+  z-index:3;
+  display:inline-block;
+  padding:15px 22px;
+  border:3px solid var(--black,#141414);
+  background:var(--yellow,#F2DB66);
+  color:var(--black,#141414);
+  box-shadow:6px 6px 0 var(--black,#141414);
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:.2s ease;
+}
+
+.swaps-page .swap-cta a:hover{
+  transform:translate(4px,4px);
+  box-shadow:2px 2px 0 var(--black,#141414);
+}
+
+/* ---------------------------------------------------------
+   FOOTER SPACING
+   --------------------------------------------------------- */
+
+.swaps-page + .footer{
+  margin-top:0;
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+   --------------------------------------------------------- */
+
+@media(max-width:900px){
+
+  .swaps-page .swaps-main{
+    padding:150px 22px 0;
+  }
+
+  .swaps-page .swap-hero{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+  .swaps-page .swap-intro{
+    justify-self:start;
+  }
+
+  .swaps-page .visual-swaps{
+    grid-template-columns:1fr;
+  }
+
+  .swaps-page .swap-feature-content{
+    grid-template-columns:1fr;
+  }
+
+  .swaps-page .swap-image{
+    height:190px;
+  }
+
+  .swaps-page .ranking-track{
+    grid-template-columns:1fr;
+  }
+
+  .swaps-page .rank-step{
+    border-right:0;
+    border-bottom:3px solid var(--black,#141414);
+  }
+
+  .swaps-page .rank-step:last-child{
+    border-bottom:0;
+  }
+
+  .swaps-page .safety-panel{
+    grid-template-columns:1fr;
+  }
+
+  .swaps-page .swap-cta{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+
+  .swaps-page .swaps-main{
+    padding:130px 16px 0;
+  }
+
+  .swaps-page .swap-title{
+    font-size:70px;
+  }
+
+  .swaps-page .appy-guide{
+    align-items:flex-start;
+  }
+
+  .swaps-page .appy-guide img{
+    width:58px;
+    height:58px;
+  }
+
+  .swaps-page .swap-feature{
+    padding:22px;
+  }
+
+  .swaps-page .swap-feature-content{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .swaps-page .swap-image{
+    width:100%;
+  }
+
+  .swaps-page .section-heading{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .swaps-page .safety-copy{
+    padding:25px;
+  }
+}
+
+</style>
+</head>
+
+
+<body class="swaps-page">
+
+<!-- =====================================================
+     ORIGINAL SAFEBITE CURSOR
+     DO NOT CHANGE
+     ===================================================== -->
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+
+<!-- ============ NAVBAR (shared site-wide nav) ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SAFEBITE<span class="nav-logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="dashboard.html"><span class="nav-frame"><img src="assets/appy/static/sit.png" alt=""></span>Dashboard</a></li>
+      <li class="nav-item"><a href="scan.html"><span class="nav-frame"><img src="assets/appy/static/read.png" alt=""></span>Scan</a></li>
+      <li class="nav-item"><a href="craving-search.html"><span class="nav-frame"><img src="assets/appy/static/drinkwalk.png" alt=""></span>Craving Search</a></li>
+      <li class="nav-item"><a href="history.html"><span class="nav-frame"><img src="assets/appy/static/think.png" alt=""></span>History</a></li>
+      <li class="nav-item"><a href="settings.html"><span class="nav-frame"><img src="assets/appy/static/meditate.png" alt=""></span>Settings</a></li>
+      <li class="nav-item"><a href="#" id="signout-link"><span class="nav-frame"><img src="assets/appy/static/eat.png" alt=""></span>Sign out</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- =====================================================
+     SWAPS CONTENT
+     ===================================================== -->
+
+<main class="swaps-main">
+
+  <div class="swaps-container">
+
+
+    <!-- HERO -->
+
+    <section class="swap-hero">
+
+      <div>
+
+        <div class="swap-kicker">
+          <span class="swap-kicker-line"></span>
+          Appy's shortlist
+        </div>
+
+        <h1 class="swap-title">
+          PICK<br>
+          YOUR<br>
+          <span>SWAP.</span>
+        </h1>
+
+      </div>
+
+      <div class="swap-intro">
+
+        These aren't simply visually similar foods.
+
+        SafeBite first removes options that conflict with
+        your allergen profile, then looks for foods that
+        still make sense for what you were craving.
+
+        <strong>
+          Safety → similarity → usefulness.
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- APPY -->
+
+    <section class="appy-guide">
+
+      <img
+        src="assets/appy/static/think.png"
+        alt="Appy"
+      >
+
+      <div class="appy-guide-copy">
+
+        <div class="appy-guide-label">
+          SafeBite recommendation engine
+        </div>
+
+        <div class="appy-guide-title">
+          Appy is matching the craving.
+        </div>
+
+        <div class="appy-guide-text">
+          Unsafe options disappear first. The remaining
+          candidates are compared for similarity and usefulness.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+
+    <div class="swap-filter-bar">
+
+      <button class="swap-filter active" data-filter="all">
+        All Options
+      </button>
+
+      <button class="swap-filter" data-filter="closest">
+        Closest Match
+      </button>
+
+      <button class="swap-filter" data-filter="simple">
+        Simple Ingredients
+      </button>
+
+      <button class="swap-filter" data-filter="macro">
+        Macro Friendly
+      </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div class="result-strip">
+
+      <strong id="swaps-context">
+        Finding your safest alternatives…
+      </strong>
+
+      <span class="result-count">
+        Safety first
+      </span>
+
+    </div>
+
+
+    <!-- VISUAL RESULT AREA -->
+
+    <section id="swaps-root">
+
+      <p style="
+        margin:0;
+        padding:25px;
+        border:3px solid #141414;
+        background:#FFFFFF;
+        box-shadow:8px 8px 0 #141414;
+        font-size:14px;
+      ">
+        Appy is preparing your personalised alternatives…
+      </p>
+
+    </section>
+
+
+
+    <!-- RANKING -->
+
+    <section class="ranking-section">
+
+      <div class="section-heading">
+
+        <h2>
+          How Appy<br>
+          ranks it.
+        </h2>
+
+        <p>
+          The recommendation layer does not let similarity
+          override safety. Each stage narrows the candidate
+          set before the final recommendation appears.
+        </p>
+
+      </div>
+
+
+      <div class="ranking-track">
+
+        <article class="rank-step">
+
+          <div class="rank-number">01</div>
+
+          <h3>
+            Filter
+          </h3>
+
+          <p>
+            Remove candidates that conflict with the
+            allergen profile.
+          </p>
+
+        </article>
+
+
+        <article class="rank-step">
+
+          <div class="rank-number">02</div>
+
+          <h3>
+            Match
+          </h3>
+
+          <p>
+            Compare the remaining foods against the
+            original craving and learned representation.
+          </p>
+
+        </article>
+
+
+        <article class="rank-step">
+
+          <div class="rank-number">03</div>
+
+          <h3>
+            Explain
+          </h3>
+
+          <p>
+            Show why the alternative was selected instead
+            of leaving the recommendation as a black box.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- SAFETY PANEL -->
+
+    <section class="safety-panel">
+
+      <div class="safety-art">
+
+        <img
+          src="assets/illustrations/Line Wedding Icons _ Simple & Stylish Clipart-Photoroom.png"
+          alt="SafeBite star illustration"
+        >
+
+      </div>
+
+
+      <div class="safety-copy">
+
+        <div class="safety-label">
+          Recommendation logic
+        </div>
+
+        <h2>
+          Useful beats<br>
+          merely similar.
+        </h2>
+
+        <p>
+          A visually similar food isn't automatically a useful
+          recommendation. SafeBite separates safety from
+          similarity so that a candidate can only reach the
+          recommendation stage after it passes the relevant
+          safety constraints.
+        </p>
+
+        <div class="safety-pills">
+
+          <span class="safety-pill">
+            Allergen filtered
+          </span>
+
+          <span class="safety-pill">
+            Craving aware
+          </span>
+
+          <span class="safety-pill">
+            Ingredient aware
+          </span>
+
+          <span class="safety-pill">
+            Explainable
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REAL APP.JS OUTPUT -->
+
+    
+    <!-- CTA -->
+
+    <section class="swap-cta">
+
+      <div>
+
+        <h2>
+          Found something<br>
+          worth trying?
+        </h2>
+
+        <p>
+          Open the recommendation to see its ingredient
+          reasoning, safety information and nutritional comparison.
+        </p>
+
+      </div>
+
+      <a href="craving-search.html">
+        Try another craving
+      </a>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+<!-- =====================================================
+     ORIGINAL SAFEBITE FOOTER
+     ===================================================== -->
+
+<footer class="footer" id="footer" data-color="#FFF8E0">
+
+  <div class="footer-topbar">
+
+    <a
+      href="#"
+      class="footer-social-icon"
+      aria-label="Instagram"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="5"
+        ></rect>
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+        ></circle>
+
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="1"
+        ></circle>
+
+      </svg>
+    </a>
+
+
+    <a
+      href="how-it-works.html"
+      class="footer-topbar-link"
+    >
+      HOW IT WORKS
+    </a>
+
+
+    <a
+      href="architecture.html"
+      class="footer-topbar-link"
+    >
+      HOW IT THINKS
+    </a>
+
+
+    <a
+      href="results.html"
+      class="footer-topbar-link"
+    >
+      RESULTS
+    </a>
+
+
+    <a
+      href="about.html"
+      class="footer-topbar-link"
+    >
+      ABOUT
+    </a>
+
+
+    <span
+      class="footer-topbar-link footer-topbar-credit"
+    >
+      SITE BY SAFEBITE
+    </span>
+
+  </div>
+
+
+  <div
+    class="footer-flatlay"
+    id="footer-flatlay"
+  >
+
+    <img
+      src="assets/footer/vase-flowers.png"
+      class="fl-item"
+      id="fl-vase"
+      alt=""
+      data-depth="0.10"
+    >
+
+    <img
+      src="assets/footer/wine-glass-1.png"
+      class="fl-item"
+      id="fl-wineglass1"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/fork.png"
+      class="fl-item"
+      id="fl-fork"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-8"
+    >
+
+    <img
+      src="assets/footer/sausage-plate.png"
+      class="fl-item"
+      id="fl-sausage"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/wine-bottle.png"
+      class="fl-item"
+      id="fl-bottle"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/candle-2.png"
+      class="fl-item"
+      id="fl-candle2"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/salt-pepper.png"
+      class="fl-item"
+      id="fl-saltpepper"
+      alt=""
+      data-depth="0.11"
+    >
+
+    <img
+      src="assets/footer/cheese-block.png"
+      class="fl-item"
+      id="fl-cheese"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/candle-1.png"
+      class="fl-item"
+      id="fl-candle1"
+      alt=""
+      data-depth="0.08"
+    >
+
+    <img
+      src="assets/footer/olives-bowl.png"
+      class="fl-item"
+      id="fl-olivesbowl"
+      alt=""
+      data-depth="0.05"
+    >
+
+    <img
+      src="assets/footer/olives-loose.png"
+      class="fl-item"
+      id="fl-olivesloose"
+      alt=""
+      data-depth="0.09"
+    >
+
+    <img
+      src="assets/footer/jar.png"
+      class="fl-item"
+      id="fl-jar"
+      alt=""
+      data-depth="0.07"
+    >
+
+    <img
+      src="assets/footer/bread-board.png"
+      class="fl-item"
+      id="fl-bread"
+      alt=""
+      data-depth="0.04"
+    >
+
+    <img
+      src="assets/footer/spoon.png"
+      class="fl-item"
+      id="fl-spoon"
+      alt=""
+      data-depth="0.10"
+      data-rotate="6"
+    >
+
+    <img
+      src="assets/footer/wine-glass-2.png"
+      class="fl-item"
+      id="fl-wineglass2"
+      alt=""
+      data-depth="0.06"
+    >
+
+    <img
+      src="assets/footer/charcuterie-board.png"
+      class="fl-item"
+      id="fl-charcuterie"
+      alt=""
+      data-depth="0.03"
+    >
+
+    <img
+      src="assets/footer/knife.png"
+      class="fl-item"
+      id="fl-knife"
+      alt=""
+      data-depth="0.08"
+      data-rotate="-4"
+    >
+
+    <img
+      src="assets/footer/hat-plate.png"
+      class="fl-item"
+      id="fl-hat"
+      alt=""
+      data-depth="0.05"
+    >
+
+  </div>
+
+</footer>
+
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script src="script.js"></script>
+<script src="appy-sprites.js"></script>
+
+<script src="base-script.js"></script>
+
+<script src="app.js"></script>
+<script src="swaps-results.js"></script>
+
+<!-- PAGE INTERACTIONS -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  /* -------------------------------------------------------
+     FILTER BUTTONS
+     ------------------------------------------------------- */
+
+  const filters =
+    document.querySelectorAll(".swap-filter");
+
+  const options =
+    document.querySelectorAll(".swap-option");
+
+  filters.forEach(function(button){
+
+    button.addEventListener("click", function(){
+
+      filters.forEach(function(item){
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      const filter =
+        button.dataset.filter;
+
+      options.forEach(function(card){
+
+        if(
+          filter === "all" ||
+          card.dataset.category === filter
+        ){
+
+          card.style.display = "";
+
+          requestAnimationFrame(function(){
+            card.style.opacity = "1";
+            card.style.transform = "";
+          });
+
+        }else{
+
+          card.style.opacity = "0";
+          card.style.transform = "scale(.96)";
+
+          setTimeout(function(){
+
+            card.style.display = "none";
+
+          },180);
+
+        }
+
+      });
+
+    });
+
+  });
+
+
+  /* -------------------------------------------------------
+     SMALL SCROLL REVEALS
+     Does not hide content if JS fails.
+     ------------------------------------------------------- */
+
+  const revealItems = document.querySelectorAll(
+    ".appy-guide, .visual-swaps, .ranking-section, .safety-panel, .swap-cta"
+  );
+
+  if("IntersectionObserver" in window){
+
+    const observer =
+      new IntersectionObserver(function(entries){
+
+        entries.forEach(function(entry){
+
+          if(entry.isIntersecting){
+
+            entry.target.style.transform =
+              "translateY(0)";
+
+            entry.target.style.opacity =
+              "1";
+
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      },{
+        threshold:.12
+      });
+
+
+    revealItems.forEach(function(item){
+
+      item.style.transition =
+        "opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1)";
+
+      item.style.opacity = "0";
+      item.style.transform = "translateY(35px)";
+
+      observer.observe(item);
+
+    });
+
+  }
+
+
+  /* -------------------------------------------------------
+     GSAP ONLY IF AVAILABLE
+     ------------------------------------------------------- */
+
+  if(
+    typeof gsap !== "undefined" &&
+    typeof ScrollTrigger !== "undefined"
+  ){
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from(".swap-hero > *",{
+      y:35,
+      opacity:0,
+      duration:.8,
+      stagger:.12,
+      ease:"power3.out"
+    });
+
+    ScrollTrigger.refresh();
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
