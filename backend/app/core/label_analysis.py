@@ -1,341 +1,307 @@
 """
-SafeBite backend — Core Scan Flow
-==================================
-Endpoints your frontend (scan.html / verdict.html / ingredient-detail.html)
-should call instead of the mock functions in app-data.js:
+Context-aware label analysis.
 
-  POST /api/scan            -> upload a label photo, get back a verdict
-  GET  /api/scans           -> scan history (for dashboard)
-  GET  /api/scans/{id}      -> one scan, same shape as MOCK_SCANS entries
-  GET  /api/ingredient/{id} -> same shape as MOCK_INGREDIENTS entries
-  GET  /api/profile         -> current user's allergen profile
-  POST /api/profile         -> save allergen profile
-  GET  /api/swaps/{scan_id} -> ranked swap candidates for a flagged/unclear scan
-  GET  /api/swaps?q=        -> ranked swap candidates for a typed/spoken craving
+Replaces the old "any keyword anywhere => flagged" logic with evidence classes:
 
-Response JSON shapes match app-data.js exactly on purpose, so swapping
-the frontend from mock -> real is a URL change, not a rewrite.
+  definite       allergen appears as an ingredient / "Contains:" statement
+  precautionary  appears only inside "may contain / traces of / produced in a
+                 facility that handles ..." clauses  -> verdict UNCLEAR (cross-contact risk)
+  claim          appears only inside a free-from claim ("dairy free", "no milk")
+                 -> ignored (the claim is not an ingredient)
+  fuzzy          one OCR typo away from an alias (e.g. "peanuk") -> verdict UNCLEAR
 
-Run:
-  pip install -r requirements.txt
-  uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+Verdict rules (fail-safe, never silently "safe"):
+  any profile allergen definite                  -> flagged
+  else precautionary / fuzzy / ambiguous flavour -> unclear (with a specific note)
+  else                                           -> safe
+Database evidence can only ESCALATE a verdict (safe -> unclear/flagged), never lower it.
+
+Public API (drop-in for main.compute_verdict):
+  compute_verdict(ocr_text, profile_allergens, min_chars) -> (verdict, flagged, note)
+  compute_verdict_with_database(ocr_text, profile, min_chars, product) -> same tuple
+  analyze(text, profile_allergens) -> detailed findings (used by the eval script)
 """
+from __future__ import annotations
 
-from contextlib import asynccontextmanager
+import re
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Optional
-import uuid, io, re
+from app.core.allergen_kb import EXCLUDE_FOR, INGREDIENT_KB
 
-from app.api.explain_routes import router as explain_router
-from app.api.nudge_routes import router as nudge_router
-from app.ai.detector import detect_panel
-from app.core.exceptions import (
-    LLMUnavailableError,
-    llm_unavailable_handler,
-    unhandled_exception_handler,
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+_SYN = {
+    "milk": "dairy", "tree nut": "tree-nut", "tree_nut": "tree-nut", "treenut": "tree-nut",
+    "tree nuts": "tree-nut", "tree-nuts": "tree-nut", "peanuts": "peanut", "eggs": "egg",
+    "soya": "soy", "soybean": "soy", "crustacean": "shellfish", "crustaceans": "shellfish",
+}
+
+
+def expand_profile(tags: Optional[Iterable[str]]) -> Set[str]:
+    """Normalise profile tags so 'tree nut' / 'tree_nut' / 'milk' all match the KB."""
+    out: Set[str] = set()
+    for t in tags or []:
+        k = str(t).strip().lower()
+        dashed = k.replace("_", "-").replace(" ", "-")
+        for v in (k, dashed, _SYN.get(k, k), _SYN.get(dashed, dashed)):
+            out.add(v)
+        if k in {"nuts", "nut"}:
+            out |= {"tree-nut", "peanut"}
+    return out
+
+
+def edit_distance(a: str, b: str) -> int:
+    if a == b:
+        return 0
+    if not a or not b:
+        return max(len(a), len(b))
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def _norm(text: str) -> str:
+    t = (text or "").lower()
+    t = t.replace("\u2010", "-").replace("\u2011", "-").replace("\u2013", "-").replace("\u2014", "-")
+    t = re.sub(r"[ \t]+", " ", t)
+    return t
+
+
+# ---------------------------------------------------------------------------
+# precautionary clauses and free-from claims
+# ---------------------------------------------------------------------------
+_PREC_TRIGGER = re.compile(
+    r"(?:may|might|could|can)\s+(?:also\s+)?contain"
+    r"|contains?\s+traces?\s+of|traces?\s+of"
+    r"|(?:produced|processed|manufactured|made|packed|packaged)\s+(?:in|on)\s+"
+    r"(?:a|an|the|shared)?[^.;\n]{0,40}?(?:facility|equipment|line|factory|premises|unit|plant|kitchen)"
+    r"|(?:shares?|handles?)\s+(?:a\s+)?(?:facility|equipment|line|production)"
+    r"|cross[- ]?contact|not\s+suitable\s+for\s+(?:people|those|persons)?[^.;\n]{0,15}allerg"
 )
-from app.core import database as db
-from app.core.auth import router as auth_router, current_user
-from app.core.config import ALLOWED_ORIGINS, OLLAMA_BASE_URL, MIN_OCR_ALNUM_CHARS
-from app.core.logging_config import logger, setup_logging
-from app.ai.craving_vae import (
-    rank_craving,
-    craving_text_to_vector,
-    flagged_item_to_vector,
-    rank_swaps_vae,
-)
-from app.ai import craving_engine
-
-# ---------------------------------------------------------------
-# Startup / shutdown
-# ---------------------------------------------------------------
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    setup_logging()
-    db.init_db()
-    feedback.init()
-    _check_ollama_reachable()
-    yield
+_PREC_MAX = 150  # characters of clause after the trigger
 
 
-def _check_ollama_reachable() -> None:
+def _precaution_spans(t: str) -> List[Tuple[int, int]]:
+    spans = []
+    for m in _PREC_TRIGGER.finditer(t):
+        start, hard_end = m.start(), min(len(t), m.end() + _PREC_MAX)
+        end = hard_end
+        # clause ends at sentence punctuation or at the next section heading
+        stop = re.search(r"[.;]|ingredient|nutrition|contains\s*:|\bbest before\b", t[m.end():hard_end])
+        if stop:
+            end = m.end() + stop.start()
+        spans.append((start, end))
+    return spans
+
+
+_CLAIM_BEFORE = re.compile(
+    r"(?:\bno|\bwithout|free\s+(?:from|of)|contains?\s+no|does\s+not\s+contain|\bnon)[\s-]+(?:added\s+|any\s+)?$")
+_CLAIM_AFTER = re.compile(r"^[\s-]*free\b")
+
+
+def _is_claim(t: str, start: int, end: int) -> bool:
+    return bool(_CLAIM_BEFORE.search(t[max(0, start - 18):start])) or bool(_CLAIM_AFTER.match(t[end:end + 10]))
+
+
+# ---------------------------------------------------------------------------
+# compiled alias patterns
+# ---------------------------------------------------------------------------
+_compiled: Dict[int, Dict[str, dict]] = {}
+
+
+def _compile(kb: dict) -> Dict[str, dict]:
+    key = id(kb)
+    if key in _compiled:
+        return _compiled[key]
+    out = {}
+    for ing_id, ing in kb.items():
+        aliases = sorted(set(ing["aliases"]), key=len, reverse=True)
+        parts = []
+        for a in aliases:
+            esc = re.escape(a)
+            parts.append(esc + (r"(?:s|es)?" if " " not in a and a.isalpha() else ""))
+        rx = re.compile(r"\b(?:" + "|".join(parts) + r")\b") if parts else None
+        ex = EXCLUDE_FOR.get(ing_id, [])
+        ex_rx = re.compile(r"\b(?:" + "|".join(re.escape(e) for e in ex) + r")\b") if ex else None
+        singles = [a for a in aliases if " " not in a and a.isalpha() and len(a) >= 6]
+        out[ing_id] = {"rx": rx, "ex": ex_rx, "singles": singles}
+    _compiled[key] = out
+    return out
+
+
+def _fuzzy_hit(t: str, singles: List[str], exact_words: Set[str]) -> Optional[str]:
+    if not singles:
+        return None
+    for tok in set(re.findall(r"[a-z]{6,}", t)):
+        if tok in exact_words:
+            continue
+        for a in singles:
+            if abs(len(tok) - len(a)) <= 1 and edit_distance(tok, a) == 1 \
+                    and tok.rstrip("s") != a and tok != a + "s":
+                return tok
+    return None
+
+
+# ---------------------------------------------------------------------------
+# analysis
+# ---------------------------------------------------------------------------
+def analyze(text: str, profile_allergens: Optional[Iterable[str]], kb: Optional[dict] = None,
+            context_aware: bool = True) -> dict:
     """
-    Non-fatal startup check for Ollama. The old behavior was: the first
-    request to /explain-ingredient or /explain-swap would fail with a
-    generic connection error and no context. This logs a loud, specific
-    warning once at boot instead, so it's obvious *before* a demo why
-    those two routes won't work, without blocking the rest of the API
-    (scan/verdict/swap-ranking/profile all work fine without Ollama).
+    Returns {"findings": [{id,name,status,evidence,profile_match}], ...}.
+    context_aware=False reproduces the old keyword baseline (any hit = definite);
+    kept so the evaluation script can measure what the context logic adds.
     """
-    try:
-        import httpx
-        httpx.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=2.0)
-        logger.info(f"Ollama reachable at {OLLAMA_BASE_URL}")
-    except Exception:
-        logger.warning(
-            "=" * 70 + "\n"
-            f"Ollama not reachable at {OLLAMA_BASE_URL}.\n"
-            "/explain-ingredient and /explain-swap will return 503 until:\n"
-            "  1) Ollama is installed and running (https://ollama.com), and\n"
-            "  2) the model is pulled: `ollama pull llama3.2`\n"
-            "Everything else (scan, verdict, swaps, profile) works without it.\n"
-            + "=" * 70
-        )
+    kb = kb or INGREDIENT_KB
+    t = _norm(text)
+    compiled = _compile(kb)
+    P = expand_profile(profile_allergens)
+    prec_spans = _precaution_spans(t) if context_aware else []
+    findings = []
+
+    for ing_id, ing in kb.items():
+        relevant = bool(set(ing["allergen_tags"]) & P)
+        ambiguous = ing_id == "natural-flavor"
+        if not (relevant or ambiguous):
+            continue
+        c = compiled[ing_id]
+        statuses, evidence, exact_words = [], None, set()
+        if c["rx"]:
+            ex_spans = [m.span() for m in c["ex"].finditer(t)] if (c["ex"] and context_aware) else []
+            for m in c["rx"].finditer(t):
+                s, e = m.span()
+                if any(xs <= s and e <= xe for xs, xe in ex_spans):
+                    continue
+                exact_words.add(m.group(0))
+                if context_aware and any(ps <= s < pe for ps, pe in prec_spans):
+                    st = "precautionary"
+                elif context_aware and _is_claim(t, s, e):
+                    st = "claim"
+                else:
+                    st = "definite"
+                statuses.append(st)
+                if evidence is None or st == "definite":
+                    evidence = m.group(0)
+        if "definite" in statuses:
+            status = "definite"
+        elif "precautionary" in statuses:
+            status = "precautionary"
+        elif "claim" in statuses:
+            status = "claim"
+        else:
+            status = None
+            if context_aware and relevant:
+                tok = _fuzzy_hit(t, c["singles"], exact_words)
+                if tok:
+                    status, evidence = "fuzzy", tok
+        if status:
+            findings.append({"id": ing_id, "name": ing["name"], "status": status,
+                             "evidence": evidence, "profile_match": relevant})
+    return {"findings": findings}
 
 
-app = FastAPI(title="SafeBite API", lifespan=lifespan)
-
-# Restricted to a dev allowlist by default — see app/core/config.py to
-# override via the ALLOWED_ORIGINS env var when deploying. The old
-# allow_origins=["*"] let any website's frontend JS call this API using a
-# visitor's browser session; that's a real vulnerability once this is
-# deployed anywhere with actual user data attached.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_origin_regex=r"https://.*\.app\.github\.dev",
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Wire in the AI explanation routes (/explain-ingredient, /explain-swap).
-# Without this include_router call, explain_routes.py is fully coded but
-# unreachable at runtime.
-app.include_router(auth_router)
-app.include_router(explain_router)
-app.include_router(nudge_router)
-
-# Register the custom exception handlers so LLM failures return the clean
-# {"error": ..., "message": ...} JSON shape instead of a raw framework 500.
-app.add_exception_handler(LLMUnavailableError, llm_unavailable_handler)
-app.add_exception_handler(Exception, unhandled_exception_handler)
+def _names(items: List[dict]) -> str:
+    return ", ".join(sorted({f["name"] for f in items}))
 
 
-# ---------------------------------------------------------------
-# Static reference data — ingredient KB stays in-code (small, fixed
-# vocabulary, not user data). Scans and the user profile are the things
-# that actually needed persistence, and now live in app/core/database.py.
-# ---------------------------------------------------------------
+def _verdict_from_findings(findings: List[dict]) -> Tuple[str, List[dict], Optional[str]]:
+    rel = [f for f in findings if f["profile_match"]]
+    flagged = [{"id": f["id"], "name": f["name"]} for f in rel if f["status"] == "definite"]
+    prec = [f for f in rel if f["status"] == "precautionary"]
+    fuzzy = [f for f in rel if f["status"] == "fuzzy"]
+    ambiguous = [f for f in findings if f["id"] == "natural-flavor" and f["status"] == "definite"]
 
-from app.core.allergen_kb import INGREDIENT_KB  # single source of truth (was inline here)
-from app.core import label_analysis, barcode, feedback
-from app.core.label_analysis import compute_verdict  # re-exported so existing imports keep working
-
-
-# ---------------------------------------------------------------
-# Pydantic response models — mirror app-data.js shapes
-# ---------------------------------------------------------------
-
-class FlaggedIngredient(BaseModel):
-    id: str
-    name: str
-
-class ScanResult(BaseModel):
-    scanId: str
-    productName: str
-    date: str
-    verdict: str  # "safe" | "flagged" | "unclear"
-    flaggedIngredients: List[FlaggedIngredient]
-    note: Optional[str] = None  # populated when a verdict was downgraded (e.g. OCR failure)
-
-class IngredientDetail(BaseModel):
-    name: str
-    plainLanguage: str
-    aliases: List[str]
-    whyForYou: str
-
-class ProfileIn(BaseModel):
-    allergens: List[str]
+    notes = []
+    if prec:
+        notes.append(f"Precautionary label: may contain {_names(prec)}. Not listed as an ingredient, "
+                     "but cross-contact is possible. Check the pack against your own risk level.")
+    if fuzzy:
+        notes.append(f"Possible {_names(fuzzy)} (some text was unclear). Retake the photo to confirm.")
+    if flagged:
+        return "flagged", flagged, (" ".join(notes) or None)
+    if prec or fuzzy:
+        return "unclear", [], " ".join(notes)
+    if ambiguous:
+        return "unclear", [], ("Contains an ingredient whose exact source can't be confirmed "
+                               "from the label alone.")
+    return "safe", [], None
 
 
+# ---------------------------------------------------------------------------
+# gating (can we trust this OCR read at all?) + public verdict API
+# ---------------------------------------------------------------------------
+def _has_ingredient_heading(t: str) -> bool:
+    for tok in set(re.findall(r"[a-z]{6,}", t)):
+        if tok.startswith("ingredient") or tok == "composition":
+            return True
+        if len(tok) <= 13 and (edit_distance(tok, "ingredients") <= 2 or edit_distance(tok, "ingredient") <= 2):
+            return True
+    return False
 
 
-# ---------------------------------------------------------------
-# OCR — real pytesseract call. Falls back to empty string if
-# tesseract isn't installed on the machine running this.
-# ---------------------------------------------------------------
-def run_ocr(image_bytes: bytes) -> str:
-    try:
-        import pytesseract
-        from PIL import Image, ImageOps
-
-        from app.core.config import TESSERACT_CMD
-        if TESSERACT_CMD:
-            pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
-
-        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        if img.width < 1500:
-            scale = 1500 / img.width
-            img = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
-
-        candidates = [
-            ImageOps.autocontrast(img.convert("L")),
-            ImageOps.autocontrast(img.split()[1]),
-        ]
-        texts = [pytesseract.image_to_string(c, config="--psm 6") for c in candidates]
-        return max(texts, key=len).lower()
-    except Exception as e:
-        logger.warning(f"OCR failed/unavailable: {e}")
-        return ""
+def _verdict(ocr_text: str, profile_allergens, min_chars: int, kb=None):
+    t = _norm(ocr_text)
+    if len(re.sub(r"[^a-z0-9]", "", t)) < min_chars:
+        return ("unclear", [],
+                "Couldn't read enough text from this label to check it safely. "
+                "Try a clearer, well-lit photo of the ingredients panel.", "unreadable")
+    if not _has_ingredient_heading(t):
+        return ("unclear", [],
+                "No ingredients list found in this image. Nutrition Facts panels "
+                "don't list allergens, so please photograph the ingredients section.", "no_ingredients")
+    v, flagged, note = _verdict_from_findings(analyze(t, profile_allergens, kb)["findings"])
+    return v, flagged, note, "ok"
 
 
-# ---------------------------------------------------------------
-# VERDICT ENGINE — rule-based keyword matching against the user's
-# allergen profile + the ingredient KB above, deliberately kept
-# deterministic and auditable (see the report's rationale for why
-# this one component is NOT a learned classifier).
-#
-# Safety-critical fix: OCR failure or near-empty extraction must
-# NEVER fall through to "safe" — that would be a silent false
-# negative on an allergen safety check. If we can't read enough of
-# the label, the verdict is "unclear" with an explicit note, same
-# as the existing ambiguous-ingredient case, so the frontend's
-# 3-state UI (safe/flagged/unclear) doesn't need to change.
-# ---------------------------------------------------------------
-# compute_verdict now lives in app/core/label_analysis.py (context-aware).
+def compute_verdict(ocr_text: str, profile_allergens, min_chars: int = 8):
+    v, flagged, note, _ = _verdict(ocr_text, profile_allergens, min_chars)
+    return v, flagged, note
 
 
-# ---------------------------------------------------------------
-# ROUTES
-# ---------------------------------------------------------------
+def compute_verdict_with_database(ocr_text: str, profile_allergens, min_chars: int,
+                                  product: Optional[dict], kb: Optional[dict] = None):
+    """Same as compute_verdict, plus escalation from a product-database record."""
+    kb = kb or INGREDIENT_KB
+    verdict, flagged, note, reason = _verdict(ocr_text, profile_allergens, min_chars, kb)
+    if not product:
+        return verdict, flagged, note
 
-@app.post("/api/scan", response_model=ScanResult)
-async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product", barcode_text: Optional[str] = None, user: dict = Depends(current_user)):
-    image_bytes = await file.read()
+    P = expand_profile(profile_allergens)
+    relevant = {i for i, ing in kb.items() if set(ing["allergen_tags"]) & P}
+    db_def = set(product.get("allergen_ids", [])) & relevant
+    db_trace = set(product.get("trace_ids", [])) & relevant
+    src = "the product database (Open Food Facts)"
+    SRC = src[0].upper() + src[1:]
 
-    cropped = detect_panel(image_bytes)           # YOLOv8 product detector (falls back to full image)
-    logger.info(
-        "YOLO detector: %s (input %d bytes, output %d bytes)",
-        "fell back to full image" if cropped == image_bytes else "cropped to detected product",
-        len(image_bytes), len(cropped),
-    )
-    ocr_text = run_ocr(cropped)
-    # If the crop lost the text or the ingredients heading, retry on the full image
-    if len(re.sub(r"[^a-z0-9]", "", ocr_text)) < MIN_OCR_ALNUM_CHARS or "ingredient" not in ocr_text:
-        ocr_text = run_ocr(image_bytes)
-    # Barcode cross-check (optional): typed code wins, else try to decode from the photo.
-    code = barcode.normalize(barcode_text) or barcode.decode_barcode(image_bytes)
-    product = barcode.lookup(code) if code else None
-    if product and product_name in (None, "", "Scanned Product"):
-        product_name = product.get("name") or product_name
-    verdict, flagged, note = label_analysis.compute_verdict_with_database(
-        ocr_text, db.get_profile(user["id"])["allergens"], MIN_OCR_ALNUM_CHARS, product)
+    if reason != "ok":  # photo unusable: lean on the database, but never claim "safe"
+        text_hits = set()
+        if product.get("ingredients_text"):
+            res = analyze("ingredients: " + product["ingredients_text"], profile_allergens, kb)
+            text_hits = {f["id"] for f in res["findings"] if f["profile_match"] and f["status"] == "definite"}
+        ids = db_def | text_hits
+        if ids:
+            names = sorted(kb[i]["name"] for i in ids)
+            return ("flagged", [{"id": i, "name": kb[i]["name"]} for i in sorted(ids)],
+                    f"Based on {src}, not your photo: contains {', '.join(names)}.")
+        return ("unclear", [],
+                f"The photo couldn't be read. {SRC} lists none of your allergens, "
+                "but databases can be outdated, so verify on the pack.")
 
-    scan_id = str(uuid.uuid4())[:8]
-    scan = {
-        "scanId": scan_id,
-        "productName": product_name,
-        "date": "today",
-        "verdict": verdict,
-        "flaggedIngredients": flagged,
-        "note": note,
-    }
-    db.save_scan(scan, user["id"])
-    return scan
-
-
-@app.get("/api/scans", response_model=List[ScanResult])
-def list_scans(user: dict = Depends(current_user)):
-    return db.list_scans(user["id"])  # already most-recent-first
-
-
-@app.get("/api/scans/{scan_id}", response_model=ScanResult)
-def get_scan(scan_id: str, user: dict = Depends(current_user)):
-    scan = db.get_scan(scan_id, user["id"])
-    if not scan:
-        raise HTTPException(404, "Scan not found")
-    return scan
-
-
-class FeedbackIn(BaseModel):
-    scanId: str
-    kind: str
-    comment: Optional[str] = None
-
-
-@app.post("/api/feedback")
-def post_feedback(body: FeedbackIn, user: dict = Depends(current_user)):
-    if not db.get_scan(body.scanId, user["id"]):
-        raise HTTPException(404, "Scan not found")
-    try:
-        feedback.save(user["id"], body.scanId, body.kind, body.comment)
-    except ValueError as e:
-        raise HTTPException(400, str(e))
-    return {"ok": True}
-
-
-@app.get("/api/ingredient/{ingredient_id}", response_model=IngredientDetail)
-def get_ingredient(ingredient_id: str):
-    ing = INGREDIENT_KB.get(ingredient_id)
-    if not ing:
-        raise HTTPException(404, "Ingredient not found")
-    return {
-        "name": ing["name"],
-        "plainLanguage": ing["plainLanguage"],
-        "aliases": [a.title() for a in ing["aliases"]],
-        "whyForYou": ing["whyForYouTemplate"],
-    }
-
-
-@app.get("/api/swaps/{scan_id}")
-def get_swaps_for_scan(scan_id: str, user: dict = Depends(current_user)):
-    scan = db.get_scan(scan_id, user["id"])
-    if not scan:
-        raise HTTPException(404, "Scan not found")
-    # Build a craving-signature query vector from the flagged ingredient(s)
-    # and product name, then rank via the trained VAE's latent space
-    # instead of the old tag-overlap heuristic.
-    text_source = " ".join([ing["name"] for ing in scan["flaggedIngredients"]] + [scan["productName"]])
-    query_vec = flagged_item_to_vector(text_source)
-    return craving_engine.search(scan["productName"], db.get_profile(user["id"])["allergens"], _prefs(user))
-
-
-@app.get("/api/swaps")
-def search_swaps(q: str, user: dict = Depends(current_user)):
-    return craving_engine.search(q, db.get_profile(user["id"])["allergens"], _prefs(user))
-
-
-@app.get("/api/profile")
-def get_profile(user: dict = Depends(current_user)):
-    return db.get_profile(user["id"])
-
-@app.get("/api/craving/understand")
-def understand_craving(q: str, user: dict = Depends(current_user)):
-    return craving_engine.understand(q)
-
-@app.post("/api/profile")
-def set_profile(profile: ProfileIn, user: dict = Depends(current_user)):
-    return db.set_profile(user["id"], profile.allergens)
-
-class PrefsIn(BaseModel):
-    prefs: dict
-
-    
-def _prefs(user):
-    try:
-        return db.get_prefs(user["id"])
-    except Exception:
-        return {}
-
-
-@app.get("/api/profile/prefs")
-def get_prefs(user: dict = Depends(current_user)):
-    return {"prefs": db.get_prefs(user["id"])}
-
-
-@app.post("/api/profile/prefs")
-def set_prefs(body: PrefsIn, user: dict = Depends(current_user)):
-    db.set_prefs(user["id"], body.prefs)
-    return {"prefs": body.prefs}
-
-@app.get("/")
-def root():
-    return {"status": "ok", "service": "safebite-backend"}
-
-
-@app.get("/health")
-def health():
-    return {"status": "ok", "service": "safebite-backend"}
+    have = {f["id"] for f in flagged}
+    new_def = sorted(db_def - have)
+    notes = [note] if note else []
+    if new_def:
+        flagged = flagged + [{"id": i, "name": kb[i]["name"]} for i in new_def]
+        notes.append(f"{SRC} lists {', '.join(kb[i]['name'] for i in new_def)}, "
+                     "which wasn't clearly visible in your photo. Verify on the pack.")
+        verdict = "flagged"
+    elif verdict == "safe" and db_trace:
+        names = ", ".join(sorted(kb[i]["name"] for i in db_trace))
+        notes.append(f"{SRC} lists possible traces of {names}.")
+        verdict = "unclear"
+    return verdict, flagged, (" ".join(notes) or None)
