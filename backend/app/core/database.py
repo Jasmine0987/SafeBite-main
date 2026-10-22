@@ -87,15 +87,23 @@ def init_db() -> None:
         cols = [r["name"] for r in conn.execute("PRAGMA table_info(scans)").fetchall()]
         if "user_id" not in cols:
             conn.execute("ALTER TABLE scans ADD COLUMN user_id INTEGER")
+        ucols = [r["name"] for r in conn.execute("PRAGMA table_info(users)").fetchall()]
+        if "terms_version" not in ucols:
+            conn.execute("ALTER TABLE users ADD COLUMN terms_version TEXT")
+        if "terms_accepted_at" not in ucols:
+            conn.execute("ALTER TABLE users ADD COLUMN terms_accepted_at TEXT")
         conn.commit()
     finally:
         conn.close()
 
 
-def create_user(email: str, password_hash: str) -> dict:
+def create_user(email: str, password_hash: str, terms_version: Optional[str] = None) -> dict:
     conn = _get_connection()
     try:
-        cur = conn.execute("INSERT INTO users (email, password_hash) VALUES (?, ?)", (email, password_hash))
+        cur = conn.execute(
+            "INSERT INTO users (email, password_hash, terms_version, terms_accepted_at) "
+            "VALUES (?, ?, ?, CASE WHEN ? IS NULL THEN NULL ELSE datetime('now') END)",
+            (email, password_hash, terms_version, terms_version))
         user_id = cur.lastrowid
         conn.execute("INSERT INTO user_profiles (user_id, allergens_json) VALUES (?, '[]')", (user_id,))
         conn.commit()

@@ -27,7 +27,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
-import uuid, io, re
+import uuid, io, re, os
 
 from app.api.explain_routes import router as explain_router
 from app.api.nudge_routes import router as nudge_router
@@ -39,7 +39,7 @@ from app.core.exceptions import (
 )
 from app.core import database as db
 from app.core.auth import router as auth_router, current_user
-from app.core.config import ALLOWED_ORIGINS, OLLAMA_BASE_URL, MIN_OCR_ALNUM_CHARS
+from app.core.config import ALLOWED_ORIGINS, ALLOWED_ORIGIN_REGEX, MAX_UPLOAD_BYTES, OLLAMA_BASE_URL, MIN_OCR_ALNUM_CHARS
 from app.core.logging_config import logger, setup_logging
 from app.ai.craving_vae import (
     rank_craving,
@@ -96,10 +96,23 @@ app = FastAPI(title="SafeBite API", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_origin_regex=r"https://.*\.app\.github\.dev",
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX or None,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def security_headers(request, call_next):
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    if request.url.path.startswith("/api/"):
+        response.headers.setdefault("Cache-Control", "no-store")  # allergy data must not be cached
+    if request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https":
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+    return response
 
 # Wire in the AI explanation routes (/explain-ingredient, /explain-swap).
 # Without this include_router call, explain_routes.py is fully coded but
@@ -205,6 +218,8 @@ def run_ocr(image_bytes: bytes) -> str:
 @app.post("/api/scan", response_model=ScanResult)
 async def scan_label(file: UploadFile = File(...), product_name: Optional[str] = "Scanned Product", barcode_text: Optional[str] = None, user: dict = Depends(current_user)):
     image_bytes = await file.read()
+    if len(image_bytes) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, f"Image too large (limit {MAX_UPLOAD_BYTES // (1024 * 1024)} MB).")
 
     cropped = detect_panel(image_bytes)           # YOLOv8 product detector (falls back to full image)
     logger.info(
@@ -333,9 +348,20 @@ def set_prefs(body: PrefsIn, user: dict = Depends(current_user)):
 
 @app.get("/")
 def root():
+    if os.getenv("SERVE_FRONTEND") == "1":
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse("/index.html")
     return {"status": "ok", "service": "safebite-backend"}
 
 
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "safebite-backend"}
+
+# Production: serve the static frontend from this same app (one origin, no CORS needed).
+if os.getenv("SERVE_FRONTEND") == "1":
+    from pathlib import Path as _Path
+    from fastapi.staticfiles import StaticFiles
+    _fe = _Path(__file__).resolve().parents[2] / "frontend"
+    if _fe.exists():
+        app.mount("/", StaticFiles(directory=str(_fe), html=True), name="frontend")

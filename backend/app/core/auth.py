@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel
 
 from app.core import database as db
+from app.core.config import TERMS_VERSION
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -36,6 +37,7 @@ def _token_hash(token: str) -> str:
 class Credentials(BaseModel):
     email: str
     password: str
+    accepted_terms: bool = False  # required on signup, ignored on login
 
 
 def _session_response(user: dict) -> dict:
@@ -51,8 +53,10 @@ def signup(body: Credentials):
         raise HTTPException(400, "Enter a valid email address.")
     if len(body.password) < 8:
         raise HTTPException(400, "Password must be at least 8 characters.")
+    if not body.accepted_terms:
+        raise HTTPException(400, "Please accept the terms and the health-data consent to create an account.")
     try:
-        user = db.create_user(email, _hash_password(body.password))
+        user = db.create_user(email, _hash_password(body.password), TERMS_VERSION)
     except sqlite3.IntegrityError:
         raise HTTPException(409, "An account with that email already exists. Try logging in.")
     return _session_response(user)

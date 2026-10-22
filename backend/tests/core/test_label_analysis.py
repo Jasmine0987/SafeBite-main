@@ -151,3 +151,21 @@ def test_db_text_used_when_photo_unreadable():
 
 def test_edit_distance():
     assert edit_distance("peanut", "peanuk") == 1 and edit_distance("abc", "abc") == 0
+
+# ---- OCR digit/letter confusions inside short allergen words ----
+def test_ocr_confusable_short_word_is_not_safe():
+    from app.core.label_analysis import compute_verdict
+    v, flagged, note = compute_verdict("ingredients: wheat flour, m1lk powder, salt", ["milk"])
+    assert v != "safe" and note
+
+
+def test_ocr_rn_for_m_is_not_safe():
+    from app.core.label_analysis import compute_verdict
+    v, _, _ = compute_verdict("ingredients: sugar, rnilk solids, salt", ["milk"])
+    assert v != "safe"
+
+
+def test_confusable_rule_leaves_e_numbers_and_vitamins_alone():
+    from app.core.label_analysis import compute_verdict
+    v, _, _ = compute_verdict("ingredients: water, sugar, colour e150d, vitamin b12, e102", ["milk", "egg", "soy"])
+    assert v == "safe"
