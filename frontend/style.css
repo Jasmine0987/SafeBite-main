@@ -8,7 +8,7 @@
   --shadow-sm:4px 4px 0 var(--ink); --shadow-md:6px 6px 0 var(--ink); --shadow-lg:10px 10px 0 var(--ink);
   --display:'Bungee','Impact',sans-serif; --display-heading:'Bungee','Impact',sans-serif; --body:'Space Mono',ui-monospace,monospace;
   --footer-ink:#141414; --footer-cream:#FCF6E8; --ease-bounce:cubic-bezier(.34,1.56,.64,1);
-  
+  --black:#141414;
 }
 html, body, *, *::before, *::after { cursor: none !important; }
 #trail-canvas{
