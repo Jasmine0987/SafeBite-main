@@ -3,12 +3,12 @@
    ========================================================= */
 :where(:root){
   --ink:#141414; --cream:#FCF6E8; --yellow:#F2DB66; --red:#BD3647; --green:#A2BF8A;
-  --purple:#6B66A6; --plum:#816AA8; --slate:#3F3D5C;
+  --purple:#6B66A6; --plum:#816AA8; --slate:#3F3D5C; --black: #000000;
   --border:2px solid var(--ink); --border-thick:3px solid var(--ink);
   --shadow-sm:4px 4px 0 var(--ink); --shadow-md:6px 6px 0 var(--ink); --shadow-lg:10px 10px 0 var(--ink);
   --display:'Bungee','Impact',sans-serif; --display-heading:'Bungee','Impact',sans-serif; --body:'Space Mono',ui-monospace,monospace;
   --footer-ink:#141414; --footer-cream:#FCF6E8; --ease-bounce:cubic-bezier(.34,1.56,.64,1);
-  --black:#141414;
+
 }
 html, body, *, *::before, *::after { cursor: none !important; }
 #trail-canvas{
@@ -1748,72 +1748,23 @@ img.img-fallback{
   opacity:0.5;
   pointer-events:none;
 }
-html, body { height:auto; overflow-y:auto !important; }
-input, textarea, select { color:var(--ink) !important; background:#fff; }
-.app-main, .app-shell { color:var(--ink); }
-.sb-stack-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
-  align-items: start;
-  gap: clamp(20px, 3vw, 48px);
+
+
+/* =========================================================
+   FALLING HEADINGS — letter wrappers must survive any page
+   rule like ".some-title span{display:block}", which would stack
+   every letter on its own line. Loaded by every page (pages.css
+   is not), so it lives here.
+   ========================================================= */
+.split-title .split-letter,
+.split-title .split-word-wrap{
+  display:inline-block !important;
+  position:static !important;
+  float:none !important;
+  width:auto !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 !important;
 }
-
-.sb-stack-title,
-.sb-stack-intro-right {
-  min-width: 0;
-}
-
-.sb-stack-title .sb-big-heading {
-  max-width: 100%;
-  margin-bottom: 0;
-  overflow-wrap: normal;
-}
-
-.sb-stack-intro-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  padding-top: 120px;
-}
-
-.sb-stack-intro-right .sb-flow-appy {
-  position: static;
-  display: block;
-  width: clamp(100px, 12vw, 155px);
-  height: 120px;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: left center;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-.sb-stack-intro-right .sb-reveal {
-  position: static;
-  width: 100%;
-  max-width: 360px;
-  margin: 0;
-  overflow-wrap: break-word;
-}
-
-@media (max-width: 650px) {
-  .sb-stack-intro {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr);
-    gap: 12px;
-  }
-
-  .sb-stack-intro-right {
-    padding-top: 90px;
-    gap: 12px;
-  }
-
-  .sb-stack-intro-right .sb-flow-appy {
-    width: 90px;
-    height: 90px;
-  }
-
-  .sb-stack-intro-right .sb-reveal {
-    font-size: 12px;
-  }
-}
+.split-title .split-word-wrap{ white-space:nowrap; }
+.split-title .split-letter{ will-change:transform, opacity; }

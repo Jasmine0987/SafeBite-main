@@ -1,0 +1,108 @@
+/* SafeBite page refinements — loaded only on the 14 pages outside the five design references.
+   Keep app-specific layouts and interactions; use the shared design tokens only. */
+:root {
+  color-scheme: light;
+}
+
+body {
+  color: var(--ink);
+  background-color: var(--cream);
+  font-family: var(--body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.app-heading, .page-title, .section-title {
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+a.brutal-btn,
+a.button,
+.brutal-btn {
+  box-sizing: border-box;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0.72rem 1rem;
+  border: var(--border-thick);
+  border-radius: 0;
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: clamp(0.68rem, 1.7vw, 0.86rem);
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+button:hover,
+[role="button"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+a.brutal-btn:hover,
+a.button:hover,
+.brutal-btn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--purple);
+  outline-offset: 3px;
+}
+
+/* Cream paper panels instead of pure white; preserve semantic status fills. */
+.app-main,
+.app-back,
+.dash-craving,
+.scan-thumb,
+.verdict-result,
+.ingredient-card,
+.swap-result-card,
+.auth-card,
+.card,
+.panel,
+.modal-card,
+.content-card {
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  color: var(--ink);
+  background-color: var(--cream);
+  border-color: var(--ink);
+  font-family: var(--body);
+}
+
+::placeholder {
+  color: var(--ink);
+  opacity: 0.62;
+}
+
+@media (max-width: 600px) {
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  a.brutal-btn,
+  a.button,
+  .brutal-btn {
+    min-height: 44px;
+    padding: 0.7rem 0.85rem;
+  }
+}

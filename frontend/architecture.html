@@ -1915,7 +1915,7 @@ document
 if(window.gsap){
 
   gsap.from(
-    '.thinks-hero-inner > *',
+    '.thinks-hero-inner > *:not(h1)',
     {
       y:45,
       opacity:0,
@@ -1934,7 +1934,7 @@ if(window.gsap){
 
       gsap.from(
         section.querySelectorAll(
-          '.thinks-section-title, .thinks-statement-title, .personal-heading, .thinks-section-kicker'
+          '.thinks-section-kicker'
         ),
         {
           y:35,
