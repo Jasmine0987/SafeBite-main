@@ -1748,3 +1748,5 @@ img.img-fallback{
   opacity:0.5;
   pointer-events:none;
 }
+input, textarea, select { color:var(--ink) !important; background:#fff; }
+.app-main, .app-shell { color:var(--ink); }
