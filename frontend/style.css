@@ -1751,3 +1751,69 @@ img.img-fallback{
 html, body { height:auto; overflow-y:auto !important; }
 input, textarea, select { color:var(--ink) !important; background:#fff; }
 .app-main, .app-shell { color:var(--ink); }
+.sb-stack-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
+  align-items: start;
+  gap: clamp(20px, 3vw, 48px);
+}
+
+.sb-stack-title,
+.sb-stack-intro-right {
+  min-width: 0;
+}
+
+.sb-stack-title .sb-big-heading {
+  max-width: 100%;
+  margin-bottom: 0;
+  overflow-wrap: normal;
+}
+
+.sb-stack-intro-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-top: 120px;
+}
+
+.sb-stack-intro-right .sb-flow-appy {
+  position: static;
+  display: block;
+  width: clamp(100px, 12vw, 155px);
+  height: 120px;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.sb-stack-intro-right .sb-reveal {
+  position: static;
+  width: 100%;
+  max-width: 360px;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 650px) {
+  .sb-stack-intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr);
+    gap: 12px;
+  }
+
+  .sb-stack-intro-right {
+    padding-top: 90px;
+    gap: 12px;
+  }
+
+  .sb-stack-intro-right .sb-flow-appy {
+    width: 90px;
+    height: 90px;
+  }
+
+  .sb-stack-intro-right .sb-reveal {
+    font-size: 12px;
+  }
+}
