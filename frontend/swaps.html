@@ -3,10 +3,12 @@
 <head>
 <script src="auth.js"></script>
 <script>
-  const KEY = 'safebite_token';
-  if (localStorage.getItem(KEY)) document.querySelectorAll('.nav-logo').forEach(a => a.href = 'dashboard.html');
-  document.getElementById('signout-link')?.addEventListener('click', e => {
-    e.preventDefault(); localStorage.removeItem(KEY); location.href = 'login.html';
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('#signout-link');
+    if (!link) return;
+    e.preventDefault();
+    try { localStorage.clear(); sessionStorage.clear(); } catch (err) {}
+    window.location.href = 'login.html';
   });
 </script>
 <meta charset="UTF-8">
@@ -601,6 +603,21 @@
   transform:translateY(-5px);
 }
 
+.swaps-page #swaps-root .swap-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:25px; margin-bottom:55px;
+}
+.swaps-page #swaps-root .swap-result-card{
+  padding:26px; background:#fff; color:#141414;
+  border:3px solid #141414; box-shadow:9px 9px 0 #141414;
+}
+.swaps-page #swaps-root .swap-result-card h3{ margin:10px 0; color:#141414; }
+.swaps-page #swaps-root .swap-result-card a{ color:#141414; font-weight:800; }
+.swaps-page #swaps-root .swap-macro-delta{
+  display:inline-block; padding:5px 10px; background:#FFD84D;
+  border:2px solid #141414; font-size:11px; font-weight:800; text-transform:uppercase;
+}
+
 /* ---------------------------------------------------------
    CTA
    --------------------------------------------------------- */
@@ -919,109 +936,21 @@
 
     <!-- VISUAL RESULT AREA -->
 
-    <section class="visual-swaps">
+    <section id="swaps-root">
 
-
-      <!-- MAIN SWAP -->
-
-      <article
-        class="swap-feature swap-option"
-        data-category="closest"
-      >
-
-        <div class="swap-feature-tag">
-          Closest match
-        </div>
-
-        <div class="swap-feature-content">
-
-          <div>
-
-            <h2>
-              Same<br>
-              craving.<br>
-              Different<br>
-              route.
-            </h2>
-
-            <p>
-              Appy searches for an alternative that keeps the
-              sensory idea of the original food while respecting
-              the user's allergen profile.
-            </p>
-
-          </div>
-
-          <div class="swap-image">
-
-            <img
-              src="assets/illustrations/Line Wedding Icons _ Simple & Stylish Clipart-Photoroom.png"
-              alt="Star illustration"
-            >
-
-          </div>
-
-        </div>
-
-      </article>
-
-
-      <!-- SIDE OPTIONS -->
-
-      <div class="swap-side">
-
-        <article
-          class="mini-swap yellow swap-option"
-          data-category="simple"
-        >
-
-          <div class="mini-swap-number">
-            02
-          </div>
-
-          <h3>
-            Simple<br>
-            ingredients.
-          </h3>
-
-          <p>
-            Fewer unfamiliar ingredients can make
-            the alternative easier to understand.
-          </p>
-
-          <img
-            class="mini-star"
-            src="assets/illustrations/Line Wedding Icons _ Simple & Stylish Clipart-Photoroom.png"
-            alt=""
-          >
-
-        </article>
-
-
-        <article
-          class="mini-swap green swap-option"
-          data-category="macro"
-        >
-
-          <div class="mini-swap-number">
-            03
-          </div>
-
-          <h3>
-            Macro<br>
-            friendly.
-          </h3>
-
-          <p>
-            When useful, nutritional similarity becomes
-            another signal instead of an afterthought.
-          </p>
-
-        </article>
-
-      </div>
+      <p style="
+        margin:0;
+        padding:25px;
+        border:3px solid #141414;
+        background:#FFFFFF;
+        box-shadow:8px 8px 0 #141414;
+        font-size:14px;
+      ">
+        Appy is preparing your personalised alternatives…
+      </p>
 
     </section>
+
 
 
     <!-- RANKING -->
@@ -1158,22 +1087,7 @@
 
     <!-- REAL APP.JS OUTPUT -->
 
-    <section id="swaps-root">
-
-      <p style="
-        margin:0;
-        padding:25px;
-        border:3px solid #141414;
-        background:#FFFFFF;
-        box-shadow:8px 8px 0 #141414;
-        font-size:14px;
-      ">
-        Appy is preparing your personalised alternatives…
-      </p>
-
-    </section>
-
-
+    
     <!-- CTA -->
 
     <section class="swap-cta">
@@ -1461,7 +1375,7 @@
 <script src="base-script.js"></script>
 
 <script src="app.js"></script>
-
+<script src="swaps-results.js"></script>
 
 <!-- PAGE INTERACTIONS -->
 

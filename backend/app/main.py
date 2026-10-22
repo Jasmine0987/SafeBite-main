@@ -47,7 +47,7 @@ from app.ai.craving_vae import (
     flagged_item_to_vector,
     rank_swaps_vae,
 )
-
+from app.ai import craving_engine
 
 # ---------------------------------------------------------------
 # Startup / shutdown
@@ -391,18 +391,21 @@ def get_swaps_for_scan(scan_id: str, user: dict = Depends(current_user)):
     # instead of the old tag-overlap heuristic.
     text_source = " ".join([ing["name"] for ing in scan["flaggedIngredients"]] + [scan["productName"]])
     query_vec = flagged_item_to_vector(text_source)
-    return {"query": scan["productName"], "results": rank_swaps_vae(query_vec)}
+    return craving_engine.search(scan["productName"], db.get_profile(user["id"])["allergens"], _prefs(user))
 
 
 @app.get("/api/swaps")
 def search_swaps(q: str, user: dict = Depends(current_user)):
-    return rank_craving(q, db.get_profile(user["id"])["allergens"])
+    return craving_engine.search(q, db.get_profile(user["id"])["allergens"], _prefs(user))
 
 
 @app.get("/api/profile")
 def get_profile(user: dict = Depends(current_user)):
     return db.get_profile(user["id"])
 
+@app.get("/api/craving/understand")
+def understand_craving(q: str, user: dict = Depends(current_user)):
+    return craving_engine.understand(q)
 
 @app.post("/api/profile")
 def set_profile(profile: ProfileIn, user: dict = Depends(current_user)):
@@ -410,6 +413,13 @@ def set_profile(profile: ProfileIn, user: dict = Depends(current_user)):
 
 class PrefsIn(BaseModel):
     prefs: dict
+
+    
+def _prefs(user):
+    try:
+        return db.get_prefs(user["id"])
+    except Exception:
+        return {}
 
 
 @app.get("/api/profile/prefs")

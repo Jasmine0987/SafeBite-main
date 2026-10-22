@@ -101,6 +101,7 @@ _KEYWORD_TO_AXIS = {
     "creamy": "creamy", "milkshake": "creamy", "smooth": "creamy",
     "fruity": "fruity", "fruit": "fruity", "citrus": "fruity",
     "cold": "cold", "icy": "cold", "frozen": "cold", "ice": "cold",
+    "warm": "savory", "comforting": "creamy", "cozy": "creamy", "hearty": "savory",
 }
 
 
@@ -278,7 +279,7 @@ else:
 _catalog_embeddings = _vae.embed(_catalog_matrix)  # (n_items, LATENT_DIM)
 
 
-def rank_swaps_vae(query_vec: np.ndarray, limit: int = 3) -> List[dict]:
+def rank_swaps_vae(query_vec: np.ndarray, limit: int = 12) -> List[dict]:
     """
     Ranks SWAP_CATALOG by Euclidean distance in the learned latent space
     between the query's embedding and each item's embedding — this is the
@@ -365,7 +366,7 @@ def parse_craving(text: str):
     return target, weight, hit
 
 
-def rank_craving(text: str, allergens: List[str], limit: int = 4) -> dict:
+def rank_craving(text: str, allergens: List[str], limit: int = 12) -> dict:
     target, weight, hit = parse_craving(text)
     if not hit:
         return {"query": text, "results": [],
