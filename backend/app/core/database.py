@@ -246,4 +246,3 @@ def set_prefs(user_id: int, prefs: dict) -> None:
         conn.commit()
     finally:
         conn.close()
-

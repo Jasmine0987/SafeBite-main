@@ -175,7 +175,7 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
         document.body.style.backgroundColor = entry.target.getAttribute('data-color');
       }
     });
-  }, { threshold: 0.45 });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
 
   sections.forEach(s => io.observe(s));
 })();

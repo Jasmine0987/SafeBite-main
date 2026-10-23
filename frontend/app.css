@@ -339,20 +339,3 @@
 }
 .swap-why{ font-size:0.82rem; line-height:1.5; opacity:0.85; }
 .swap-empty{ font-size:0.85rem; opacity:0.6; }
-/* ---- barcode field (scan.html) ---- */
-.scan-barcode{display:block;width:100%;max-width:420px;margin:18px auto 0;text-align:left;font-family:'Space Mono',monospace}
-.scan-barcode-label{display:block;font-weight:700;font-size:.72rem;letter-spacing:.08em;margin-bottom:6px}
-.scan-barcode input{width:100%;box-sizing:border-box;padding:10px 12px;border:3px solid #141414;background:#fff;font:inherit;font-size:1rem}
-.scan-barcode-hint{display:block;margin-top:6px;font-size:.72rem;line-height:1.4;opacity:.75}
-.scan-barcode-hint a{color:inherit}
-
-/* ---- verdict note + report-a-problem (verdict.html) ---- */
-.sb-note{margin:14px 0 0;padding:12px 14px;border:3px solid #141414;background:#F2DB66;font-family:'Space Mono',monospace;box-shadow:4px 4px 0 #141414}
-.sb-note--precaution{background:#F2DB66}
-.sb-note-tag{display:inline-block;margin-bottom:6px;padding:2px 8px;background:#141414;color:#FCF6E8;font-weight:700;font-size:.68rem;letter-spacing:.08em}
-.sb-note p{margin:0;font-size:.85rem;line-height:1.5}
-.sb-feedback{margin:18px 0 0;font-family:'Space Mono',monospace}
-.sb-feedback-panel{margin-top:12px;display:flex;flex-direction:column;gap:10px;max-width:460px}
-.sb-feedback-panel[hidden]{display:none}
-.sb-feedback-panel select,.sb-feedback-panel textarea{padding:10px;border:3px solid #141414;background:#fff;font:inherit}
-.sb-feedback-msg{margin:0;font-size:.8rem}
