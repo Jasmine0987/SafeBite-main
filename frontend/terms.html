@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeBite — Terms, Disclaimer &amp; Privacy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#FCF6E8;--black:#141414;--yellow:#F2DB66;--red:#BD3647}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--black);font-family:'Space Mono',monospace;line-height:1.65}
+  main{max-width:780px;margin:0 auto;padding:40px 22px 90px}
+  h1{font-family:'Bungee',sans-serif;font-size:2.2rem;line-height:1.05;margin:0 0 6px}
+  h2{font-family:'Bungee',sans-serif;font-size:1.1rem;margin:36px 0 8px}
+  .meta{font-size:.78rem;opacity:.7;margin-bottom:24px}
+  .box{border:3px solid var(--black);background:var(--yellow);padding:14px 16px;box-shadow:5px 5px 0 var(--black);margin:20px 0}
+  .box strong{display:block;margin-bottom:4px}
+  ul{padding-left:20px}
+  li{margin:4px 0}
+  a{color:inherit}
+  .back{display:inline-block;margin-bottom:22px;font-weight:700}
+  .todo{background:#fff;border:2px dashed var(--red);padding:10px 12px;font-size:.82rem}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="javascript:history.length>1?history.back():location.href='index.html'">← Back</a>
+  <h1>Terms, disclaimer &amp; privacy</h1>
+  <p class="meta">Version 2026-10-23 · SafeBite is a student project (CSE4006 Deep Learning, VIT-AP) in closed beta.</p>
+
+  <div class="box">
+    <strong>The short version</strong>
+    SafeBite is an assistive second check. It is not medical advice and it can be wrong.
+    Never rely on it alone. Always read the full label, and follow your doctor's guidance on your allergy.
+  </div>
+
+  <h2>1. What SafeBite does</h2>
+  <p>You photograph a food label (and may type its barcode). SafeBite reads the text, compares it with the allergens you declared, and returns one of three answers: <b>safe</b>, <b>flagged</b> or <b>unclear</b>. It also suggests swaps and explains ingredients in plain English.</p>
+
+  <h2>2. Not medical advice</h2>
+  <ul>
+    <li>SafeBite does not diagnose, treat or advise on any medical condition.</li>
+    <li>A <b>safe</b> result means only that nothing on your list was found in the text SafeBite could read. It is not a guarantee that the food is free of your allergens.</li>
+    <li>If you have a severe allergy, carry the treatment your doctor prescribed and follow their plan.</li>
+  </ul>
+
+  <h2>3. Known limits</h2>
+  <ul>
+    <li><b>Reading errors.</b> Curved, blurry, glossy, dark or non-English labels may be read wrongly or not at all. When SafeBite cannot read enough text it says <b>unclear</b>, never safe.</li>
+    <li><b>"May contain" and shared-facility warnings.</b> SafeBite shows these as notes and answers <b>unclear</b>, not safe, when they match your allergens. Cross-contact risk depends on you and your doctor, not on this app.</li>
+    <li><b>Names and recipes change.</b> Regional ingredient names, new aliases and reformulated products can be missed. The ingredient list inside the app is hand-written and not yet independently audited.</li>
+    <li><b>Product database.</b> Barcode lookups use Open Food Facts, which is community-maintained and can be out of date.</li>
+    <li><b>Prototype.</b> Accuracy has not yet been measured on a large set of real labels. Do not treat any figure shown in the app or in presentations as a safety guarantee.</li>
+  </ul>
+
+  <h2>4. Your account and acceptable use</h2>
+  <ul>
+    <li>Use SafeBite for your own personal use. Don't upload other people's private images or try to break or overload the service.</li>
+    <li>Keep your password private. Sessions expire automatically after 30 days.</li>
+    <li>The service is provided "as is" during the beta, without warranties, and may change or stop at any time. To the extent the law allows, the student team is not liable for loss arising from reliance on a result.</li>
+  </ul>
+
+  <h2>5. What data SafeBite stores</h2>
+  <ul>
+    <li><b>Account:</b> your email and a salted hash of your password (never the password itself).</li>
+    <li><b>Allergy profile:</b> the allergens you select. This is health-related information.</li>
+    <li><b>Scan history:</b> the product name, the verdict, flagged ingredients and notes for each scan. Label photos are processed to read the text; this app does not keep a copy of the photo.</li>
+    <li><b>Reports:</b> anything you send through "Report a problem".</li>
+    <li><b>Consent record:</b> the version of these terms you accepted and when.</li>
+  </ul>
+
+  <h2>6. How it's used</h2>
+  <ul>
+    <li>To run the app: show your verdicts, history and swaps.</li>
+    <li>To check and improve accuracy: your problem reports may be reviewed and, with identifying details removed, used as test cases.</li>
+    <li>Your data is not sold and is not used for advertising.</li>
+    <li>Ingredient explanations use a language model running on the same server (Ollama). They are not sent to a third-party AI service by SafeBite.</li>
+    <li>If you type or scan a barcode, the barcode number is sent to Open Food Facts to look the product up.</li>
+  </ul>
+
+  <h2>7. Your choices</h2>
+  <ul>
+    <li>You can change your allergen profile in Settings at any time.</li>
+    <li>You can ask for your account and data to be deleted, or for a copy of it, using the contact below.</li>
+    <li>If you don't agree to these terms, don't create an account.</li>
+  </ul>
+
+  <h2>8. Contact</h2>
+  <p class="todo">TODO before launch: put a real contact email and the name of the responsible person or institution here.<br>Contact: <b>[your contact email]</b></p>
+
+  <p class="meta" style="margin-top:34px">This page is a plain-language template written for a student beta. Before any public release, have it reviewed against the data-protection law that applies to your users.</p>
+</main>
+</body>
+</html>

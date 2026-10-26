@@ -175,7 +175,7 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
         document.body.style.backgroundColor = entry.target.getAttribute('data-color');
       }
     });
-  }, { threshold: 0.45 });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
 
   sections.forEach(s => io.observe(s));
 })();
@@ -350,7 +350,20 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
     return pieces;
   }
 
-  const titles = document.querySelectorAll('.split-title');
+  // ---- AUTO-DROP: every page-level heading (h1/h2) falls in, with no
+  // per-page markup. A heading opts out with data-no-fall, or by living
+  // in the nav/footer/dialogs. Already-tagged headings are left alone,
+  // so about.html (which tags its own) behaves exactly as before.
+  document.querySelectorAll('h1, h2').forEach(h => {
+    if (h.classList.contains('split-title')) return;
+    if (h.hasAttribute('data-no-fall')) return;
+    if (h.closest('nav, footer, dialog, [role="dialog"], .modal')) return;
+    if (!h.textContent.trim()) return;
+    h.classList.add('split-title', 'split-letters');
+  });
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const titles = reduceMotion ? [] : document.querySelectorAll('.split-title');
   titles.forEach(title => {
     const isLetters = title.classList.contains('split-letters');
     const pieces = splitBy(title, isLetters ? 'letter' : 'word');
@@ -378,7 +391,31 @@ function createSprite(el, { cols = 5, rows = 5, fps = 12, autoplay = true } = {}
     } else {
       gsap.from(pieces, tween);
     }
+
+    // FAILSAFE: if a heading has been on screen for 2.5s and its
+    // letters are still not visible (ScrollTrigger mis-measured,
+    // hidden parent, etc.), force them visible. Text never vanishes.
+    const guard = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        guard.disconnect();
+        setTimeout(() => {
+          const stuck = pieces.some(el => parseFloat(getComputedStyle(el).opacity) < 0.05);
+          if (stuck){
+            gsap.killTweensOf(pieces);
+            gsap.set(pieces, { clearProps: 'all' });
+          }
+        }, 2500);
+      });
+    }, { threshold: 0.1 });
+    guard.observe(title);
   });
+
+  // Fonts/images shift layout; re-measure trigger positions once loaded.
+  if (hasScrollTrigger){
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+  }
 })();
 
 // =========================================================

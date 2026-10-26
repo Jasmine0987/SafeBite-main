@@ -91,7 +91,7 @@
 
 .results-hero-title .title-line {
   display: block;
-  overflow: hidden;
+  overflow: visible; /* letters fall in from above — must not clip */
 }
 
 .results-hero-title .accent {
@@ -722,7 +722,7 @@
         DOES IT WORK?
       </p>
 
-      <h1 class="results-hero-title split-title">
+      <h1 class="results-hero-title split-title split-letters">
         <span class="title-line">THE</span>
         <span class="title-line">NUMBERS,</span>
         <span class="title-line">
@@ -1425,13 +1425,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ".results-hero-title .title-line"
   );
 
-  gsap.from(titleLines, {
-    yPercent: 110,
-    opacity: 0,
-    duration: 1.1,
-    stagger: 0.12,
-    ease: "power4.out"
-  });
+  /* hero title now falls in via script.js (.split-title) */
 
 
   gsap.from(".results-hero-kicker", {
@@ -1478,23 +1472,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (typeof ScrollTrigger !== "undefined") {
 
-    gsap.utils.toArray(".results-heading").forEach((heading) => {
-
-      gsap.from(heading, {
-        y: 70,
-        opacity: 0,
-        duration: 1,
-        ease: "power4.out",
-
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 82%",
-          once: true
-        }
-
-      });
-
-    });
+    /* .results-heading now falls in via script.js (.split-title) */
 
 
     /* ---------- BIG CARDS ---------- */

@@ -57,3 +57,17 @@ if not TESSERACT_CMD:
     _default_windows_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     if os.path.exists(_default_windows_path):
         TESSERACT_CMD = _default_windows_path
+
+
+# ---------------------------------------------------------------------------
+# Deployment / compliance
+# ---------------------------------------------------------------------------
+# Regex of extra allowed origins. Default keeps GitHub Codespaces working in
+# dev; in production set ALLOWED_ORIGIN_REGEX="" (empty) to switch it off.
+ALLOWED_ORIGIN_REGEX = os.getenv("ALLOWED_ORIGIN_REGEX", r"https://.*\.app\.github\.dev")
+
+# Bump when terms.html changes materially; stored with each signup.
+TERMS_VERSION = "2026-10-23"
+
+# Reject label photos larger than this many bytes.
+MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))

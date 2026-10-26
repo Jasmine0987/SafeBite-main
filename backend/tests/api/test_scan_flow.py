@@ -78,7 +78,7 @@ def test_verdict_runs_normally_once_enough_text_present():
 def auth(client):
     """Sign up a fresh user and attach its bearer token to the test client."""
     email = f"test-{uuid.uuid4().hex[:8]}@example.com"
-    r = client.post("/api/auth/signup", json={"email": email, "password": "password123"})
+    r = client.post("/api/auth/signup", json={"email": email, "password": "password123", "accepted_terms": True})
     assert r.status_code == 200, r.text
     client.headers.update({"Authorization": f"Bearer {r.json()['token']}"})
     return client
@@ -199,3 +199,43 @@ def test_set_profile_persists(auth):
     r = auth.post("/api/profile", json={"allergens": ["peanut", "dairy"]})
     assert r.status_code == 200
     assert auth.get("/api/profile").json()["allergens"] == ["peanut", "dairy"]
+
+
+# ---------------------------------------------------------------------------
+# consent, feedback, upload limit
+# ---------------------------------------------------------------------------
+def test_signup_requires_terms_consent(client):
+    email = f"noconsent-{uuid.uuid4().hex[:8]}@example.com"
+    r = client.post("/api/auth/signup", json={"email": email, "password": "password123"})
+    assert r.status_code == 400
+    assert "terms" in r.json()["detail"].lower()
+
+
+def test_login_does_not_need_consent_flag(client):
+    email = f"login-{uuid.uuid4().hex[:8]}@example.com"
+    client.post("/api/auth/signup", json={"email": email, "password": "password123", "accepted_terms": True})
+    assert client.post("/api/auth/login", json={"email": email, "password": "password123"}).status_code == 200
+
+
+def test_feedback_saved_for_own_scan(auth):
+    scan = _make_scan(auth).json()
+    r = auth.post("/api/feedback", json={"scanId": scan["scanId"], "kind": "missed_allergen", "comment": "had milk"})
+    assert r.status_code == 200 and r.json() == {"ok": True}
+
+
+def test_feedback_rejects_unknown_kind_and_unknown_scan(auth):
+    scan = _make_scan(auth).json()
+    assert auth.post("/api/feedback", json={"scanId": scan["scanId"], "kind": "nonsense"}).status_code == 400
+    assert auth.post("/api/feedback", json={"scanId": "nope", "kind": "other"}).status_code == 404
+
+
+def test_oversized_upload_rejected(auth, monkeypatch):
+    import app.main as m
+    monkeypatch.setattr(m, "MAX_UPLOAD_BYTES", 10)
+    files = {"file": ("big.jpg", io.BytesIO(b"x" * 50), "image/jpeg")}
+    assert auth.post("/api/scan", files=files).status_code == 413
+
+
+def test_security_headers_present(client):
+    h = client.get("/health").headers
+    assert h["x-content-type-options"] == "nosniff" and h["x-frame-options"] == "DENY"

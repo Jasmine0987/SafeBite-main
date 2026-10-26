@@ -129,7 +129,8 @@ def _compile(kb: dict) -> Dict[str, dict]:
         ex = EXCLUDE_FOR.get(ing_id, [])
         ex_rx = re.compile(r"\b(?:" + "|".join(re.escape(e) for e in ex) + r")\b") if ex else None
         singles = [a for a in aliases if " " not in a and a.isalpha() and len(a) >= 6]
-        out[ing_id] = {"rx": rx, "ex": ex_rx, "singles": singles}
+        words = [a for a in aliases if " " not in a and a.isalpha() and len(a) >= 3]
+        out[ing_id] = {"rx": rx, "ex": ex_rx, "singles": singles, "words": words}
     _compiled[key] = out
     return out
 
@@ -143,6 +144,39 @@ def _fuzzy_hit(t: str, singles: List[str], exact_words: Set[str]) -> Optional[st
         for a in singles:
             if abs(len(tok) - len(a)) <= 1 and edit_distance(tok, a) == 1 \
                     and tok.rstrip("s") != a and tok != a + "s":
+                return tok
+    return None
+
+
+# OCR often swaps look-alike characters inside SHORT words ("m1lk", "5oy", "eg9",
+# "rnilk"). _fuzzy_hit ignores words under 6 letters, so those misreads used to
+# fall through as "safe". Only tokens mixing digits and letters (or containing
+# rn / vv) are tried, so ordinary words and E-numbers are not touched.
+_DIGIT_FIX = {"0": "o", "1": "il", "3": "e", "4": "a", "5": "s", "8": "b", "9": "g"}
+_E_NUMBER = re.compile(r"^e\d{3,4}[a-z]?$")
+
+
+def _confusable_variants(tok: str) -> Set[str]:
+    outs = {""}
+    for ch in tok:
+        opts = _DIGIT_FIX.get(ch, ch)
+        outs = {o + c for o in outs for c in opts}
+        if len(outs) > 64:
+            return set()
+    extra = {v.replace("rn", "m").replace("vv", "w") for v in outs} if ("rn" in tok or "vv" in tok) else set()
+    return outs | extra
+
+
+def _ocr_confusable_hit(t: str, words: List[str], exact_words: Set[str]) -> Optional[str]:
+    if not words:
+        return None
+    wanted = set(words)
+    for tok in set(re.findall(r"[a-z0-9]{3,12}", t)):
+        mixed = any(c.isdigit() for c in tok) and any(c.isalpha() for c in tok)
+        if tok in exact_words or _E_NUMBER.match(tok) or not (mixed or "rn" in tok or "vv" in tok):
+            continue
+        for v in _confusable_variants(tok):
+            if v != tok and (v in wanted or (v.endswith("s") and v[:-1] in wanted) or (v.endswith("es") and v[:-2] in wanted)):
                 return tok
     return None
 
@@ -196,7 +230,7 @@ def analyze(text: str, profile_allergens: Optional[Iterable[str]], kb: Optional[
         else:
             status = None
             if context_aware and relevant:
-                tok = _fuzzy_hit(t, c["singles"], exact_words)
+                tok = _fuzzy_hit(t, c["singles"], exact_words) or _ocr_confusable_hit(t, c["words"], exact_words) or _ocr_confusable_hit(t, c["words"], exact_words)
                 if tok:
                     status, evidence = "fuzzy", tok
         if status:

@@ -2881,17 +2881,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-    heroTimeline.from(
-      '.insights-title span',
-      {
-        yPercent:110,
-        opacity:0,
-        rotate:2,
-        duration:1,
-        stagger:.12
-      },
-      '-=.25'
-    );
+    /* .insights-title falls in via script.js (.split-title) */
 
 
     heroTimeline.from(
@@ -2950,7 +2940,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const elements =
         section.querySelectorAll(
-          '.insights-section-kicker, .insights-section-title, .snapshot-card, .pattern-main, .flags-card, .week-panel, .craving-story, .craving-card, .signal-panel, .next-copy, .next-card'
+          '.insights-section-kicker, .snapshot-card, .pattern-main, .flags-card, .week-panel, .craving-story, .craving-card, .signal-panel, .next-copy, .next-card'
         );
 
 

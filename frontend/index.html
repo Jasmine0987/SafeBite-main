@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="style.css">
-
+<link rel="stylesheet" href="pages.css">
 <style>
 
 
@@ -1395,10 +1395,18 @@ body.index-page .verdict-panel h3{
   }
 }
 
+.sb-verdict-grid{align-items:flex-start}
+.sb-verdict-right{flex:0 0 min(520px,100%)!important}
+body.index-page .verdict-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%}
+body.index-page .gooey-btn{width:100%;margin:0}
+body.index-page .verdict-stage{width:100%;min-height:440px}
+.sb-stack-shell{height:80vh!important}
+.sb-stack-card{position:absolute!important;top:0!important;left:0;right:0;margin:0 auto!important;height:min(70vh,600px)}
+.sb-stack-card + .sb-stack-card{margin-top:0!important}
 </style>
 </head>
 
-<body class="index-page">
+<body class="index-page color-wash">
 
 <!-- =======================================================
      SCROLL PROGRESS
@@ -1602,7 +1610,7 @@ body.index-page .verdict-panel h3{
   </div>
   <img
       class="sb-kinetic-centre"
-      src="assets/appy/static/read.png"
+      src="assets/appy/static/eat.png"
       alt="Appy reading"
     >
 
@@ -1716,28 +1724,21 @@ body.index-page .verdict-panel h3{
   data-color="#6B66A6"
 >
 
-  <div class="sb-stack-intro">
-
-    <div class="sb-reveal">
-
-      <p class="sb-micro">
-        03 / THE FLOW
-      </p>
-
-      <h2 class="sb-big-heading">
-        FROM<br>PHOTO<br>TO ANSWER.
-      </h2>
-
-    </div>
+  
+<div class="sb-stack-intro">
+  <div class="sb-stack-title">
+    <p class="sb-micro">03 / THE FLOW</p>
+    <h2 class="sb-big-heading">
+      FROM<br>PHOTO<br>TO ANSWER.
+    </h2>
+  </div>
 
     <p class="sb-reveal">
       Scroll through the actual SafeBite pipeline.
       Each layer stays visible while the next stage arrives.
       Nothing important gets hidden behind a black box.
     </p>
-
   </div>
-
 
   <div
     class="sb-stack-shell"
@@ -1754,7 +1755,7 @@ body.index-page .verdict-panel h3{
         </span>
 
         <h3 class="sb-stack-title">
-          FIND<br>THE<br>PANEL.
+          FIND<br>THE<br>PANEL
         </h3>
 
         <p>
@@ -1786,7 +1787,7 @@ body.index-page .verdict-panel h3{
         </span>
 
         <h3 class="sb-stack-title">
-          TURN<br>PIXELS<br>INTO WORDS.
+          TURN<br>PIXEL<br>INTO WORDS
         </h3>
 
         <p>
@@ -1818,7 +1819,7 @@ body.index-page .verdict-panel h3{
         </span>
 
         <h3 class="sb-stack-title">
-          CHECK<br>THE<br>RISK.
+          CHECK<br>THE<br>RISK
         </h3>
 
         <p>
@@ -1850,7 +1851,7 @@ body.index-page .verdict-panel h3{
         </span>
 
         <h3 class="sb-stack-title">
-          SAFE.<br>FLAGGED.<br>UNCLEAR.
+          SAFE.<br>FLAG.<br>BAD.
         </h3>
 
         <p>
@@ -3234,46 +3235,23 @@ document.querySelectorAll(
    STICKY CARD SCALE
    ========================================================= */
 
-if(
-  !reducedMotion &&
-  window.gsap &&
-  window.ScrollTrigger
-){
-
-  const stackCards =
-    document.querySelectorAll(
-      ".sb-stack-card"
-    );
-
-  stackCards.forEach(
-    function(card,index){
-
-      const scale =
-        1 -
-        (stackCards.length - index - 1)
-        * .035;
-
-      gsap.to(
-        card,
-        {
-          scale:Math.max(.87,scale),
-
-          scrollTrigger:{
-            trigger:card,
-            start:"top 13%",
-            end:"bottom 13%",
-            scrub:1,
-            invalidateOnRefresh:true
-          }
-
-        }
-      );
-
+if(!reducedMotion && window.gsap && window.ScrollTrigger){
+  const cards = gsap.utils.toArray(".sb-stack-card");
+  gsap.set(cards.slice(1), {yPercent:115});
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger:"#sb-stack-shell", start:"top 12%",
+      end:"+=" + cards.length * 70 + "%",
+      scrub:1, pin:true, anticipatePin:1, invalidateOnRefresh:true
     }
-  );
-
+  });
+  cards.slice(1).forEach((card,i)=>{
+    tl.to(card,{yPercent:0,ease:"none",duration:1},i);
+    cards.slice(0,i+1).forEach((prev,j)=>{
+      tl.to(prev,{scale:1-(i+1-j)*0.05,y:-(i+1-j)*14,ease:"none",duration:1},i);
+    });
+  });
 }
-
 
 /* =========================================================
    PIPELINE INTERACTION

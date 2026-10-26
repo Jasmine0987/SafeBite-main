@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeBite — PAGE NAME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="pages.css?v=4">
+</head>
+<body>
+
+<canvas id="trail-canvas"></canvas>
+<div class="custom-appy-cursor" id="appy-cursor"></div>
+
+<!-- NAVBAR: leave this block; run `python apply_nav.py` to fill it in -->
+<nav class="navbar" id="navbar"><div class="nav-inner"></div></nav>
+
+<!-- HERO -->
+<header class="page-hero" id="hero" data-color="#6B66A6">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title" style="color:var(--yellow)">PAGE TITLE<br>GOES HERE</h1>
+    <p class="page-hero-sub" style="color:var(--cream)">One warm sentence.</p>
+    <a href="#first" class="brutal-btn brutal-btn--yellow hero-cta">PRIMARY ACTION ↓</a>
+  </div>
+</header>
+
+<!-- SECTION (light) -->
+<section class="content-section" id="first" data-color="#FCF6E8">
+  <p class="section-kicker" style="color:var(--red)">KICKER</p>
+  <h2 class="section-title" style="color:var(--ink)">SECTION HEADING</h2>
+  <p class="section-body-text reveal" style="color:var(--ink)">Body copy.</p>
+</section>
+
+<!-- SECTION (dark) — alternate colours, never repeat neighbours -->
+<section class="content-section" data-color="#BD3647">
+  <p class="section-kicker" style="color:var(--yellow)">KICKER</p>
+  <h2 class="section-title" style="color:var(--cream)">SECTION HEADING</h2>
+  <p class="section-body-text reveal" style="color:var(--cream)">Body copy.</p>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip" data-color="#6B66A6">
+  <h2 class="section-title" style="font-size:clamp(1.6rem,4vw,2.6rem) !important; color:var(--yellow); margin-bottom:.6rem;">CLOSING LINE.</h2>
+  <p style="color:var(--cream); font-size:.85rem; margin-bottom:1.8rem;">Supporting line.</p>
+  <a href="login.html" class="brutal-btn brutal-btn--yellow">TRY SAFEBITE →</a>
+</section>
+
+<!-- FOOTER: paste the entire <footer class="footer" id="footer"> … </footer> block from about.html verbatim -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

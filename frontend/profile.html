@@ -3215,28 +3215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-      gsap.utils
-        .toArray(".profile-heading")
-        .forEach((heading) => {
-
-          gsap.from(
-            heading,
-            {
-              y: 70,
-              opacity: 0,
-              duration: 1,
-              ease: "power4.out",
-
-              scrollTrigger: {
-                trigger: heading,
-                start: "top 85%",
-                once: true
-              }
-
-            }
-          );
-
-        });
+      /* .profile-heading falls in via script.js (.split-title) */
 
 
       const footerItems =

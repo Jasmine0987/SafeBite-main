@@ -1259,7 +1259,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.from(".swap-hero > *",{
+    gsap.from(".swap-hero > *:not(h1)",{
       y:35,
       opacity:0,
       duration:.8,
