@@ -979,6 +979,15 @@
           </div>
 
 
+          <!-- CONSENT (signup only) -->
+          <label id="consent-row" style="display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;font-size:13px;font-weight:600;line-height:1.4;">
+            <input type="checkbox" id="accepted-terms" style="margin-top:3px;">
+            <span>
+              I agree to the <a href="terms.html" target="_blank">Terms</a> and consent to
+              SafeBite processing my health and allergy data.(ik its ridiculous theres a button to click but if u smart then u will click on terms!! :))
+            </span>
+          </label>
+
           <!-- SUBMIT -->
 
           <button
@@ -1089,6 +1098,9 @@ const passwordToggle =
 
 function updateAuthMode(){
 
+  const consentRow = document.getElementById('consent-row');
+  if(consentRow) consentRow.style.display = isSignup ? 'flex' : 'none';
+
   if(isSignup){
 
     authTitle.innerHTML =
@@ -1198,6 +1210,11 @@ form.addEventListener('submit', async (event) => {
   const passwordValue = password.value;
   if(!email || !passwordValue) return;
 
+  if(isSignup && !document.getElementById('accepted-terms').checked){
+    showAuthError('Please tick the box to accept the Terms and health-data consent.');
+    return;
+  }
+
   submitButton.disabled = true;
   const originalLabel = submitButton.textContent;
   submitButton.textContent = 'ONE SEC…';
@@ -1206,7 +1223,13 @@ form.addEventListener('submit', async (event) => {
     const res = await fetch(`${SB_API}/api/auth/${isSignup ? 'signup' : 'login'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: passwordValue })
+      body: JSON.stringify({
+        email,
+        password: passwordValue,
+        accepted_terms: isSignup
+          ? document.getElementById('accepted-terms').checked
+          : false
+      })
     });
     const data = await res.json().catch(() => ({}));
     if(!res.ok) throw new Error(data.detail || 'Something went wrong.');
